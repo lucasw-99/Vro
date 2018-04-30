@@ -17,6 +17,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
+        window = UIWindow(frame: UIScreen.main.bounds)
+        let loginViewController = LoginViewController()
+        loginViewController.view.backgroundColor = UIColor.black
+        let navigationController = UINavigationController(rootViewController: loginViewController)
+        navigationController.navigationBar.isTranslucent = false
+        window?.rootViewController = navigationController
+        window?.makeKeyAndVisible()
         return true
     }
 
