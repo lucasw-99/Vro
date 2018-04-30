@@ -11,6 +11,7 @@
 		A0AD85FA2093ED9B00D5F793 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD85F92093ED9B00D5F793 /* Util.swift */; };
 		A0AD85FC2096897B00D5F793 /* Home2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD85FB2096897B00D5F793 /* Home2ViewController.swift */; };
 		A0AD85FE209689E600D5F793 /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0AD85FD209689E600D5F793 /* Home.storyboard */; };
+		A0AD86002096C5DC00D5F793 /* GuestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD85FF2096C5DC00D5F793 /* GuestTableViewCell.swift */; };
 		A0FF4694209176B9006FE799 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FF4693209176B9006FE799 /* AppDelegate.swift */; };
 		A0FF4696209176B9006FE799 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FF4695209176B9006FE799 /* LoginViewController.swift */; };
 		A0FF4699209176B9006FE799 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0FF4697209176B9006FE799 /* Main.storyboard */; };
@@ -40,6 +41,7 @@
 		A0AD85F92093ED9B00D5F793 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		A0AD85FB2096897B00D5F793 /* Home2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home2ViewController.swift; sourceTree = "<group>"; };
 		A0AD85FD209689E600D5F793 /* Home.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
+		A0AD85FF2096C5DC00D5F793 /* GuestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestTableViewCell.swift; sourceTree = "<group>"; };
 		A0FF4690209176B9006FE799 /* Wagin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wagin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0FF4693209176B9006FE799 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A0FF4695209176B9006FE799 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 				A0FF469F209176BA006FE799 /* Info.plist */,
 				A0FF46A720918B65006FE799 /* GoogleService-Info.plist */,
 				A0AD85FB2096897B00D5F793 /* Home2ViewController.swift */,
+				A0AD85FF2096C5DC00D5F793 /* GuestTableViewCell.swift */,
 				A0AD85FD209689E600D5F793 /* Home.storyboard */,
 			);
 			path = Wagin;
@@ -260,6 +263,7 @@
 				A0AD85FA2093ED9B00D5F793 /* Util.swift in Sources */,
 				A0FF4694209176B9006FE799 /* AppDelegate.swift in Sources */,
 				A0FF46AC20923352006FE799 /* HomeViewController.swift in Sources */,
+				A0AD86002096C5DC00D5F793 /* GuestTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
