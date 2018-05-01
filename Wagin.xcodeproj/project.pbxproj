@@ -8,10 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		4C005FA9770D32F8CE39A680 /* Pods_Wagin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11E51E9EF17703E72D3A9BBC /* Pods_Wagin.framework */; };
+		A0648FFD20981138001417D7 /* ManageProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0648FFC20981138001417D7 /* ManageProfileViewController.swift */; };
 		A0AD85FA2093ED9B00D5F793 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD85F92093ED9B00D5F793 /* Util.swift */; };
-		A0AD85FC2096897B00D5F793 /* Home2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD85FB2096897B00D5F793 /* Home2ViewController.swift */; };
-		A0AD85FE209689E600D5F793 /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0AD85FD209689E600D5F793 /* Home.storyboard */; };
-		A0AD86002096C5DC00D5F793 /* GuestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD85FF2096C5DC00D5F793 /* GuestTableViewCell.swift */; };
+		A0AD8602209771D300D5F793 /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0AD8601209771D300D5F793 /* Home.storyboard */; };
+		A0AD86062097893F00D5F793 /* PostHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD86052097893F00D5F793 /* PostHeaderTableViewCell.swift */; };
+		A0AD8608209789BC00D5F793 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD8607209789BC00D5F793 /* PostTableViewCell.swift */; };
+		A0AD860A20978C2500D5F793 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD860920978C2500D5F793 /* Post.swift */; };
+		A0AD860C20978D6400D5F793 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD860B20978D6400D5F793 /* User.swift */; };
+		A0AD86102097933A00D5F793 /* NewsfeedTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD860F2097933A00D5F793 /* NewsfeedTableViewController.swift */; };
 		A0FF4694209176B9006FE799 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FF4693209176B9006FE799 /* AppDelegate.swift */; };
 		A0FF4696209176B9006FE799 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FF4695209176B9006FE799 /* LoginViewController.swift */; };
 		A0FF4699209176B9006FE799 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0FF4697209176B9006FE799 /* Main.storyboard */; };
@@ -19,7 +23,6 @@
 		A0FF469E209176BA006FE799 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0FF469C209176BA006FE799 /* LaunchScreen.storyboard */; };
 		A0FF46A820918B66006FE799 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A0FF46A720918B65006FE799 /* GoogleService-Info.plist */; };
 		A0FF46AA20919435006FE799 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FF46A920919435006FE799 /* SignupViewController.swift */; };
-		A0FF46AC20923352006FE799 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FF46AB20923352006FE799 /* HomeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -38,10 +41,14 @@
 		11E51E9EF17703E72D3A9BBC /* Pods_Wagin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Wagin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CC27F84E82DE7DA30E870D7 /* Pods-Wagin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wagin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Wagin/Pods-Wagin.release.xcconfig"; sourceTree = "<group>"; };
 		A00219A420927451009982BD /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
+		A0648FFC20981138001417D7 /* ManageProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageProfileViewController.swift; sourceTree = "<group>"; };
 		A0AD85F92093ED9B00D5F793 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
-		A0AD85FB2096897B00D5F793 /* Home2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home2ViewController.swift; sourceTree = "<group>"; };
-		A0AD85FD209689E600D5F793 /* Home.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
-		A0AD85FF2096C5DC00D5F793 /* GuestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestTableViewCell.swift; sourceTree = "<group>"; };
+		A0AD8601209771D300D5F793 /* Home.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
+		A0AD86052097893F00D5F793 /* PostHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHeaderTableViewCell.swift; sourceTree = "<group>"; };
+		A0AD8607209789BC00D5F793 /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
+		A0AD860920978C2500D5F793 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		A0AD860B20978D6400D5F793 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		A0AD860F2097933A00D5F793 /* NewsfeedTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsfeedTableViewController.swift; sourceTree = "<group>"; };
 		A0FF4690209176B9006FE799 /* Wagin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wagin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0FF4693209176B9006FE799 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A0FF4695209176B9006FE799 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -51,7 +58,6 @@
 		A0FF469F209176BA006FE799 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A0FF46A720918B65006FE799 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A0FF46A920919435006FE799 /* SignupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
-		A0FF46AB20923352006FE799 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C4BEF0FC22195EA7215394A7 /* Pods-Wagin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wagin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Wagin/Pods-Wagin.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -89,18 +95,21 @@
 			isa = PBXGroup;
 			children = (
 				A0FF4693209176B9006FE799 /* AppDelegate.swift */,
+				A0AD860920978C2500D5F793 /* Post.swift */,
 				A0FF46A920919435006FE799 /* SignupViewController.swift */,
 				A0FF4695209176B9006FE799 /* LoginViewController.swift */,
-				A0FF46AB20923352006FE799 /* HomeViewController.swift */,
 				A0FF4697209176B9006FE799 /* Main.storyboard */,
 				A0AD85F92093ED9B00D5F793 /* Util.swift */,
 				A0FF469A209176BA006FE799 /* Assets.xcassets */,
 				A0FF469C209176BA006FE799 /* LaunchScreen.storyboard */,
 				A0FF469F209176BA006FE799 /* Info.plist */,
 				A0FF46A720918B65006FE799 /* GoogleService-Info.plist */,
-				A0AD85FB2096897B00D5F793 /* Home2ViewController.swift */,
-				A0AD85FF2096C5DC00D5F793 /* GuestTableViewCell.swift */,
-				A0AD85FD209689E600D5F793 /* Home.storyboard */,
+				A0AD86052097893F00D5F793 /* PostHeaderTableViewCell.swift */,
+				A0AD8601209771D300D5F793 /* Home.storyboard */,
+				A0AD8607209789BC00D5F793 /* PostTableViewCell.swift */,
+				A0AD860B20978D6400D5F793 /* User.swift */,
+				A0AD860F2097933A00D5F793 /* NewsfeedTableViewController.swift */,
+				A0648FFC20981138001417D7 /* ManageProfileViewController.swift */,
 			);
 			path = Wagin;
 			sourceTree = "<group>";
@@ -186,7 +195,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0FF469E209176BA006FE799 /* LaunchScreen.storyboard in Resources */,
-				A0AD85FE209689E600D5F793 /* Home.storyboard in Resources */,
+				A0AD8602209771D300D5F793 /* Home.storyboard in Resources */,
 				A0FF46A820918B66006FE799 /* GoogleService-Info.plist in Resources */,
 				A0FF469B209176BA006FE799 /* Assets.xcassets in Resources */,
 				A0FF4699209176B9006FE799 /* Main.storyboard in Resources */,
@@ -257,13 +266,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A0AD85FC2096897B00D5F793 /* Home2ViewController.swift in Sources */,
+				A0AD8608209789BC00D5F793 /* PostTableViewCell.swift in Sources */,
 				A0FF46AA20919435006FE799 /* SignupViewController.swift in Sources */,
 				A0FF4696209176B9006FE799 /* LoginViewController.swift in Sources */,
+				A0648FFD20981138001417D7 /* ManageProfileViewController.swift in Sources */,
+				A0AD86102097933A00D5F793 /* NewsfeedTableViewController.swift in Sources */,
+				A0AD860A20978C2500D5F793 /* Post.swift in Sources */,
 				A0AD85FA2093ED9B00D5F793 /* Util.swift in Sources */,
+				A0AD860C20978D6400D5F793 /* User.swift in Sources */,
 				A0FF4694209176B9006FE799 /* AppDelegate.swift in Sources */,
-				A0FF46AC20923352006FE799 /* HomeViewController.swift in Sources */,
-				A0AD86002096C5DC00D5F793 /* GuestTableViewCell.swift in Sources */,
+				A0AD86062097893F00D5F793 /* PostHeaderTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,9 +15,9 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var loginButtonText: UIButton!
 
     private let backgroundImage: UIImageView = UIImageView(image: #imageLiteral(resourceName: "waginLoginScreensaver"))
-    private let usernameInput: UITextField = UITextField()
+    private let emailInput: UITextField = UITextField()
     private let passwordInput: UITextField = UITextField()
-    private let usernameLabel: UILabel = UILabel()
+    private let emailLabel: UILabel = UILabel()
     private let passwordLabel: UILabel = UILabel()
     private let loginButton: UIButton = UIButton(type: UIButtonType.system)
     private let signupButton: UIButton = UIButton(type: .system)
@@ -36,33 +36,50 @@ class LoginViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        guard let user = Auth.auth().currentUser else { return }
-        print("Going to home screen")
-        let homeStoryBoard = UIStoryboard(name: "Home", bundle: nil)
-        let nextViewController = homeStoryBoard.instantiateInitialViewController()
-        present(nextViewController!, animated: true, completion: nil)
+        guard Auth.auth().currentUser != nil else { return }
+        transitionToHome()
     }
 
     @objc func loginUser(_ sender: Any) {
-        guard let username: String = usernameInput.text, username != "" else {
-            print("Username empty")
+
+        guard let email: String = emailInput.text, email != "" else {
+            let alert = Util.makeOKAlert(alertTitle: "Error with Sign In", message: "The email field is empty.")
+            self.present(alert, animated: true, completion: nil)
             return
         }
         guard let password: String = passwordInput.text, password != "" else {
-            print("password empty")
+            let alert = Util.makeOKAlert(alertTitle: "Error with Sign In", message: "The password field is empty.")
+            self.present(alert, animated: true, completion: nil)
             return
         }
-        print("Neither username nor password were empty")
+        Util.toggleButton(button: loginButton, isEnabled: false)
         // TODO: Validate users
+        let spinner = Util.displaySpinner(onView: view)
+        Auth.auth().signIn(withEmail: email, password: password) { user, error in
+            if error == nil && user != nil {
+                Util.removeSpinner(spinner)
+                self.dismiss(animated: false, completion: nil)
+                self.transitionToHome()
+            } else {
+                let alert = Util.makeOKAlert(alertTitle: "Error with Sign In", message: error!.localizedDescription)
+                Util.removeSpinner(spinner)
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+
+    @objc func signupUser(_ sender: Any) {
+        navigationController?.pushViewController(SignupViewController(), animated: true)
+    }
+
+    private func transitionToHome() {
+        Util.toggleButton(button: self.loginButton, isEnabled: true)
+        emailInput.text = ""
+        passwordInput.text = ""
         let homeStoryBoard = UIStoryboard(name: "Home", bundle: nil)
         let nextViewController = homeStoryBoard.instantiateInitialViewController()
         present(nextViewController!, animated: true, completion: nil)
         //navigationController?.pushViewController(HomeViewController(), animated: true)
-    }
-
-    @objc func signupUser(_ sender: Any) {
-        print("Called signupUser")
-        navigationController?.pushViewController(SignupViewController(), animated: true)
     }
 
     private func setupSubviews() {
@@ -71,17 +88,17 @@ class LoginViewController: UIViewController {
         backgroundImage.alpha = 0.9
         view.addSubview(backgroundImage)
 
-        usernameLabel.textAlignment = .center
-        usernameLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        usernameLabel.text = "Username"
-        usernameLabel.textColor = UIColor.white
-        view.addSubview(usernameLabel)
+        emailLabel.textAlignment = .center
+        emailLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        emailLabel.text = "Email"
+        emailLabel.textColor = UIColor.white
+        view.addSubview(emailLabel)
 
-        usernameInput.backgroundColor = UIColor.white
-        usernameInput.borderStyle = .roundedRect
-        usernameInput.autocorrectionType = .no
-        usernameInput.autocapitalizationType = .none
-        view.addSubview(usernameInput)
+        emailInput.backgroundColor = UIColor.white
+        emailInput.borderStyle = .roundedRect
+        emailInput.autocorrectionType = .no
+        emailInput.autocapitalizationType = .none
+        view.addSubview(emailInput)
 
         passwordLabel.textAlignment = .center
         passwordLabel.font = UIFont.boldSystemFont(ofSize: 20)
@@ -117,20 +134,20 @@ class LoginViewController: UIViewController {
             make.edges.equalToSuperview()
         }
 
-        usernameLabel.snp.makeConstraints { make in
+        emailLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(75)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
 
-        usernameInput.snp.makeConstraints { make in
-            make.top.equalTo(usernameLabel.snp.bottom).offset(15)
+        emailInput.snp.makeConstraints { make in
+            make.top.equalTo(emailLabel.snp.bottom).offset(15)
             make.centerX.equalToSuperview()
             make.width.equalTo(190)
         }
 
         passwordLabel.snp.makeConstraints { make in
-            make.top.equalTo(usernameInput.snp.bottom).offset(45)
+            make.top.equalTo(emailInput.snp.bottom).offset(45)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }

@@ -160,7 +160,7 @@ class SignupViewController: UIViewController {
     }
 
     private func createUser(_ email: String, _ username: String, _ password: String) {
-        let spinner = displaySpinner(onView: view)
+        let spinner = Util.displaySpinner(onView: view)
         Auth.auth().createUser(withEmail: email, password: password) { user, error in
             if user != nil && error == nil {
                 // reassign userID to username
@@ -169,41 +169,19 @@ class SignupViewController: UIViewController {
                 changeUsernameRequest?.commitChanges { error in
                     if error == nil {
                         print("Dismissing view controller")
-                        self.removeSpinner(spinner: spinner)
+                        Util.removeSpinner(spinner)
                         self.navigationController?.popViewController(animated: true)
                     } else {
                         let alert = Util.makeOKAlert(alertTitle: self.alertTitle, message: error!.localizedDescription)
-                        self.removeSpinner(spinner: spinner)
+                        Util.removeSpinner(spinner)
                         self.present(alert, animated: true, completion: nil)
                     }
                 }
             } else {
                 let alert = Util.makeOKAlert(alertTitle: self.alertTitle, message: error!.localizedDescription)
-                self.removeSpinner(spinner: spinner)
+                Util.removeSpinner(spinner)
                 self.present(alert, animated: true, completion: nil)
             }
-        }
-    }
-}
-
-private extension SignupViewController {
-    func displaySpinner(onView: UIView) -> UIView {
-        let spinnerView = UIView.init(frame: onView.bounds)
-        spinnerView.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
-        let ai = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
-        ai.startAnimating()
-        ai.center = spinnerView.center
-        DispatchQueue.main.async {
-            spinnerView.addSubview(ai)
-            onView.addSubview(spinnerView)
-        }
-
-        return spinnerView
-    }
-
-    func removeSpinner(spinner: UIView) {
-        DispatchQueue.main.async {
-            spinner.removeFromSuperview()
         }
     }
 }
