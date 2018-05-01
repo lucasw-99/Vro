@@ -25,7 +25,6 @@ class NewsfeedTableViewController: UITableViewController {
         fetchPosts()
 
         tableView.rowHeight = Storyboard.postCellDefaultHeight
-//        tableView.rowHeight = UITableViewAutomaticDimension
         tableView.separatorColor = UIColor.clear
     }
 

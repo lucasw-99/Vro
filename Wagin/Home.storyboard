@@ -35,11 +35,29 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Tap to change profile photo" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kZJ-BQ-vqI">
+                                <rect key="frame" x="71" y="202" width="232" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A2w-sZ-lgz">
+                                <rect key="frame" x="162" y="118" width="62" height="62"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button" image="сontacts"/>
+                                <connections>
+                                    <action selector="changeProfilePicture:" destination="FzM-w4-yZE" eventType="touchUpInside" id="AcP-QC-46S"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="zpp-Mv-j2b"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Edit Profile" image="settings" id="Fwa-jv-JGg"/>
+                    <connections>
+                        <outlet property="profilePictureButton" destination="A2w-sZ-lgz" id="vG8-bD-ngr"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F2w-cQ-5Nu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -287,5 +305,6 @@
         <image name="settings" width="30" height="30"/>
         <image name="user_group_man_man" width="30" height="30"/>
         <image name="waginLoginScreensaver" width="1727" height="1035"/>
+        <image name="сontacts" width="30" height="30"/>
     </resources>
 </document>

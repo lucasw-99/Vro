@@ -73,6 +73,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A06236F620989C3800E505F2 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				A0648FFC20981138001417D7 /* ManageProfileViewController.swift */,
+				A0AD860F2097933A00D5F793 /* NewsfeedTableViewController.swift */,
+				A0FF4695209176B9006FE799 /* LoginViewController.swift */,
+				A0FF46A920919435006FE799 /* SignupViewController.swift */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
 		A0FF4687209176B9006FE799 = {
 			isa = PBXGroup;
 			children = (
@@ -94,10 +105,9 @@
 		A0FF4692209176B9006FE799 /* Wagin */ = {
 			isa = PBXGroup;
 			children = (
+				A06236F620989C3800E505F2 /* View Controllers */,
 				A0FF4693209176B9006FE799 /* AppDelegate.swift */,
 				A0AD860920978C2500D5F793 /* Post.swift */,
-				A0FF46A920919435006FE799 /* SignupViewController.swift */,
-				A0FF4695209176B9006FE799 /* LoginViewController.swift */,
 				A0FF4697209176B9006FE799 /* Main.storyboard */,
 				A0AD85F92093ED9B00D5F793 /* Util.swift */,
 				A0FF469A209176BA006FE799 /* Assets.xcassets */,
@@ -108,8 +118,6 @@
 				A0AD8601209771D300D5F793 /* Home.storyboard */,
 				A0AD8607209789BC00D5F793 /* PostTableViewCell.swift */,
 				A0AD860B20978D6400D5F793 /* User.swift */,
-				A0AD860F2097933A00D5F793 /* NewsfeedTableViewController.swift */,
-				A0648FFC20981138001417D7 /* ManageProfileViewController.swift */,
 			);
 			path = Wagin;
 			sourceTree = "<group>";
@@ -232,12 +240,14 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-Wagin/Pods-Wagin-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -427,10 +437,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = Wagin/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = lww515.Wagin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -450,10 +457,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = Wagin/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = lww515.Wagin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;

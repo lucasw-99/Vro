@@ -31,4 +31,9 @@ class Util {
         button.isEnabled = isEnabled
         button.alpha = isEnabled ? 1.0 : 0.5
     }
+
+    static func makeImageCircular(image: UIImageView) {
+        image.layer.cornerRadius = image.frame.size.width / 2
+        image.clipsToBounds = true
+    }
 }
