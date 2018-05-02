@@ -16,6 +16,8 @@
 		A0AD860A20978C2500D5F793 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD860920978C2500D5F793 /* Post.swift */; };
 		A0AD860C20978D6400D5F793 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD860B20978D6400D5F793 /* User.swift */; };
 		A0AD86102097933A00D5F793 /* NewsfeedTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD860F2097933A00D5F793 /* NewsfeedTableViewController.swift */; };
+		A0C8B6C9209A163400A98D53 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C8B6C8209A163400A98D53 /* MapViewController.swift */; };
+		A0C8B6CB209A185C00A98D53 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0C8B6CA209A185C00A98D53 /* MapKit.framework */; };
 		A0FF4694209176B9006FE799 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FF4693209176B9006FE799 /* AppDelegate.swift */; };
 		A0FF4696209176B9006FE799 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FF4695209176B9006FE799 /* LoginViewController.swift */; };
 		A0FF4699209176B9006FE799 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0FF4697209176B9006FE799 /* Main.storyboard */; };
@@ -49,6 +51,8 @@
 		A0AD860920978C2500D5F793 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		A0AD860B20978D6400D5F793 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		A0AD860F2097933A00D5F793 /* NewsfeedTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsfeedTableViewController.swift; sourceTree = "<group>"; };
+		A0C8B6C8209A163400A98D53 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		A0C8B6CA209A185C00A98D53 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A0FF4690209176B9006FE799 /* Wagin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wagin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0FF4693209176B9006FE799 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A0FF4695209176B9006FE799 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -66,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0C8B6CB209A185C00A98D53 /* MapKit.framework in Frameworks */,
 				4C005FA9770D32F8CE39A680 /* Pods_Wagin.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -80,6 +85,7 @@
 				A0AD860F2097933A00D5F793 /* NewsfeedTableViewController.swift */,
 				A0FF4695209176B9006FE799 /* LoginViewController.swift */,
 				A0FF46A920919435006FE799 /* SignupViewController.swift */,
+				A0C8B6C8209A163400A98D53 /* MapViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -134,6 +140,7 @@
 		F9E53E77C4FB3E9482F5DD9D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A0C8B6CA209A185C00A98D53 /* MapKit.framework */,
 				A00219A420927451009982BD /* SnapKit.framework */,
 				11E51E9EF17703E72D3A9BBC /* Pods_Wagin.framework */,
 			);
@@ -176,6 +183,14 @@
 				TargetAttributes = {
 					A0FF468F209176B9006FE799 = {
 						CreatedOnToolsVersion = 9.3;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -278,6 +293,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0C8B6C9209A163400A98D53 /* MapViewController.swift in Sources */,
 				A0AD8608209789BC00D5F793 /* PostTableViewCell.swift in Sources */,
 				A0FF46AA20919435006FE799 /* SignupViewController.swift in Sources */,
 				A0FF4696209176B9006FE799 /* LoginViewController.swift in Sources */,
@@ -439,7 +455,10 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = Wagin/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = lww515.Wagin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -459,7 +478,10 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = Wagin/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = lww515.Wagin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;

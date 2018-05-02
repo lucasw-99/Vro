@@ -35,6 +35,8 @@ class ManageProfileViewController: UIViewController {
     }
 
     private func setupSubviews() {
+        Util.makeImageCircular(image: profilePictureButton.imageView!)
+        
         if let photoUrl = Auth.auth().currentUser?.photoURL {
             let pathReference = Storage.storage().reference(forURL: photoUrl.absoluteString)
             pathReference.getData(maxSize: 3 * 1024 * 1024) { data, error in
@@ -44,10 +46,10 @@ class ManageProfileViewController: UIViewController {
                     print("Setting profile picture!")
                     let profilePicture = UIImage(data: data!)
                     self.profilePictureButton.setImage(profilePicture, for: .normal)
+                    Util.makeImageCircular(image: self.profilePictureButton.imageView!)
                 }
             }
         }
-        Util.makeImageCircular(image: profilePictureButton.imageView!)
 
         imagePicker.allowsEditing = true
         imagePicker.sourceType = .photoLibrary
