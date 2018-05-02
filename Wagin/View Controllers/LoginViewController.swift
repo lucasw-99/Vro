@@ -36,8 +36,6 @@ class LoginViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        guard Auth.auth().currentUser != nil else { return }
-        transitionToHome()
     }
 
     @objc func loginUser(_ sender: Any) {
@@ -78,8 +76,7 @@ class LoginViewController: UIViewController {
         passwordInput.text = ""
         let homeStoryBoard = UIStoryboard(name: "Home", bundle: nil)
         let nextViewController = homeStoryBoard.instantiateInitialViewController()
-        present(nextViewController!, animated: true, completion: nil)
-        //navigationController?.pushViewController(HomeViewController(), animated: true)
+        navigationController?.pushViewController(nextViewController!, animated: true)
     }
 
     private func setupSubviews() {

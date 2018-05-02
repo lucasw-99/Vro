@@ -10,6 +10,7 @@ import UIKit
 import FirebaseAuth
 import FirebaseStorage
 import FirebaseDatabase
+import FirebaseStorageUI
 
 class ManageProfileViewController: UIViewController {
 
@@ -18,7 +19,6 @@ class ManageProfileViewController: UIViewController {
 
     @IBAction func logOutUser(_ sender: Any) {
         try! Auth.auth().signOut()
-        self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func changeProfilePicture(_ sender: Any) {
@@ -35,6 +35,18 @@ class ManageProfileViewController: UIViewController {
     }
 
     private func setupSubviews() {
+        if let photoUrl = Auth.auth().currentUser?.photoURL {
+            let pathReference = Storage.storage().reference(forURL: photoUrl.absoluteString)
+            pathReference.getData(maxSize: 3 * 1024 * 1024) { data, error in
+                if let error = error {
+                    print("Error downloading file: \(error.localizedDescription)")
+                } else {
+                    print("Setting profile picture!")
+                    let profilePicture = UIImage(data: data!)
+                    self.profilePictureButton.setImage(profilePicture, for: .normal)
+                }
+            }
+        }
         Util.makeImageCircular(image: profilePictureButton.imageView!)
 
         imagePicker.allowsEditing = true

@@ -17,13 +17,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        let loginViewController = LoginViewController()
-        loginViewController.view.backgroundColor = UIColor.black
-        let navigationController = UINavigationController(rootViewController: loginViewController)
-        navigationController.navigationBar.isTranslucent = false
-        window?.rootViewController = navigationController
-        window?.makeKeyAndVisible()
+        let authListener = Auth.auth().addStateDidChangeListener { auth, user in
+            if user != nil {
+                // user is logged in
+                let homeStoryBoard = UIStoryboard(name: "Home", bundle: nil)
+                let homeViewController = homeStoryBoard.instantiateInitialViewController()
+                let navigationController = UINavigationController(rootViewController: homeViewController!)
+                navigationController.isNavigationBarHidden = true
+                self.window?.rootViewController = navigationController
+                self.window?.makeKeyAndVisible()
+            } else {
+                let loginViewController = LoginViewController()
+                loginViewController.view.backgroundColor = UIColor.black
+                let navigationController = UINavigationController(rootViewController: loginViewController)
+                navigationController.navigationBar.isTranslucent = false
+                self.window?.rootViewController = navigationController
+                self.window?.makeKeyAndVisible()
+            }
+        }
         return true
     }
 
