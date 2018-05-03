@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2Jt-HW-JDr">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -15,7 +15,7 @@
         <!--New Event-->
         <scene sceneID="m5u-3n-9UD">
             <objects>
-                <viewController id="287-cJ-pQs" customClass="NewEventViewController" customModule="Wagin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NewEvent" id="287-cJ-pQs" customClass="NewEventViewController" customModule="Wagin" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qQz-Xv-GcN">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -101,7 +101,7 @@
         <!--Near You-->
         <scene sceneID="2ev-g6-1ma">
             <objects>
-                <viewController id="3X0-2e-aOY" customClass="MapViewController" customModule="Wagin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NearYou" id="3X0-2e-aOY" customClass="MapViewController" customModule="Wagin" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="XM1-DQ-Yth">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -136,7 +136,7 @@
                                 </connections>
                             </searchBar>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iAa-mX-IYI">
-                                <rect key="frame" x="0.0" y="163" width="375" height="455"/>
+                                <rect key="frame" x="0.0" y="163" width="375" height="504"/>
                                 <connections>
                                     <outlet property="delegate" destination="3X0-2e-aOY" id="XkL-OB-yMb"/>
                                 </connections>
@@ -168,10 +168,10 @@
             </objects>
             <point key="canvasLocation" x="-98.400000000000006" y="1109.5952023988007"/>
         </scene>
-        <!--Edit Profile-->
+        <!--Manage Profile-->
         <scene sceneID="vTk-oZ-aBI">
             <objects>
-                <viewController id="FzM-w4-yZE" customClass="ManageProfileViewController" customModule="Wagin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ManageProfile" id="FzM-w4-yZE" customClass="ManageProfileViewController" customModule="Wagin" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ayD-xx-ELl">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -210,7 +210,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="zpp-Mv-j2b"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Edit Profile" image="settings" id="Fwa-jv-JGg"/>
+                    <tabBarItem key="tabBarItem" title="Manage Profile" image="settings" id="Fwa-jv-JGg"/>
                     <connections>
                         <outlet property="profilePictureButton" destination="A2w-sZ-lgz" id="vG8-bD-ngr"/>
                     </connections>
@@ -219,49 +219,10 @@
             </objects>
             <point key="canvasLocation" x="538.39999999999998" y="463.71814092953525"/>
         </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="T1w-Ya-KFW">
-            <objects>
-                <tabBarController id="2Jt-HW-JDr" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="LXa-FV-Obp">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="ITr-H8-nHZ" kind="relationship" relationship="viewControllers" id="K3D-rW-atO"/>
-                        <segue destination="FzM-w4-yZE" kind="relationship" relationship="viewControllers" id="sSk-0r-Ya9"/>
-                        <segue destination="3X0-2e-aOY" kind="relationship" relationship="viewControllers" id="RbY-6c-ufz"/>
-                        <segue destination="287-cJ-pQs" kind="relationship" relationship="viewControllers" id="hWp-to-Y61"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Lud-mS-ndO" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-413" y="131"/>
-        </scene>
-        <!--Social Feed-->
-        <scene sceneID="DQ4-Ua-FOd">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ITr-H8-nHZ" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Social Feed" image="people" id="AwZ-KL-mTe"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="mPq-Q6-lBH">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="YUq-c9-rkx" kind="relationship" relationship="rootViewController" id="QkD-NY-n6l"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7FB-FA-g34" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="538.39999999999998" y="-201.04947526236884"/>
-        </scene>
         <!--Newsfeed Table View Controller-->
         <scene sceneID="KdK-ql-mXt">
             <objects>
-                <tableViewController id="YUq-c9-rkx" customClass="NewsfeedTableViewController" customModule="Wagin" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="NewsFeed" id="YUq-c9-rkx" customClass="NewsfeedTableViewController" customModule="Wagin" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="5pt-E5-xnN">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -451,7 +412,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bSV-CV-sbk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1440.8" y="-201.49925037481262"/>
+            <point key="canvasLocation" x="538" y="-395"/>
         </scene>
     </scenes>
     <resources>
@@ -461,7 +422,6 @@
         <image name="following" width="30" height="30"/>
         <image name="for_you" width="30" height="30"/>
         <image name="map_marker" width="30" height="30"/>
-        <image name="people" width="30" height="30"/>
         <image name="settings" width="30" height="30"/>
         <image name="user_group_man_man" width="30" height="30"/>
         <image name="waginLoginScreensaver" width="1727" height="1035"/>

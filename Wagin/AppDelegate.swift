@@ -25,9 +25,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     print("userProfile: \(userProfile)")
                 })
 
+                let tabBar = UITabBarController()
                 let homeStoryBoard = UIStoryboard(name: "Home", bundle: nil)
-                let homeViewController = homeStoryBoard.instantiateInitialViewController()
-                let navigationController = UINavigationController(rootViewController: homeViewController!)
+
+                Util.initializeTabViewControllers(tabBar: tabBar, storyBoard: homeStoryBoard)
+
+                let navigationController = UINavigationController(rootViewController: tabBar)
                 navigationController.isNavigationBarHidden = true
                 self.window?.rootViewController = navigationController
                 self.window?.makeKeyAndVisible()
