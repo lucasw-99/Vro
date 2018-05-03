@@ -18,8 +18,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         let authListener = Auth.auth().addStateDidChangeListener { auth, user in
-            if user != nil {
+            if let user = user {
                 // user is logged in
+                UserService.observeUserProfile(user.uid, completion: { userProfile in
+                    UserService.currentUserProfile = userProfile
+                    print("userProfile: \(userProfile)")
+                })
+
                 let homeStoryBoard = UIStoryboard(name: "Home", bundle: nil)
                 let homeViewController = homeStoryBoard.instantiateInitialViewController()
                 let navigationController = UINavigationController(rootViewController: homeViewController!)
@@ -27,6 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.window?.rootViewController = navigationController
                 self.window?.makeKeyAndVisible()
             } else {
+                UserService.currentUserProfile = nil
+
                 let loginViewController = LoginViewController()
                 loginViewController.view.backgroundColor = UIColor.black
                 let navigationController = UINavigationController(rootViewController: loginViewController)

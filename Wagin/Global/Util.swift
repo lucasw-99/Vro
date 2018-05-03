@@ -36,4 +36,8 @@ class Util {
         image.layer.cornerRadius = image.frame.size.width / 2
         image.clipsToBounds = true
     }
+
+    static func secondsToHoursMinutesSeconds (seconds : Int) -> (Int, Int, Int) {
+        return (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
+    }
 }

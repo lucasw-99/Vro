@@ -37,15 +37,28 @@ class MapViewController: UIViewController {
         directionsRequest.transportType = .automobile
 
         let directions = MKDirections(request: directionsRequest)
-        directions.calculateETA { (response, error) in
+        directions.calculate { (response, error) in
             if error != nil {
                 print("Error: \(error?.localizedDescription)")
             }
             guard let response = response else { return }
-            print("Set label text. Response: \(response)")
-            let numSeconds = Int(response.expectedTravelTime)
-            self.selectedLocationLabel.text = "\(numSeconds) seconds away."
-            print(self.selectedLocationLabel.text)
+            guard let firstRoute = response.routes.first else { return }
+            let (hours, minutes, seconds) = Util.secondsToHoursMinutesSeconds(seconds: Int(firstRoute.expectedTravelTime))
+            self.selectedLocationLabel.text = "\(hours) h \(minutes) min \(seconds)s"
+            self.mapView.add(firstRoute.polyline)
+
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = destinationMapItem.placemark.coordinate
+            annotation.title = destinationMapItem.name
+
+            let destSpan = MKCoordinateSpanMake(0.15, 0.15)
+            let destRegion = MKCoordinateRegion(center: annotation.coordinate, span: destSpan)
+
+            self.mapView.setRegion(destRegion, animated: true)
+            self.mapView.addAnnotation(annotation)
+            self.mapView.selectAnnotation(annotation, animated: true)
+
+
         }
     }
 }
@@ -86,6 +99,13 @@ extension MapViewController: UISearchBarDelegate {
 extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         print("Rendering mapView")
+        if overlay is MKPolyline {
+            let renderer = MKPolylineRenderer(overlay: overlay)
+            renderer.strokeColor = .blue
+            renderer.lineWidth = 10
+            return renderer
+        }
+
         return MKOverlayRenderer()
     }
 }
