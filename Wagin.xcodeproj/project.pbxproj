@@ -16,11 +16,8 @@
 		A0648FFD20981138001417D7 /* ManageProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0648FFC20981138001417D7 /* ManageProfileViewController.swift */; };
 		A0AD85FA2093ED9B00D5F793 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD85F92093ED9B00D5F793 /* Util.swift */; };
 		A0AD8602209771D300D5F793 /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0AD8601209771D300D5F793 /* Home.storyboard */; };
-		A0AD86062097893F00D5F793 /* PostHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD86052097893F00D5F793 /* PostHeaderTableViewCell.swift */; };
-		A0AD8608209789BC00D5F793 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD8607209789BC00D5F793 /* PostTableViewCell.swift */; };
 		A0AD860A20978C2500D5F793 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD860920978C2500D5F793 /* Post.swift */; };
 		A0AD860C20978D6400D5F793 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD860B20978D6400D5F793 /* User.swift */; };
-		A0AD86102097933A00D5F793 /* NewsfeedTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD860F2097933A00D5F793 /* NewsfeedTableViewController.swift */; };
 		A0C8B6C9209A163400A98D53 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C8B6C8209A163400A98D53 /* MapViewController.swift */; };
 		A0C8B6CB209A185C00A98D53 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0C8B6CA209A185C00A98D53 /* MapKit.framework */; };
 		A0F2FB2A209C0CCD0018F465 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F2FB29209C0CCD0018F465 /* CustomTabBarController.swift */; };
@@ -61,11 +58,8 @@
 		A0648FFC20981138001417D7 /* ManageProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageProfileViewController.swift; sourceTree = "<group>"; };
 		A0AD85F92093ED9B00D5F793 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		A0AD8601209771D300D5F793 /* Home.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
-		A0AD86052097893F00D5F793 /* PostHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHeaderTableViewCell.swift; sourceTree = "<group>"; };
-		A0AD8607209789BC00D5F793 /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		A0AD860920978C2500D5F793 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		A0AD860B20978D6400D5F793 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		A0AD860F2097933A00D5F793 /* NewsfeedTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NewsfeedTableViewController.swift; path = "../View Controllers/NewsfeedTableViewController.swift"; sourceTree = "<group>"; };
 		A0C8B6C8209A163400A98D53 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		A0C8B6CA209A185C00A98D53 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A0F2FB29209C0CCD0018F465 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
@@ -156,10 +150,7 @@
 		A0D18551209A38A500FC58D1 /* Newsfeed */ = {
 			isa = PBXGroup;
 			children = (
-				A0AD8607209789BC00D5F793 /* PostTableViewCell.swift */,
 				A0F2FB31209CAC590018F465 /* EventPostCollectionViewCell.swift */,
-				A0AD86052097893F00D5F793 /* PostHeaderTableViewCell.swift */,
-				A0AD860F2097933A00D5F793 /* NewsfeedTableViewController.swift */,
 				A0F2FB2D209CA5DB0018F465 /* NewsFeedViewController.swift */,
 			);
 			path = Newsfeed;
@@ -389,13 +380,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0C8B6C9209A163400A98D53 /* MapViewController.swift in Sources */,
-				A0AD8608209789BC00D5F793 /* PostTableViewCell.swift in Sources */,
 				A0FF46AA20919435006FE799 /* SignupViewController.swift in Sources */,
 				A0F2FB2E209CA5DB0018F465 /* NewsFeedViewController.swift in Sources */,
 				A0FF4696209176B9006FE799 /* LoginViewController.swift in Sources */,
 				A0648FFD20981138001417D7 /* ManageProfileViewController.swift in Sources */,
 				A0F2FB2C209C11A80018F465 /* NewEventDummyViewController.swift in Sources */,
-				A0AD86102097933A00D5F793 /* NewsfeedTableViewController.swift in Sources */,
 				A0AD860A20978C2500D5F793 /* Post.swift in Sources */,
 				A0228F79209AC4F700E71C80 /* Constants.swift in Sources */,
 				A0AD85FA2093ED9B00D5F793 /* Util.swift in Sources */,
@@ -407,7 +396,6 @@
 				A0228F80209B488500E71C80 /* UserProfile.swift in Sources */,
 				A0228F75209AC32D00E71C80 /* NewEventViewController.swift in Sources */,
 				A0228F7B209ACBAC00E71C80 /* Event.swift in Sources */,
-				A0AD86062097893F00D5F793 /* PostHeaderTableViewCell.swift in Sources */,
 				A0F2FB32209CAC590018F465 /* EventPostCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

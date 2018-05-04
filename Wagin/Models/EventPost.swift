@@ -6,19 +6,20 @@
 //  Copyright © 2018 Lucas Wotton. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 class EventPost {
-    let host: UserProfile
-    let eventImage: UIImage
+    let postedBy: UserProfile
+    let event: Event
     var likedBy: [UserProfile]
     let caption: String
+    let dayPosted: Date
 
-    init(host: UserProfile, eventImage: UIImage, likedBy: [UserProfile], caption: String) {
-        self.host = host
-        self.eventImage = eventImage
+    init(postedBy: UserProfile, event: Event, likedBy: [UserProfile], caption: String, dayPosted: Date) {
+        self.postedBy = postedBy
+        self.event = event
         self.likedBy = likedBy
         self.caption = caption
+        self.dayPosted = dayPosted
     }
 }

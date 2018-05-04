@@ -321,7 +321,7 @@
                                                         <constraint firstAttribute="height" constant="30" id="wHa-QT-23m"/>
                                                     </constraints>
                                                     <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <state key="normal" image="for_you">
+                                                    <state key="normal" image="сontacts">
                                                         <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </state>
                                                 </button>
@@ -420,7 +420,6 @@
         <image name="create_new" width="30" height="30"/>
         <image name="exit" width="30" height="30"/>
         <image name="following" width="30" height="30"/>
-        <image name="for_you" width="30" height="30"/>
         <image name="map_marker" width="30" height="30"/>
         <image name="settings" width="30" height="30"/>
         <image name="user_group_man_man" width="30" height="30"/>

@@ -11,7 +11,10 @@ import SnapKit
 
 class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 
-    private var DataSource: [EventPost] = [EventPost(host: UserProfile(uid: "hey", username: "Lucas", photoURL: URL(string: "https://stackoverflow.com/questions/24018327/what-does-an-exclamation-mark-mean-in-the-swift-language")!), eventImage: #imageLiteral(resourceName: "waginLoginScreensaver"), likedBy: [], caption: "11111111111111111111111111111111111v1111111v1111111v1111111vvv11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"), EventPost(host: UserProfile(uid: "hey", username: "Lucas", photoURL: URL(string: "https://stackoverflow.com/questions/24018327/what-does-an-exclamation-mark-mean-in-the-swift-language")!), eventImage: #imageLiteral(resourceName: "waginLoginScreensaver"), likedBy: [], caption: "222222222222"), EventPost(host: UserProfile(uid: "hey", username: "Lucas", photoURL: URL(string: "https://stackoverflow.com/questions/24018327/what-does-an-exclamation-mark-mean-in-the-swift-language")!), eventImage: #imageLiteral(resourceName: "waginLoginScreensaver"), likedBy: [], caption: "3333333333333"), EventPost(host: UserProfile(uid: "hey", username: "Lucas", photoURL: URL(string: "https://stackoverflow.com/questions/24018327/what-does-an-exclamation-mark-mean-in-the-swift-language")!), eventImage: #imageLiteral(resourceName: "waginLoginScreensaver"), likedBy: [], caption: "444444444")]
+    static var testUser = UserProfile(uid: "1", username: "Lucas", photoURL: URL(fileURLWithPath: "Haha.com"))
+    static var testEvent = Event(host: testUser, eventImage: #imageLiteral(resourceName: "home"), description: "nah", address: nil)
+
+    private var DataSource: [EventPost] = [EventPost(postedBy: testUser, event: testEvent, likedBy: [testUser], caption: "Whats up hoes", dayPosted: Date().addingTimeInterval(-30)), EventPost(postedBy: testUser, event: testEvent, likedBy: [testUser], caption: "Whats up hoes", dayPosted: Date().addingTimeInterval(-3000)), EventPost(postedBy: testUser, event: testEvent, likedBy: [testUser], caption: "Whats up hoes", dayPosted: Date().addingTimeInterval(-30)), EventPost(postedBy: testUser, event: testEvent, likedBy: [testUser], caption: "Whats up hoes", dayPosted: Date().addingTimeInterval(-30000))]
 
     private let headerView = UIView()
 
@@ -81,7 +84,7 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width - 10, height: 500)
+        return CGSize(width: view.frame.width - 10, height: 550)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
