@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     print("userProfile: \(userProfile)")
                 })
 
-                let tabBar = UITabBarController()
+                let tabBar = CustomTabBarController()
                 let homeStoryBoard = UIStoryboard(name: "Home", bundle: nil)
 
                 Util.initializeTabViewControllers(tabBar: tabBar, storyBoard: homeStoryBoard)
@@ -69,7 +69,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
 }
 

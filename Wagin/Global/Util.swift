@@ -54,7 +54,7 @@ class Util {
         nearYouController.title = "Near You"
         nearYouController.tabBarItem = UITabBarItem(title: "Near You", image: #imageLiteral(resourceName: "map_marker"), tag: 2)
 
-        let newEventController = storyBoard.instantiateViewController(withIdentifier: "NewEvent")
+        let newEventController = NewEventDummyViewController()
         newEventController.title = "New Event"
         newEventController.tabBarItem = UITabBarItem(title: "New Event", image: #imageLiteral(resourceName: "create_new"), tag: 3)
 

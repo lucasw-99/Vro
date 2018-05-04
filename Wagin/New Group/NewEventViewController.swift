@@ -52,6 +52,7 @@ class NewEventViewController: UIViewController {
         eventRef.setValue(eventObject) { error, ref in
             if error == nil {
                 print("Success!")
+                self.dismiss(animated: true, completion: nil)
             } else {
                 print("Error: \(error!.localizedDescription)")
             }
