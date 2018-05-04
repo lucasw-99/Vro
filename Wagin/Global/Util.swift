@@ -42,7 +42,8 @@ class Util {
     }
 
     static func initializeTabViewControllers(tabBar: UITabBarController, storyBoard: UIStoryboard) {
-        let newsFeedController = storyBoard.instantiateViewController(withIdentifier: "NewsFeed")
+//        let newsFeedController = storyBoard.instantiateViewController(withIdentifier: "NewsFeed")
+        let newsFeedController = NewsFeedViewController()
         newsFeedController.title = "News Feed"
         newsFeedController.tabBarItem = UITabBarItem(title: "News Feed", image: #imageLiteral(resourceName: "people"), tag: 0)
 
