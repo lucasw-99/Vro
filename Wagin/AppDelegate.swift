@@ -26,9 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 })
 
                 let tabBar = CustomTabBarController()
-                let homeStoryBoard = UIStoryboard(name: "Home", bundle: nil)
-
-                Util.initializeTabViewControllers(tabBar: tabBar, storyBoard: homeStoryBoard)
+                tabBar.initializeTabViewControllers()
 
                 let navigationController = UINavigationController(rootViewController: tabBar)
                 navigationController.isNavigationBarHidden = true

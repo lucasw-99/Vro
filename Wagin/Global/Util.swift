@@ -41,29 +41,6 @@ class Util {
         return (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
     }
 
-    static func initializeTabViewControllers(tabBar: UITabBarController, storyBoard: UIStoryboard) {
-        let newsFeedController = NewsFeedViewController()
-        newsFeedController.title = "News Feed"
-        newsFeedController.tabBarItem = UITabBarItem(title: "News Feed", image: #imageLiteral(resourceName: "people"), tag: 0)
-
-        let manageProfileController = ManageProfileViewController()
-        manageProfileController.title = "Manage Profile"
-        manageProfileController.tabBarItem = UITabBarItem(title: "Manage Profile", image: #imageLiteral(resourceName: "settings"), tag: 1)
-
-//        let nearYouController = storyBoard.instantiateViewController(withIdentifier: "NearYou")
-        let nearYouController = MapViewController()
-        nearYouController.title = "Near You"
-        nearYouController.tabBarItem = UITabBarItem(title: "Near You", image: #imageLiteral(resourceName: "map_marker"), tag: 2)
-
-        let newEventController = NewEventDummyViewController()
-        newEventController.title = "New Event"
-        newEventController.tabBarItem = UITabBarItem(title: "New Event", image: #imageLiteral(resourceName: "create_new"), tag: 3)
-
-        let tabBarItems = [newsFeedController, manageProfileController, nearYouController, newEventController]
-
-        tabBar.viewControllers = tabBarItems 
-    }
-
     static func currentDate(date: Date) {
         let calendar = Calendar.current
 

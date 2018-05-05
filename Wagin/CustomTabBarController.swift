@@ -17,12 +17,33 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         if viewController is NewEventDummyViewController {
             // present modally
-            let homeStoryBoard = UIStoryboard(name: "Home", bundle: nil)
-            let nextViewController = homeStoryBoard.instantiateViewController(withIdentifier: "NewEvent")
-            tabBarController.present(nextViewController, animated: true)
+            let modalViewController = NewEventViewController()
+            tabBarController.present(modalViewController, animated: true)
             return false
         } else {
             return true
         }
+    }
+
+    func initializeTabViewControllers() {
+        let newsFeedController = NewsFeedViewController()
+        newsFeedController.title = "News Feed"
+        newsFeedController.tabBarItem = UITabBarItem(title: "News Feed", image: #imageLiteral(resourceName: "people"), tag: 0)
+
+        let manageProfileController = ManageProfileViewController()
+        manageProfileController.title = "Manage Profile"
+        manageProfileController.tabBarItem = UITabBarItem(title: "Manage Profile", image: #imageLiteral(resourceName: "settings"), tag: 1)
+
+        let nearYouController = MapViewController()
+        nearYouController.title = "Near You"
+        nearYouController.tabBarItem = UITabBarItem(title: "Near You", image: #imageLiteral(resourceName: "map_marker"), tag: 2)
+
+        let newEventController = NewEventDummyViewController()
+        newEventController.title = "New Event"
+        newEventController.tabBarItem = UITabBarItem(title: "New Event", image: #imageLiteral(resourceName: "create_new"), tag: 3)
+
+        let tabBarItems = [newsFeedController, manageProfileController, nearYouController, newEventController]
+
+        self.viewControllers = tabBarItems
     }
 }

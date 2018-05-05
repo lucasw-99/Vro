@@ -74,9 +74,8 @@ class LoginViewController: UIViewController {
         Util.toggleButton(button: self.loginButton, isEnabled: true)
         emailInput.text = ""
         passwordInput.text = ""
-        let tabBar = UITabBarController()
-        let homeStoryBoard = UIStoryboard(name: "Home", bundle: nil)
-        Util.initializeTabViewControllers(tabBar: tabBar, storyBoard: homeStoryBoard)
+        let tabBar = CustomTabBarController()
+        tabBar.initializeTabViewControllers()
         navigationController?.pushViewController(tabBar, animated: true)
     }
 
