@@ -10,21 +10,71 @@ import UIKit
 import MapKit
 
 class MapViewController: UIViewController {
-
-    @IBOutlet weak var selectedLocationLabel: UILabel!
-    @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var mapView: MKMapView!
+    private let headerView = UIView()
+    private let headerLabel = UILabel()
+    private let searchBar = UISearchBar()
+    private let mapView = MKMapView()
 
     private let locationManager = CLLocationManager()
     private var currentCoordinate: CLLocationCoordinate2D!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupSubviews()
+        setupLayout()
+    }
+
+    private func setupSubviews() {
+        headerLabel.text = "Nearby Events"
+        headerLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        headerLabel.numberOfLines = 1
+        headerLabel.textAlignment = .center
+        headerView.addSubview(headerLabel)
+        view.addSubview(headerView)
+
+        view.addSubview(searchBar)
+
+        view.addSubview(mapView)
 
         locationManager.requestWhenInUseAuthorization()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         locationManager.startUpdatingLocation()
+
+        searchBar.delegate = self
+
+        mapView.delegate = self
+
+        view.backgroundColor = .white
+    }
+
+    private func setupLayout() {
+        headerView.snp.makeConstraints { make in
+            make.top.equalTo(view.layoutMarginsGuide.snp.topMargin)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(50)
+        }
+
+        headerLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+
+        searchBar.snp.makeConstraints { make in
+            make.top.equalTo(headerView.snp.bottom)
+            make.trailing.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.height.equalTo(56)
+        }
+
+        mapView.snp.makeConstraints { make in
+            make.top.equalTo(searchBar.snp.bottom)
+            make.trailing.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
     }
 
     private func getDirections(to destinationMapItem: MKMapItem) {
@@ -44,7 +94,7 @@ class MapViewController: UIViewController {
             guard let response = response else { return }
             guard let firstRoute = response.routes.first else { return }
             let (hours, minutes, seconds) = Util.secondsToHoursMinutesSeconds(seconds: Int(firstRoute.expectedTravelTime))
-            self.selectedLocationLabel.text = "\(hours) h \(minutes) min \(seconds)s"
+            self.headerLabel.text = "\(hours) h \(minutes) min \(seconds)s"
             self.mapView.add(firstRoute.polyline)
 
             let annotation = MKPointAnnotation()
@@ -57,8 +107,6 @@ class MapViewController: UIViewController {
             self.mapView.setRegion(destRegion, animated: true)
             self.mapView.addAnnotation(annotation)
             self.mapView.selectAnnotation(annotation, animated: true)
-
-
         }
     }
 }

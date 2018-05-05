@@ -96,79 +96,8 @@
             </objects>
             <point key="canvasLocation" x="-805.60000000000002" y="1095.2023988005999"/>
         </scene>
-        <!--Near You-->
-        <scene sceneID="2ev-g6-1ma">
-            <objects>
-                <viewController storyboardIdentifier="NearYou" id="3X0-2e-aOY" customClass="MapViewController" customModule="Wagin" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="XM1-DQ-Yth">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uoR-DW-0Vl">
-                                <rect key="frame" x="12" y="32" width="351" height="75"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nearby Functions" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u2H-zU-OwW">
-                                        <rect key="frame" x="108" y="27" width="135" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="u2H-zU-OwW" secondAttribute="trailing" constant="108" id="0HJ-Bb-Oi3"/>
-                                    <constraint firstAttribute="height" constant="75" id="IHR-bF-mMM"/>
-                                    <constraint firstItem="u2H-zU-OwW" firstAttribute="leading" secondItem="uoR-DW-0Vl" secondAttribute="leading" constant="108" id="IHU-1A-3NI"/>
-                                    <constraint firstAttribute="bottom" secondItem="u2H-zU-OwW" secondAttribute="bottom" constant="27" id="gMO-sF-SWG"/>
-                                    <constraint firstItem="u2H-zU-OwW" firstAttribute="top" secondItem="uoR-DW-0Vl" secondAttribute="top" constant="27" id="tsU-Wy-bNa"/>
-                                </constraints>
-                            </view>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="Zdn-WP-CNH">
-                                <rect key="frame" x="0.0" y="107" width="375" height="56"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="56" id="P7b-ZR-g1G"/>
-                                </constraints>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="3X0-2e-aOY" id="tGN-vN-x8l"/>
-                                </connections>
-                            </searchBar>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" showsPointsOfInterest="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iAa-mX-IYI">
-                                <rect key="frame" x="0.0" y="163" width="375" height="504"/>
-                                <connections>
-                                    <outlet property="delegate" destination="3X0-2e-aOY" id="XkL-OB-yMb"/>
-                                </connections>
-                            </mapView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="uoR-DW-0Vl" firstAttribute="top" secondItem="lBp-Yk-phU" secondAttribute="top" constant="12" id="0aK-Sw-Eo8"/>
-                            <constraint firstItem="Zdn-WP-CNH" firstAttribute="top" secondItem="uoR-DW-0Vl" secondAttribute="bottom" id="4A9-91-oRP"/>
-                            <constraint firstItem="lBp-Yk-phU" firstAttribute="trailing" secondItem="uoR-DW-0Vl" secondAttribute="trailing" constant="12" id="5Ee-WU-g0l"/>
-                            <constraint firstItem="uoR-DW-0Vl" firstAttribute="leading" secondItem="lBp-Yk-phU" secondAttribute="leading" constant="12" id="6b2-rd-c5u"/>
-                            <constraint firstItem="iAa-mX-IYI" firstAttribute="leading" secondItem="lBp-Yk-phU" secondAttribute="leading" id="7xQ-4L-Xaa"/>
-                            <constraint firstItem="Zdn-WP-CNH" firstAttribute="leading" secondItem="lBp-Yk-phU" secondAttribute="leading" id="IuC-z9-H3B"/>
-                            <constraint firstItem="lBp-Yk-phU" firstAttribute="trailing" secondItem="Zdn-WP-CNH" secondAttribute="trailing" id="Nbo-cb-rs1"/>
-                            <constraint firstItem="iAa-mX-IYI" firstAttribute="bottom" secondItem="lBp-Yk-phU" secondAttribute="bottom" id="Ngn-d5-syM"/>
-                            <constraint firstItem="iAa-mX-IYI" firstAttribute="top" secondItem="Zdn-WP-CNH" secondAttribute="bottom" id="Qry-MW-JNo"/>
-                            <constraint firstItem="iAa-mX-IYI" firstAttribute="trailing" secondItem="lBp-Yk-phU" secondAttribute="trailing" id="yT7-ja-O4G"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="lBp-Yk-phU"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Near You" image="map_marker" id="Dby-sp-vYN"/>
-                    <connections>
-                        <outlet property="mapView" destination="iAa-mX-IYI" id="DLq-UO-ra5"/>
-                        <outlet property="searchBar" destination="Zdn-WP-CNH" id="jbC-Ba-NH0"/>
-                        <outlet property="selectedLocationLabel" destination="u2H-zU-OwW" id="pcr-te-Ukg"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="scH-Yq-WcY" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-98.400000000000006" y="1109.5952023988007"/>
-        </scene>
     </scenes>
     <resources>
         <image name="create_new" width="30" height="30"/>
-        <image name="map_marker" width="30" height="30"/>
     </resources>
 </document>

@@ -50,7 +50,8 @@ class Util {
         manageProfileController.title = "Manage Profile"
         manageProfileController.tabBarItem = UITabBarItem(title: "Manage Profile", image: #imageLiteral(resourceName: "settings"), tag: 1)
 
-        let nearYouController = storyBoard.instantiateViewController(withIdentifier: "NearYou")
+//        let nearYouController = storyBoard.instantiateViewController(withIdentifier: "NearYou")
+        let nearYouController = MapViewController()
         nearYouController.title = "Near You"
         nearYouController.tabBarItem = UITabBarItem(title: "Near You", image: #imageLiteral(resourceName: "map_marker"), tag: 2)
 
