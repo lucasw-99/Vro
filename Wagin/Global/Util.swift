@@ -42,12 +42,11 @@ class Util {
     }
 
     static func initializeTabViewControllers(tabBar: UITabBarController, storyBoard: UIStoryboard) {
-//        let newsFeedController = storyBoard.instantiateViewController(withIdentifier: "NewsFeed")
         let newsFeedController = NewsFeedViewController()
         newsFeedController.title = "News Feed"
         newsFeedController.tabBarItem = UITabBarItem(title: "News Feed", image: #imageLiteral(resourceName: "people"), tag: 0)
 
-        let manageProfileController = storyBoard.instantiateViewController(withIdentifier: "ManageProfile")
+        let manageProfileController = ManageProfileViewController()
         manageProfileController.title = "Manage Profile"
         manageProfileController.tabBarItem = UITabBarItem(title: "Manage Profile", image: #imageLiteral(resourceName: "settings"), tag: 1)
 

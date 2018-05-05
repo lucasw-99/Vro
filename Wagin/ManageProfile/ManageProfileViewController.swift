@@ -14,10 +14,15 @@ import FirebaseStorageUI
 
 class ManageProfileViewController: UIViewController {
 
-    private var imagePicker = UIImagePickerController()
-    @IBOutlet weak var profilePictureButton: UIButton!
+    private let changeProfileButton = UIButton()
+    private let profileLabel = UILabel()
 
-    @IBAction func logOutUser(_ sender: Any) {
+    private let logoutButton = UIButton()
+    private let logoutLabel = UILabel()
+
+    private var imagePicker = UIImagePickerController()
+
+    @IBAction func logoutUser(_ sender: Any) {
         try! Auth.auth().signOut()
     }
     
@@ -31,11 +36,32 @@ class ManageProfileViewController: UIViewController {
         super.viewDidLoad()
         setupSubviews()
         setupLayout()
-        // Do any additional setup after loading the view.
     }
 
     private func setupSubviews() {
-        Util.makeImageCircular(image: profilePictureButton.imageView!)
+        changeProfileButton.setImage(#imageLiteral(resourceName: "add_user_male"), for: .normal)
+        changeProfileButton.addTarget(self, action: #selector(ManageProfileViewController.changeProfilePicture(_:)), for: .touchUpInside)
+        view.addSubview(changeProfileButton)
+
+        profileLabel.text = "Tap to change profile photo"
+        profileLabel.textColor = .darkGray
+        profileLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        profileLabel.numberOfLines = 1
+        profileLabel.textAlignment = .center
+        view.addSubview(profileLabel)
+
+        logoutButton.setImage(#imageLiteral(resourceName: "exit"), for: .normal)
+        logoutButton.addTarget(self, action: #selector(ManageProfileViewController.logoutUser(_:)), for: .touchUpInside)
+        view.addSubview(logoutButton)
+
+        logoutLabel.text = "Tap to logout"
+        logoutLabel.textColor = .darkGray
+        logoutLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        logoutLabel.numberOfLines = 1
+        logoutLabel.textAlignment = .center
+        view.addSubview(logoutLabel)
+
+        Util.makeImageCircular(image: changeProfileButton.imageView!)
         
         if let photoUrl = Auth.auth().currentUser?.photoURL {
             let pathReference = Storage.storage().reference(forURL: photoUrl.absoluteString)
@@ -45,8 +71,8 @@ class ManageProfileViewController: UIViewController {
                 } else {
                     print("Setting profile picture!")
                     let profilePicture = UIImage(data: data!)
-                    self.profilePictureButton.setImage(profilePicture, for: .normal)
-                    Util.makeImageCircular(image: self.profilePictureButton.imageView!)
+                    self.changeProfileButton.setImage(profilePicture, for: .normal)
+                    Util.makeImageCircular(image: self.changeProfileButton.imageView!)
                 }
             }
         }
@@ -54,10 +80,37 @@ class ManageProfileViewController: UIViewController {
         imagePicker.allowsEditing = true
         imagePicker.sourceType = .photoLibrary
         imagePicker.delegate = self
+
+        view.backgroundColor = .white
     }
 
     private func setupLayout() {
+        changeProfileButton.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(100)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(75)
+            make.height.equalTo(75)
+        }
 
+        profileLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalTo(changeProfileButton.snp.bottom).offset(15)
+        }
+
+        logoutButton.snp.makeConstraints { make in
+            make.top.equalTo(profileLabel.snp.bottom).offset(20)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(50)
+            make.height.equalTo(50)
+        }
+
+        logoutLabel.snp.makeConstraints { make in
+            make.top.equalTo(logoutButton.snp.bottom).offset(5)
+            make.centerX.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
     }
 }
 
@@ -69,8 +122,8 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
-            profilePictureButton.setImage(pickedImage, for: .normal)
-            Util.makeImageCircular(image: profilePictureButton.imageView!)
+            changeProfileButton.setImage(pickedImage, for: .normal)
+            Util.makeImageCircular(image: changeProfileButton.imageView!)
             print("Changing user profile")
             self.uploadProfileImage(pickedImage) { url in
                 guard let url = url else {
