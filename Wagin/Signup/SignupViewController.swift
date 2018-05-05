@@ -168,7 +168,6 @@ class SignupViewController: UIViewController {
                 changeUsernameRequest?.displayName = username
                 changeUsernameRequest?.commitChanges { error in
                     if error == nil {
-                        print("Dismissing view controller")
                         Util.removeSpinner(spinner)
                         self.navigationController?.popViewController(animated: true)
                     } else {

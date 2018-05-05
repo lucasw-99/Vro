@@ -8,15 +8,15 @@
 
 import UIKit
 import SnapKit
+import FirebaseDatabase
 
 class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 
-    static var testUser = UserProfile(uid: "1", username: "Lucas", photoURL: URL(fileURLWithPath: "Haha.com"))
-    static var testEvent = Event(host: testUser, eventImage: #imageLiteral(resourceName: "home"), description: "nah", address: nil)
-
-    private var DataSource: [EventPost] = [EventPost(postedBy: testUser, event: testEvent, likedBy: [testUser], caption: "Whats up hoes", dayPosted: Date().addingTimeInterval(-30)), EventPost(postedBy: testUser, event: testEvent, likedBy: [testUser], caption: "Whats up hoes", dayPosted: Date().addingTimeInterval(-3000)), EventPost(postedBy: testUser, event: testEvent, likedBy: [testUser], caption: "Whats up hoes", dayPosted: Date().addingTimeInterval(-30)), EventPost(postedBy: testUser, event: testEvent, likedBy: [testUser], caption: "Whats up hoes", dayPosted: Date().addingTimeInterval(-30000))]
+    private var DataSource: [EventPost] = []
 
     private let headerView = UIView()
+    private let userImage = UIImageView()
+    private let usernameLabel = UILabel()
 
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -27,15 +27,65 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
         return cv
     }()
 
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        observeEventPosts()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()
         setupLayout()
+        observeEventPosts()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+
+    private func observeEventPosts() {
+        let eventPostsRef = Database.database().reference().child(Constants.eventPosts)
+        eventPostsRef.observe(.value, with: { snapshot in
+            var tempPosts = [EventPost]()
+            for child in snapshot.children {
+                if let childSnapshot = child as? DataSnapshot,
+                let eventPostDict = childSnapshot.value as? [String: Any],
+                    let postedByDict = eventPostDict["postedBy"] as? [String: Any],
+                    let postedByUid = postedByDict["uid"] as? String,
+                    let postedByUsername = postedByDict["username"] as? String,
+                    let postedByAbsolutePhotoURL = postedByDict["photoURL"] as? String,
+                    let postedByPhotoURL = URL(string: postedByAbsolutePhotoURL),
+                    let eventDict = eventPostDict["event"] as? [String: Any],
+                    let hostDict = eventDict["host"] as? [String: Any],
+                    let hostUid = hostDict["uid"] as? String,
+                    let hostUsername = hostDict["username"] as? String,
+                    let hostAbsolutePhotoURL = hostDict["photoURL"] as? String,
+                    let hostPhotoURL = URL(string: hostAbsolutePhotoURL),
+                    let eventDescription = eventDict["description"] as? String,
+                    let eventAddress = eventDict["address"] as? String,
+                    let eventTime = eventDict["eventTime"] as? String,
+                    let eventPostCaption = eventPostDict["caption"] as? String,
+                    let eventPostTimestamp = eventPostDict["timestamp"] as? TimeInterval {
+
+                    let hostUser = UserProfile(uid: hostUid, username: hostUsername, photoURL: hostPhotoURL)
+                    let postedByUser = UserProfile(uid: postedByUid, username: postedByUsername, photoURL: postedByPhotoURL)
+
+                    let eventDate = Util.stringToDate(dateString: eventTime)
+                    let timestamp = Date(timeIntervalSince1970: eventPostTimestamp / 1000)
+                    let event = Event(host: hostUser, eventImage: #imageLiteral(resourceName: "settings"), description: eventDescription, address: eventAddress, eventTime: eventDate)
+                    let eventPost = EventPost(postedBy: postedByUser, event: event, likedBy: [], caption: eventPostCaption, timestamp: timestamp)
+
+                    tempPosts.append(eventPost)
+                }
+            }
+            self.DataSource = tempPosts
+            self.collectionView.reloadData()
+        })
     }
 
     private func setupSubviews() {

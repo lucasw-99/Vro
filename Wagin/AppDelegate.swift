@@ -22,7 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // user is logged in
                 UserService.observeUserProfile(user.uid, completion: { userProfile in
                     UserService.currentUserProfile = userProfile
-                    print("userProfile: \(userProfile)")
                 })
 
                 let tabBar = CustomTabBarController()

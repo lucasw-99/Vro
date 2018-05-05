@@ -7,6 +7,6 @@
 //
 
 class Constants {
-    static let events = "events"
+    static let eventPosts = "eventPosts"
     static let dateFormat = "MM/dd/yyyy hh:mm a"
 }

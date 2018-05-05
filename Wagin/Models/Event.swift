@@ -13,11 +13,13 @@ class Event {
     let eventImage: UIImage
     let description: String
     let address: String?
+    let eventTime: Date
 
-    init(host: UserProfile, eventImage: UIImage, description: String, address: String?) {
+    init(host: UserProfile, eventImage: UIImage, description: String, address: String?, eventTime: Date) {
         self.host = host
         self.eventImage = eventImage
         self.description = description
         self.address = address
+        self.eventTime = eventTime
     }
 }

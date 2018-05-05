@@ -122,7 +122,6 @@ extension MapViewController: CLLocationManagerDelegate {
 
 extension MapViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print("Search button clicked")
         searchBar.endEditing(true)
         let localSearchRequest = MKLocalSearchRequest()
         localSearchRequest.naturalLanguageQuery = searchBar.text
@@ -134,7 +133,6 @@ extension MapViewController: UISearchBarDelegate {
                 print("Error: \(error?.localizedDescription)")
             }
             guard let response = response else { return }
-            print("Response: \(response.mapItems)")
             guard let firstMapItem = response.mapItems.first else {
                 print("No results")
                 return
@@ -146,7 +144,6 @@ extension MapViewController: UISearchBarDelegate {
 
 extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        print("Rendering mapView")
         if overlay is MKPolyline {
             let renderer = MKPolylineRenderer(overlay: overlay)
             renderer.strokeColor = .blue

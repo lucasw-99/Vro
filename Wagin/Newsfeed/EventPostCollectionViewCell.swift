@@ -185,7 +185,7 @@ class EventPostCollectionViewCell: UICollectionViewCell {
 
         captionLabel.text = eventPost.caption
 
-        daysAgo.text = smallestTimeUnit(from: eventPost.dayPosted)
+        daysAgo.text = smallestTimeUnit(from: eventPost.timestamp)
     }
 
     private func smallestTimeUnit(from date: Date) -> String {

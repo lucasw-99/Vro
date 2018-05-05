@@ -13,13 +13,13 @@ class EventPost {
     let event: Event
     var likedBy: [UserProfile]
     let caption: String
-    let dayPosted: Date
+    let timestamp: Date
 
-    init(postedBy: UserProfile, event: Event, likedBy: [UserProfile], caption: String, dayPosted: Date) {
+    init(postedBy: UserProfile, event: Event, likedBy: [UserProfile], caption: String, timestamp: Date) {
         self.postedBy = postedBy
         self.event = event
         self.likedBy = likedBy
         self.caption = caption
-        self.dayPosted = dayPosted
+        self.timestamp = timestamp
     }
 }

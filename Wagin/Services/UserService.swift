@@ -7,10 +7,12 @@
 //
 
 import FirebaseDatabase
+import UIKit
 
 class UserService {
 
     static var currentUserProfile: UserProfile?
+    static var currentUserImage: UIImage?
 
     @available(*, introduced: 0.0)
     static func observeUserProfile(_ uid: String, completion: @escaping ( (_ userProfile: UserProfile?) -> () )) {
@@ -18,7 +20,6 @@ class UserService {
 
         userRef.observe(.value, with: { snapshot in
             var userProfile: UserProfile?
-            print("snapshot: \(snapshot)")
             if let dict = snapshot.value as? [String: Any],
                 let username = dict["username"] as? String,
                 let photoURL = dict["photoURL"] as? String,
@@ -27,6 +28,5 @@ class UserService {
             }
             completion(userProfile)
         })
-
     }
 }

@@ -41,15 +41,25 @@ class Util {
         return (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
     }
 
-    static func currentDate(date: Date) {
-        let calendar = Calendar.current
-
-        let year = calendar.component(.year, from: date)
-        let month = calendar.component(.month, from: date)
-        let day = calendar.component(.day, from: date)
-
-
+    static func roundedCorners(ofColor color: UIColor, element: UIView) {
+        element.layer.borderColor = color.withAlphaComponent(0.5).cgColor
+        element.layer.borderWidth = 1
+        element.layer.cornerRadius = 5
+        element.clipsToBounds = true
     }
+
+    static func stringToDate(dateString: String) -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = Constants.dateFormat
+        return dateFormatter.date(from: dateString)!
+    }
+
+    static func dateToString(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = Constants.dateFormat
+        return dateFormatter.string(from: date)
+    }
+
 }
 
 extension Date {

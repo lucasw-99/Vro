@@ -13,6 +13,8 @@ import FirebaseAuth
 class NewEventViewController: UIViewController {
     private let addressLabel = UILabel()
     private let eventAddress = UITextField()
+    private let captionLabel = UILabel()
+    private let captionText = UITextView()
     private let timeLabel = UILabel()
     private let eventDate = UIDatePicker()
     private let postEventButton = UIButton()
@@ -26,30 +28,41 @@ class NewEventViewController: UIViewController {
 
     @IBAction func postNewEvent(_ sender: Any) {
         let address = eventAddress.text
-        let date = eventDate.date
+        let eventTime = eventDate.date
+        let caption = captionText.text
 
         // TODO: Verify address & date are not nil
 
-        let eventRef = Database.database().reference().child(Constants.events).childByAutoId()
+        let eventRef = Database.database().reference().child(Constants.eventPosts).childByAutoId()
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = Constants.dateFormat
-        let dateString = dateFormatter.string(from: date)
-        print("dateString: \(dateString)")
-
-        print("currentProfile: \(UserService.currentUserProfile)")
+        let eventTimeString = dateFormatter.string(from: eventTime)
         guard let userProfile = UserService.currentUserProfile else { return }
-        let eventObject = [
-            "address": address!,
-            "date": dateString,
-            "host": [
+
+        let eventPostObject = [
+            "postedBy": [
                 "uid": userProfile.uid,
                 "username": userProfile.username,
                 "photoURL": userProfile.photoURL.absoluteString
-            ]
+            ],
+            "event": [
+                "host": [
+                    "uid": userProfile.uid,
+                    "username": userProfile.username,
+                    "photoURL": userProfile.photoURL.absoluteString
+                ],
+                // TODO: Change this to a valid description of event
+                "description": "",
+                "address": address!,
+                "eventTime": eventTimeString
+            ],
+            "likedBy": [],
+            "caption": caption!,
+            "timestamp": [".sv": "timestamp"]
         ] as [String: Any]
-        print("EventObject: \(eventObject)")
-        eventRef.setValue(eventObject) { error, ref in
+
+        eventRef.setValue(eventPostObject) { error, ref in
             if error == nil {
                 print("Success!")
                 self.dismiss(animated: true, completion: nil)
@@ -70,10 +83,18 @@ class NewEventViewController: UIViewController {
         addressLabel.textAlignment = .center
         view.addSubview(addressLabel)
 
-        eventAddress.backgroundColor = UIColor.white
-        eventAddress.borderStyle = .roundedRect
         eventAddress.autocorrectionType = .no
+        Util.roundedCorners(ofColor: .lightGray, element: eventAddress)
         view.addSubview(eventAddress)
+
+        captionLabel.text = "Caption of Event"
+        captionLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        captionLabel.numberOfLines = 1
+        captionLabel.textAlignment = .center
+        view.addSubview(captionLabel)
+
+        Util.roundedCorners(ofColor: .lightGray, element: captionText)
+        view.addSubview(captionText)
 
         timeLabel.text = "Time of Event"
         timeLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
@@ -91,12 +112,14 @@ class NewEventViewController: UIViewController {
         postEventButton.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         postEventButton.addTarget(self, action: #selector(NewEventViewController.postNewEvent(_:)), for: .touchUpInside)
         postEventButton.backgroundColor = .lightGray
+        Util.roundedCorners(ofColor: .lightGray, element: postEventButton)
         view.addSubview(postEventButton)
 
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         cancelButton.addTarget(self, action: #selector(NewEventViewController.dismissModalView(_:)), for: .touchUpInside)
         cancelButton.backgroundColor = .lightGray
+        Util.roundedCorners(ofColor: .lightGray, element: cancelButton)
         view.addSubview(cancelButton)
 
         view.backgroundColor = .white
@@ -104,7 +127,7 @@ class NewEventViewController: UIViewController {
 
     private func setupLayout() {
         addressLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.layoutMarginsGuide.snp.topMargin).offset(30)
+            make.top.equalTo(view.layoutMarginsGuide.snp.topMargin).offset(40)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
@@ -112,11 +135,25 @@ class NewEventViewController: UIViewController {
         eventAddress.snp.makeConstraints { make in
             make.top.equalTo(addressLabel.snp.bottom).offset(15)
             make.centerX.equalToSuperview()
-            make.width.equalTo(150)
+            make.width.equalTo(225)
+            make.height.equalTo(30)
+        }
+
+        captionLabel.snp.makeConstraints { make in
+            make.top.equalTo(eventAddress.snp.bottom).offset(35)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+
+        captionText.snp.makeConstraints { make in
+            make.top.equalTo(captionLabel.snp.bottom).offset(15)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(225)
+            make.height.equalTo(85)
         }
 
         timeLabel.snp.makeConstraints { make in
-            make.top.equalTo(eventAddress.snp.bottom).offset(35)
+            make.top.equalTo(captionText.snp.bottom).offset(35)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }

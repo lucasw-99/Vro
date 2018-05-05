@@ -27,7 +27,6 @@ class ManageProfileViewController: UIViewController {
     }
     
     @IBAction func changeProfilePicture(_ sender: Any) {
-        print("Called changeProfilePicture")
         // open image picker
         self.present(imagePicker, animated: true, completion: nil)
     }
@@ -124,7 +123,6 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
         if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             changeProfileButton.setImage(pickedImage, for: .normal)
             Util.makeImageCircular(image: changeProfileButton.imageView!)
-            print("Changing user profile")
             self.uploadProfileImage(pickedImage) { url in
                 guard let url = url else {
                     print("Url was nil")
@@ -135,7 +133,6 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
 
                 changeRequest?.commitChanges { error in
                     if error == nil {
-                        print("User photo url committed")
                         self.saveProfile(profileImageUrl: url) { success in
                             if success {
                                 self.dismiss(animated: true, completion: nil)
