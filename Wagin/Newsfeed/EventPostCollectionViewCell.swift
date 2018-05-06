@@ -177,6 +177,13 @@ class EventPostCollectionViewCell: UICollectionViewCell {
         usernameLabel.text = eventPost.postedBy.username
 
         // TODO: Assign user image
+        print("photoURL: \(eventPost.postedBy.photoURL), caption: \(eventPost.caption)")
+        ImageService.getImage(withURL: eventPost.postedBy.photoURL, completion: { image in
+            self.userImage.image = image
+            Util.makeImageCircular(image: self.userImage)
+        })
+        userImage.layer.borderWidth = 1
+        userImage.layer.borderColor = UIColor.lightGray.cgColor
 
         eventImageView.image = eventPost.event.eventImage
 

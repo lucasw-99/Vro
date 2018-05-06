@@ -22,6 +22,8 @@ class ManageProfileViewController: UIViewController {
 
     private var imagePicker = UIImagePickerController()
 
+    private var setProfileImage = false
+
     @IBAction func logoutUser(_ sender: Any) {
         try! Auth.auth().signOut()
     }
@@ -60,18 +62,16 @@ class ManageProfileViewController: UIViewController {
         logoutLabel.textAlignment = .center
         view.addSubview(logoutLabel)
 
-        Util.makeImageCircular(image: changeProfileButton.imageView!)
-        
-        if let photoUrl = Auth.auth().currentUser?.photoURL {
-            let pathReference = Storage.storage().reference(forURL: photoUrl.absoluteString)
-            pathReference.getData(maxSize: 3 * 1024 * 1024) { data, error in
-                if let error = error {
-                    print("Error downloading file: \(error.localizedDescription)")
-                } else {
-                    print("Setting profile picture!")
-                    let profilePicture = UIImage(data: data!)
-                    self.changeProfileButton.setImage(profilePicture, for: .normal)
-                    Util.makeImageCircular(image: self.changeProfileButton.imageView!)
+        changeProfileButton.setImage(#imageLiteral(resourceName: "add_user_male"), for: .normal)
+        if let currUser = UserService.currentUserProfile {
+            setProfileImage(currUser.photoURL)
+        } else {
+            let uid = Auth.auth().currentUser!.uid
+            let userRef = Database.database().reference().child("users/profile/\(uid)/photoURL")
+            userRef.observe(.value) { snapshot in
+                if let absolutePhotoURL = snapshot.value as? String,
+                    let photoURL = URL(string: absolutePhotoURL) {
+                    self.setProfileImage(photoURL)
                 }
             }
         }
@@ -89,6 +89,13 @@ class ManageProfileViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.width.equalTo(75)
             make.height.equalTo(75)
+        }
+
+        changeProfileButton.imageView!.snp.makeConstraints { make in
+            make.width.equalTo(75)
+            make.height.equalTo(75)
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
         }
 
         profileLabel.snp.makeConstraints { make in
@@ -110,6 +117,13 @@ class ManageProfileViewController: UIViewController {
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
+    }
+
+    private func setProfileImage(_ url: URL) {
+        ImageService.getImage(withURL: url, completion: { image in
+            self.changeProfileButton.setImage(image, for: .normal)
+            Util.makeImageCircular(image: self.changeProfileButton.imageView!, 75)
+        })
     }
 }
 

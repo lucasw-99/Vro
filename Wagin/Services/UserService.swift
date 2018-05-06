@@ -12,7 +12,6 @@ import UIKit
 class UserService {
 
     static var currentUserProfile: UserProfile?
-    static var currentUserImage: UIImage?
 
     @available(*, introduced: 0.0)
     static func observeUserProfile(_ uid: String, completion: @escaping ( (_ userProfile: UserProfile?) -> () )) {

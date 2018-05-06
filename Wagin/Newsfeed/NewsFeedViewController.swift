@@ -14,9 +14,9 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
 
     private var DataSource: [EventPost] = []
 
+    private let waginLabel = UILabel()
+    private let separatorView = UIView()
     private let headerView = UIView()
-    private let userImage = UIImageView()
-    private let usernameLabel = UILabel()
 
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -77,6 +77,7 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
 
                     let eventDate = Util.stringToDate(dateString: eventTime)
                     let timestamp = Date(timeIntervalSince1970: eventPostTimestamp / 1000)
+                    
                     let event = Event(host: hostUser, eventImage: #imageLiteral(resourceName: "settings"), description: eventDescription, address: eventAddress, eventTime: eventDate)
                     let eventPost = EventPost(postedBy: postedByUser, event: event, likedBy: [], caption: eventPostCaption, timestamp: timestamp)
 
@@ -94,7 +95,16 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
 
         collectionView.register(EventPostCollectionViewCell.self, forCellWithReuseIdentifier: "EventPostCell")
 
-        headerView.backgroundColor = .black
+        waginLabel.text = "Wagin"
+        waginLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        waginLabel.numberOfLines = 1
+        waginLabel.textAlignment = .center
+        headerView.addSubview(waginLabel)
+
+        separatorView.backgroundColor = .lightGray
+        headerView.addSubview(separatorView)
+
+//        headerView.backgroundColor = .white
         view.addSubview(headerView)
 
         view.addSubview(collectionView)
@@ -103,6 +113,20 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     private func setupLayout() {
+        waginLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.topMargin)
+            make.bottom.equalToSuperview()
+        }
+
+        separatorView.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalTo(1)
+        }
+
         headerView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
