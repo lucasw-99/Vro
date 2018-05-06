@@ -27,18 +27,37 @@ class NewEventViewController: UIViewController {
     }
 
     @IBAction func postNewEvent(_ sender: Any) {
-        let address = eventAddress.text
-        let eventTime = eventDate.date
-        let caption = captionText.text
+        guard let address: String = eventAddress.text, address != "" else {
+            // TODO: Make sure address is actually valid
+            let alert = Util.makeOKAlert(alertTitle: "New Event Error", message: "The address field is empty.")
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
 
-        // TODO: Verify address & date are not nil
+        // More error checking on date?
+        let eventTime = eventDate.date
+
+        // Warning if posting empty caption?
+        let caption = captionText.text
 
         let eventRef = Database.database().reference().child(Constants.eventPosts).childByAutoId()
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = Constants.dateFormat
         let eventTimeString = dateFormatter.string(from: eventTime)
+
         guard let userProfile = UserService.currentUserProfile else { return }
+        let eventObject = [
+            "host": [
+                "uid": userProfile.uid,
+                "username": userProfile.username,
+                "photoURL": userProfile.photoURL.absoluteString
+            ],
+            // TODO: Change this to a valid description of event
+            "description": "",
+            "address": address,
+            "eventTime": eventTimeString
+        ] as [String: Any]
 
         let eventPostObject = [
             "postedBy": [
@@ -54,7 +73,7 @@ class NewEventViewController: UIViewController {
                 ],
                 // TODO: Change this to a valid description of event
                 "description": "",
-                "address": address!,
+                "address": address,
                 "eventTime": eventTimeString
             ],
             "likedBy": [],
@@ -62,6 +81,8 @@ class NewEventViewController: UIViewController {
             "timestamp": [".sv": "timestamp"]
         ] as [String: Any]
 
+        print("EventObject: \(eventObject)")
+        print("EventPostObject: \(eventPostObject)")
         eventRef.setValue(eventPostObject) { error, ref in
             if error == nil {
                 print("Success!")
