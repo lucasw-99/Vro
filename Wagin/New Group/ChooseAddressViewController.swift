@@ -16,7 +16,7 @@ class ChooseAddressViewController: UIViewController {
     private let mapView = MKMapView()
 
     private let locationManager = CLLocationManager()
-    private var currentCoordinate: CLLocationCoordinate2D!
+    private var currentCoordinate: CLLocationCoordinate2D?
     private var currentPin: MKPointAnnotation?
 
     override func viewDidLoad() {
@@ -43,6 +43,7 @@ class ChooseAddressViewController: UIViewController {
         locationManager.startUpdatingLocation()
 
         searchBar.delegate = self
+        searchBar.showsCancelButton = true
 
         mapView.delegate = self
 
@@ -82,38 +83,38 @@ class ChooseAddressViewController: UIViewController {
         }
     }
 
-    private func getDirections(to destinationMapItem: MKMapItem) {
-        let sourcePlacemark = MKPlacemark(coordinate: currentCoordinate)
-        let sourceMapItem = MKMapItem(placemark: sourcePlacemark)
-
-        let directionsRequest = MKDirectionsRequest()
-        directionsRequest.source = sourceMapItem
-        directionsRequest.destination = destinationMapItem
-        directionsRequest.transportType = .automobile
-
-        let directions = MKDirections(request: directionsRequest)
-        directions.calculate { (response, error) in
-            if error != nil {
-                print("Error: \(error?.localizedDescription)")
-            }
-            guard let response = response else { return }
-            guard let firstRoute = response.routes.first else { return }
-            let (hours, minutes, seconds) = Util.secondsToHoursMinutesSeconds(seconds: Int(firstRoute.expectedTravelTime))
-            self.headerLabel.text = "\(hours) h \(minutes) min \(seconds)s"
-            self.mapView.add(firstRoute.polyline)
-
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = destinationMapItem.placemark.coordinate
-            annotation.title = destinationMapItem.name
-
-            let destSpan = MKCoordinateSpanMake(0.15, 0.15)
-            let destRegion = MKCoordinateRegion(center: annotation.coordinate, span: destSpan)
-
-            self.mapView.setRegion(destRegion, animated: true)
-            self.mapView.addAnnotation(annotation)
-            self.mapView.selectAnnotation(annotation, animated: true)
-        }
-    }
+//    private func getDirections(to destinationMapItem: MKMapItem) {
+//        let sourcePlacemark = MKPlacemark(coordinate: currentCoordinate)
+//        let sourceMapItem = MKMapItem(placemark: sourcePlacemark)
+//
+//        let directionsRequest = MKDirectionsRequest()
+//        directionsRequest.source = sourceMapItem
+//        directionsRequest.destination = destinationMapItem
+//        directionsRequest.transportType = .automobile
+//
+//        let directions = MKDirections(request: directionsRequest)
+//        directions.calculate { (response, error) in
+//            if error != nil {
+//                print("Error: \(error?.localizedDescription)")
+//            }
+//            guard let response = response else { return }
+//            guard let firstRoute = response.routes.first else { return }
+//            let (hours, minutes, seconds) = Util.secondsToHoursMinutesSeconds(seconds: Int(firstRoute.expectedTravelTime))
+//            self.headerLabel.text = "\(hours) h \(minutes) min \(seconds)s"
+//            self.mapView.add(firstRoute.polyline)
+//
+//            let annotation = MKPointAnnotation()
+//            annotation.coordinate = destinationMapItem.placemark.coordinate
+//            annotation.title = destinationMapItem.name
+//
+//            let destSpan = MKCoordinateSpanMake(0.15, 0.15)
+//            let destRegion = MKCoordinateRegion(center: annotation.coordinate, span: destSpan)
+//
+//            self.mapView.setRegion(destRegion, animated: true)
+//            self.mapView.addAnnotation(annotation)
+//            self.mapView.selectAnnotation(annotation, animated: true)
+//        }
+//    }
 }
 
 extension ChooseAddressViewController: CLLocationManagerDelegate {
@@ -130,8 +131,12 @@ extension ChooseAddressViewController: UISearchBarDelegate {
         searchBar.endEditing(true)
         let localSearchRequest = MKLocalSearchRequest()
         localSearchRequest.naturalLanguageQuery = searchBar.text
-        let region = MKCoordinateRegion(center: currentCoordinate, span: MKCoordinateSpan(latitudeDelta: 0.4, longitudeDelta: 0.4))
-        localSearchRequest.region = region
+        var region: MKCoordinateRegion?
+        if let coordinate = currentCoordinate {
+            region = MKCoordinateRegion(center: coordinate , span: MKCoordinateSpan(latitudeDelta: 0.4, longitudeDelta: 0.4))
+        }
+
+        localSearchRequest.region = region ?? MKCoordinateRegion()
         let localSearch = MKLocalSearch(request: localSearchRequest)
         localSearch.start { (response, error) in
             if error != nil {
@@ -142,8 +147,24 @@ extension ChooseAddressViewController: UISearchBarDelegate {
                 print("No results")
                 return
             }
-            self.getDirections(to: firstMapItem)
+            print("firstMapItem: \(firstMapItem)")
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = firstMapItem.placemark.coordinate
+            annotation.title = firstMapItem.name
+
+            let span = MKCoordinateSpanMake(0.75, 0.75)
+            let region = MKCoordinateRegion(center: annotation.coordinate, span: span)
+
+            self.removeCurrentPin()
+            self.mapView.setRegion(region, animated: true)
+            self.mapView.addAnnotation(annotation)
+            self.mapView.selectAnnotation(annotation, animated: true)
         }
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        removeCurrentPin()
+        self.searchBar.text = ""
     }
 }
 
@@ -183,9 +204,7 @@ extension ChooseAddressViewController {
 
         let pin = MKPointAnnotation()
         pin.coordinate = touchMapCoordinate
-        if let currPin = currentPin {
-            mapView.removeAnnotation(currPin)
-        }
+        removeCurrentPin()
         currentPin = pin
         mapView.addAnnotation(pin)
         mapView.selectAnnotation(pin, animated: true)
@@ -198,7 +217,9 @@ extension ChooseAddressViewController {
 
         geocoder.reverseGeocodeLocation(location) { placemarks, error in
             if let firstPlacemark = placemarks?.first {
-                self.searchBar.text = self.extractAddress(firstPlacemark)
+                let name = self.extractAddress(firstPlacemark)
+                self.searchBar.text = name
+                pin.title = name
                 print("Set searchBar text to \(self.searchBar.text)")
             } else {
                 print("Error: \(error!.localizedDescription)")
@@ -209,5 +230,11 @@ extension ChooseAddressViewController {
     private func extractAddress(_ placemark: CLPlacemark) -> String {
         let address = "\(placemark.subThoroughfare ?? "") \(placemark.thoroughfare ?? ""), \(placemark.locality ?? ""), \(placemark.administrativeArea ?? "") \(placemark.postalCode ?? "")"
         return address
+    }
+
+    private func removeCurrentPin() {
+        if let currPin = currentPin {
+            mapView.removeAnnotation(currPin)
+        }
     }
 }
