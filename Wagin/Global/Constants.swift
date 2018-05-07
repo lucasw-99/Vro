@@ -8,5 +8,6 @@
 
 class Constants {
     static let eventPosts = "eventPosts"
+    static let autocompleteSearchResult = "AutocompleteSearchResultCell"
     static let dateFormat = "MM/dd/yyyy hh:mm a"
 }

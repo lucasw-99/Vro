@@ -40,6 +40,7 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
         super.viewDidLoad()
         setupSubviews()
         setupLayout()
+        // TODO: Delete one call to observeEventPosts
         observeEventPosts()
     }
 

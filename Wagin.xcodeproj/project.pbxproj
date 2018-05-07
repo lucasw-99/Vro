@@ -15,6 +15,7 @@
 		A0228F80209B488500E71C80 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F7F209B488500E71C80 /* UserProfile.swift */; };
 		A05D5A34209E75470025E8C7 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05D5A33209E75460025E8C7 /* ImageService.swift */; };
 		A05D5A36209ECD580025E8C7 /* ChooseAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05D5A35209ECD580025E8C7 /* ChooseAddressViewController.swift */; };
+		A05D5A3C20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05D5A3B20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift */; };
 		A0648FFD20981138001417D7 /* ManageProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0648FFC20981138001417D7 /* ManageProfileViewController.swift */; };
 		A0AD85FA2093ED9B00D5F793 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD85F92093ED9B00D5F793 /* Util.swift */; };
 		A0AD860A20978C2500D5F793 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD860920978C2500D5F793 /* Post.swift */; };
@@ -58,6 +59,7 @@
 		A0228F7F209B488500E71C80 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		A05D5A33209E75460025E8C7 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		A05D5A35209ECD580025E8C7 /* ChooseAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseAddressViewController.swift; sourceTree = "<group>"; };
+		A05D5A3B20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteResultTableViewCell.swift; sourceTree = "<group>"; };
 		A0648FFC20981138001417D7 /* ManageProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageProfileViewController.swift; sourceTree = "<group>"; };
 		A0AD85F92093ED9B00D5F793 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		A0AD860920978C2500D5F793 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
@@ -109,9 +111,9 @@
 		A0228F76209AC34600E71C80 /* NewEvent */ = {
 			isa = PBXGroup;
 			children = (
+				A05D5A3920A09F5C0025E8C7 /* ChooseAddress */,
 				A0228F74209AC32D00E71C80 /* NewEventViewController.swift */,
 				A0F2FB2B209C11A80018F465 /* NewEventDummyViewController.swift */,
-				A05D5A35209ECD580025E8C7 /* ChooseAddressViewController.swift */,
 			);
 			name = NewEvent;
 			path = "New Group";
@@ -133,6 +135,23 @@
 				A05D5A33209E75460025E8C7 /* ImageService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		A05D5A3920A09F5C0025E8C7 /* ChooseAddress */ = {
+			isa = PBXGroup;
+			children = (
+				A05D5A35209ECD580025E8C7 /* ChooseAddressViewController.swift */,
+				A05D5A3A20A09F7C0025E8C7 /* SearchAutocomplete */,
+			);
+			path = ChooseAddress;
+			sourceTree = "<group>";
+		};
+		A05D5A3A20A09F7C0025E8C7 /* SearchAutocomplete */ = {
+			isa = PBXGroup;
+			children = (
+				A05D5A3B20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift */,
+			);
+			path = SearchAutocomplete;
 			sourceTree = "<group>";
 		};
 		A0D1854F209A387400FC58D1 /* Login */ = {
@@ -397,6 +416,7 @@
 				A0228F7E209B483A00E71C80 /* UserService.swift in Sources */,
 				A0F2FB30209CA9380018F465 /* EventPost.swift in Sources */,
 				A0F2FB2A209C0CCD0018F465 /* CustomTabBarController.swift in Sources */,
+				A05D5A3C20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift in Sources */,
 				A0228F80209B488500E71C80 /* UserProfile.swift in Sources */,
 				A0228F75209AC32D00E71C80 /* NewEventViewController.swift in Sources */,
 				A0228F7B209ACBAC00E71C80 /* Event.swift in Sources */,

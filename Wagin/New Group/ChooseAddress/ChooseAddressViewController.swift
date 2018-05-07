@@ -14,10 +14,16 @@ class ChooseAddressViewController: UIViewController {
     private let headerLabel = UILabel()
     private let searchBar = UISearchBar()
     private let mapView = MKMapView()
+    private let autocompleteResultTable = UITableView()
 
     private let locationManager = CLLocationManager()
     private var currentCoordinate: CLLocationCoordinate2D?
     private var currentPin: MKPointAnnotation?
+    private let searchCompleter = MKLocalSearchCompleter()
+    private var autocompleteResults: [String]?
+
+    // if map view is hidden, then autocompleteResultTable is not hidden (& vice versa)
+    private var mapViewHidden = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,22 +40,32 @@ class ChooseAddressViewController: UIViewController {
         view.addSubview(headerView)
 
         view.addSubview(searchBar)
+        searchBar.delegate = self
 
         view.addSubview(mapView)
+        mapView.delegate = self
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(ChooseAddressViewController.dropPinAtLocation(_:)))
+        longPress.minimumPressDuration = 1.5
+        mapView.addGestureRecognizer(longPress)
+
+        // add table view after mapView so it can lay over it
+        view.addSubview(autocompleteResultTable)
+        autocompleteResultTable.register(AutocompleteResultTableViewCell.self, forCellReuseIdentifier: Constants.autocompleteSearchResult)
+        autocompleteResultTable.isHidden = !mapViewHidden
+        autocompleteResultTable.delegate = self
+        autocompleteResultTable.dataSource = self
+
+        // show map view, hide table view
+        showAndHideViews()
 
         locationManager.requestWhenInUseAuthorization()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         locationManager.startUpdatingLocation()
 
-        searchBar.delegate = self
-        searchBar.showsCancelButton = true
-
-        mapView.delegate = self
-
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(ChooseAddressViewController.dropPinAtLocation(_:)))
-        longPress.minimumPressDuration = 1.5
-        mapView.addGestureRecognizer(longPress)
+        searchCompleter.delegate = self
+        // limit search results to mapviews current region
+        searchCompleter.region = mapView.region
 
         view.backgroundColor = .white
     }
@@ -81,40 +97,14 @@ class ChooseAddressViewController: UIViewController {
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-    }
 
-//    private func getDirections(to destinationMapItem: MKMapItem) {
-//        let sourcePlacemark = MKPlacemark(coordinate: currentCoordinate)
-//        let sourceMapItem = MKMapItem(placemark: sourcePlacemark)
-//
-//        let directionsRequest = MKDirectionsRequest()
-//        directionsRequest.source = sourceMapItem
-//        directionsRequest.destination = destinationMapItem
-//        directionsRequest.transportType = .automobile
-//
-//        let directions = MKDirections(request: directionsRequest)
-//        directions.calculate { (response, error) in
-//            if error != nil {
-//                print("Error: \(error?.localizedDescription)")
-//            }
-//            guard let response = response else { return }
-//            guard let firstRoute = response.routes.first else { return }
-//            let (hours, minutes, seconds) = Util.secondsToHoursMinutesSeconds(seconds: Int(firstRoute.expectedTravelTime))
-//            self.headerLabel.text = "\(hours) h \(minutes) min \(seconds)s"
-//            self.mapView.add(firstRoute.polyline)
-//
-//            let annotation = MKPointAnnotation()
-//            annotation.coordinate = destinationMapItem.placemark.coordinate
-//            annotation.title = destinationMapItem.name
-//
-//            let destSpan = MKCoordinateSpanMake(0.15, 0.15)
-//            let destRegion = MKCoordinateRegion(center: annotation.coordinate, span: destSpan)
-//
-//            self.mapView.setRegion(destRegion, animated: true)
-//            self.mapView.addAnnotation(annotation)
-//            self.mapView.selectAnnotation(annotation, animated: true)
-//        }
-//    }
+        autocompleteResultTable.snp.makeConstraints { make in
+            make.top.equalTo(searchBar.snp.bottom)
+            make.trailing.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+    }
 }
 
 extension ChooseAddressViewController: CLLocationManagerDelegate {
@@ -129,6 +119,9 @@ extension ChooseAddressViewController: CLLocationManagerDelegate {
 extension ChooseAddressViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
+        mapViewHidden = false
+        showAndHideViews()
+
         let localSearchRequest = MKLocalSearchRequest()
         localSearchRequest.naturalLanguageQuery = searchBar.text
         var region: MKCoordinateRegion?
@@ -147,24 +140,30 @@ extension ChooseAddressViewController: UISearchBarDelegate {
                 print("No results")
                 return
             }
-            print("firstMapItem: \(firstMapItem)")
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = firstMapItem.placemark.coordinate
-            annotation.title = firstMapItem.name
+            let pin = MKPointAnnotation()
+            pin.coordinate = firstMapItem.placemark.coordinate
+            pin.title = firstMapItem.name
 
             let span = MKCoordinateSpanMake(0.75, 0.75)
-            let region = MKCoordinateRegion(center: annotation.coordinate, span: span)
+            let region = MKCoordinateRegion(center: pin.coordinate, span: span)
 
             self.removeCurrentPin()
+            self.currentPin = pin
             self.mapView.setRegion(region, animated: true)
-            self.mapView.addAnnotation(annotation)
-            self.mapView.selectAnnotation(annotation, animated: true)
+            self.mapView.addAnnotation(pin)
+            self.mapView.selectAnnotation(pin, animated: true)
         }
     }
 
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        removeCurrentPin()
-        self.searchBar.text = ""
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty {
+            removeCurrentPin()
+            mapViewHidden = false
+            showAndHideViews()
+        } else {
+            print("Assigning queryFragment to: \(searchText)")
+            searchCompleter.queryFragment = searchText
+        }
     }
 }
 
@@ -236,5 +235,43 @@ extension ChooseAddressViewController {
         if let currPin = currentPin {
             mapView.removeAnnotation(currPin)
         }
+    }
+}
+
+extension ChooseAddressViewController: MKLocalSearchCompleterDelegate {
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        autocompleteResults = completer.results.map { $0.title }
+        print("autocompleteResults: \(autocompleteResults)")
+        mapViewHidden = true
+        showAndHideViews()
+        DispatchQueue.main.async {
+            self.autocompleteResultTable.reloadData()
+        }
+    }
+
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        fatalError(error.localizedDescription)
+    }
+}
+
+extension ChooseAddressViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // Don't want autocomplete results to have section headers
+        return autocompleteResults?.count ?? 0
+
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.autocompleteSearchResult, for: indexPath) as! AutocompleteResultTableViewCell
+
+        let cellTitle = autocompleteResults![indexPath.row]
+        print("cellTitle: \(cellTitle)")
+        cell.title = cellTitle
+        return cell
+    }
+
+    private func showAndHideViews() {
+        mapView.isHidden = mapViewHidden
+        autocompleteResultTable.isHidden = !mapViewHidden
     }
 }

@@ -176,7 +176,6 @@ class EventPostCollectionViewCell: UICollectionViewCell {
     private func updateUI() {
         usernameLabel.text = eventPost.postedBy.username
 
-        // TODO: Assign user image
         print("photoURL: \(eventPost.postedBy.photoURL), caption: \(eventPost.caption)")
         ImageService.getImage(withURL: eventPost.postedBy.photoURL, completion: { image in
             self.userImage.image = image
