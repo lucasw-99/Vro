@@ -244,9 +244,7 @@ extension ChooseAddressViewController: MKLocalSearchCompleterDelegate {
         print("autocompleteResults: \(autocompleteResults)")
         mapViewHidden = true
         showAndHideViews()
-        DispatchQueue.main.async {
-            self.autocompleteResultTable.reloadData()
-        }
+        self.autocompleteResultTable.reloadData()
     }
 
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
@@ -263,7 +261,6 @@ extension ChooseAddressViewController: UITableViewDelegate, UITableViewDataSourc
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.autocompleteSearchResult, for: indexPath) as! AutocompleteResultTableViewCell
-
         let cellTitle = autocompleteResults![indexPath.row]
         print("cellTitle: \(cellTitle)")
         cell.title = cellTitle

@@ -17,10 +17,14 @@ class AutocompleteResultTableViewCell: UITableViewCell {
         }
     }
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupSubviews()
         setupLayout()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -31,7 +35,8 @@ class AutocompleteResultTableViewCell: UITableViewCell {
 
     private func setupSubviews() {
         titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-        titleLabel.textAlignment = .center
+        titleLabel.textAlignment = .natural
+        titleLabel.textColor = .black
         contentView.addSubview(titleLabel)
     }
 
