@@ -108,3 +108,11 @@ extension Date {
         return ""
     }
 }
+
+extension UIView {
+    func addSubviews(_ viewArr: [UIView]) {
+        for viewToAdd in viewArr {
+            addSubview(viewToAdd)
+        }
+    }
+}

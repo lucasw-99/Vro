@@ -84,6 +84,10 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
                     tempPosts.append(eventPost)
                 }
             }
+            // sort posts in ascending order
+            tempPosts.sort(by: { (ep1, ep2) -> Bool in
+                return ep2.timestamp.compare(ep1.timestamp) == .orderedAscending
+            })
             self.DataSource = tempPosts
             self.collectionView.reloadData()
         })
@@ -104,7 +108,6 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
         separatorView.backgroundColor = .lightGray
         headerView.addSubview(separatorView)
 
-//        headerView.backgroundColor = .white
         view.addSubview(headerView)
 
         view.addSubview(collectionView)

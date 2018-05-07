@@ -14,6 +14,7 @@
 		A0228F7E209B483A00E71C80 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F7D209B483A00E71C80 /* UserService.swift */; };
 		A0228F80209B488500E71C80 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F7F209B488500E71C80 /* UserProfile.swift */; };
 		A05D5A34209E75470025E8C7 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05D5A33209E75460025E8C7 /* ImageService.swift */; };
+		A05D5A36209ECD580025E8C7 /* ChooseAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05D5A35209ECD580025E8C7 /* ChooseAddressViewController.swift */; };
 		A0648FFD20981138001417D7 /* ManageProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0648FFC20981138001417D7 /* ManageProfileViewController.swift */; };
 		A0AD85FA2093ED9B00D5F793 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD85F92093ED9B00D5F793 /* Util.swift */; };
 		A0AD860A20978C2500D5F793 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD860920978C2500D5F793 /* Post.swift */; };
@@ -56,6 +57,7 @@
 		A0228F7D209B483A00E71C80 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		A0228F7F209B488500E71C80 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		A05D5A33209E75460025E8C7 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
+		A05D5A35209ECD580025E8C7 /* ChooseAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseAddressViewController.swift; sourceTree = "<group>"; };
 		A0648FFC20981138001417D7 /* ManageProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageProfileViewController.swift; sourceTree = "<group>"; };
 		A0AD85F92093ED9B00D5F793 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		A0AD860920978C2500D5F793 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 			children = (
 				A0228F74209AC32D00E71C80 /* NewEventViewController.swift */,
 				A0F2FB2B209C11A80018F465 /* NewEventDummyViewController.swift */,
+				A05D5A35209ECD580025E8C7 /* ChooseAddressViewController.swift */,
 			);
 			name = NewEvent;
 			path = "New Group";
@@ -388,6 +391,7 @@
 				A0AD860A20978C2500D5F793 /* Post.swift in Sources */,
 				A0228F79209AC4F700E71C80 /* Constants.swift in Sources */,
 				A0AD85FA2093ED9B00D5F793 /* Util.swift in Sources */,
+				A05D5A36209ECD580025E8C7 /* ChooseAddressViewController.swift in Sources */,
 				A0AD860C20978D6400D5F793 /* User.swift in Sources */,
 				A0FF4694209176B9006FE799 /* AppDelegate.swift in Sources */,
 				A0228F7E209B483A00E71C80 /* UserService.swift in Sources */,
