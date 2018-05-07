@@ -20,7 +20,7 @@ class ChooseAddressViewController: UIViewController {
     private var currentCoordinate: CLLocationCoordinate2D?
     private var currentPin: MKPointAnnotation?
     private let searchCompleter = MKLocalSearchCompleter()
-    private var autocompleteResults: [String]?
+    private var searchResults: [(String, String, [NSValue])]?
 
     // if map view is hidden, then autocompleteResultTable is not hidden (& vice versa)
     private var mapViewHidden = false
@@ -119,11 +119,14 @@ extension ChooseAddressViewController: CLLocationManagerDelegate {
 extension ChooseAddressViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
+        searchQuery(query: searchBar.text!)
+    }
+
+    private func searchQuery(query: String) {
         mapViewHidden = false
         showAndHideViews()
-
         let localSearchRequest = MKLocalSearchRequest()
-        localSearchRequest.naturalLanguageQuery = searchBar.text
+        localSearchRequest.naturalLanguageQuery = query
         var region: MKCoordinateRegion?
         if let coordinate = currentCoordinate {
             region = MKCoordinateRegion(center: coordinate , span: MKCoordinateSpan(latitudeDelta: 0.4, longitudeDelta: 0.4))
@@ -133,7 +136,7 @@ extension ChooseAddressViewController: UISearchBarDelegate {
         let localSearch = MKLocalSearch(request: localSearchRequest)
         localSearch.start { (response, error) in
             if error != nil {
-                print("Error: \(error?.localizedDescription)")
+                print("Error: \(error!.localizedDescription)")
             }
             guard let response = response else { return }
             guard let firstMapItem = response.mapItems.first else {
@@ -240,11 +243,12 @@ extension ChooseAddressViewController {
 
 extension ChooseAddressViewController: MKLocalSearchCompleterDelegate {
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        autocompleteResults = completer.results.map { $0.title }
-        print("autocompleteResults: \(autocompleteResults)")
+        searchResults = completer.results.map { ($0.title, $0.subtitle, $0.titleHighlightRanges) }
         mapViewHidden = true
         showAndHideViews()
-        self.autocompleteResultTable.reloadData()
+        DispatchQueue.main.async {
+            self.autocompleteResultTable.reloadData()
+        }
     }
 
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
@@ -255,16 +259,38 @@ extension ChooseAddressViewController: MKLocalSearchCompleterDelegate {
 extension ChooseAddressViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Don't want autocomplete results to have section headers
-        return autocompleteResults?.count ?? 0
+        return searchResults?.count ?? 0
 
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.autocompleteSearchResult, for: indexPath) as! AutocompleteResultTableViewCell
-        let cellTitle = autocompleteResults![indexPath.row]
-        print("cellTitle: \(cellTitle)")
-        cell.title = cellTitle
+        let (title, subTitle, matchingRanges) = searchResults![indexPath.row]
+        let highlightedText = boldHighlightedSearchResult(title, matchingRanges)
+        cell.updateCell(titleText: highlightedText, descriptionText: subTitle)
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let (searchTitle, _, _) = searchResults![indexPath.row]
+        print("searchTitle: \(searchTitle)")
+        searchBar.text = searchTitle
+        searchQuery(query: searchTitle)
+    }
+
+    /*
+     searchResult: The search result
+     range: The ranges in to highlight in searchResult
+     */
+    func boldHighlightedSearchResult(_ searchResult: String, _ values: [NSValue]) -> NSMutableAttributedString {
+        let attributedString: NSMutableAttributedString = NSMutableAttributedString(string: searchResult)
+        for value in values {
+            let range = value.rangeValue
+            attributedString.addAttribute(NSAttributedStringKey.font, value: UIFont.systemFont(ofSize: 20, weight: .semibold), range: range)
+            attributedString.addAttribute(NSAttributedStringKey.backgroundColor, value: UIColor.yellow, range: range)
+        }
+        return attributedString
     }
 
     private func showAndHideViews() {
