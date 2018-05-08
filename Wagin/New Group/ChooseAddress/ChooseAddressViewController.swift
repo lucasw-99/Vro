@@ -16,11 +16,15 @@ class ChooseAddressViewController: UIViewController {
     private let mapView = MKMapView()
     private let autocompleteResultTable = UITableView()
 
+    private let selectAddressLabel = UILabel()
+    private let selectAddressButton = UIButton()
+    private let selectAddressContainerView = UIView()
+
     private let locationManager = CLLocationManager()
-    private var currentCoordinate: CLLocationCoordinate2D?
+    private var currentUserCoordinate: CLLocationCoordinate2D?
     private var currentPin: MKPointAnnotation?
     private let searchCompleter = MKLocalSearchCompleter()
-    private var searchResults: [(String, String, [NSValue])]?
+    private var searchResults = [(String, String, [NSValue])]()
 
     // if map view is hidden, then autocompleteResultTable is not hidden (& vice versa)
     private var mapViewHidden = false
@@ -29,6 +33,10 @@ class ChooseAddressViewController: UIViewController {
         super.viewDidLoad()
         setupSubviews()
         setupLayout()
+    }
+
+    @objc private func selectAddress(_ sender: Any) {
+        print("Select address button pressed")
     }
 
     private func setupSubviews() {
@@ -42,11 +50,25 @@ class ChooseAddressViewController: UIViewController {
         view.addSubview(searchBar)
         searchBar.delegate = self
 
-        view.addSubview(mapView)
         mapView.delegate = self
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(ChooseAddressViewController.dropPinAtLocation(_:)))
         longPress.minimumPressDuration = 1.5
         mapView.addGestureRecognizer(longPress)
+        view.addSubview(mapView)
+
+        selectAddressLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        selectAddressLabel.text = "Select Address"
+        selectAddressLabel.textAlignment = .center
+        selectAddressContainerView.addSubview(selectAddressLabel)
+
+        selectAddressButton.setImage(#imageLiteral(resourceName: "checked"), for: .normal)
+        selectAddressButton.addTarget(self, action: #selector(ChooseAddressViewController.selectAddress(_:)), for: .touchUpInside)
+        selectAddressContainerView.addSubview(selectAddressButton)
+
+        selectAddressContainerView.backgroundColor = .white
+        selectAddressContainerView.layer.cornerRadius = 4
+        selectAddressContainerView.isHidden = true
+        view.addSubview(selectAddressContainerView)
 
         // add table view after mapView so it can lay over it
         view.addSubview(autocompleteResultTable)
@@ -91,6 +113,25 @@ class ChooseAddressViewController: UIViewController {
             make.height.equalTo(56)
         }
 
+        selectAddressLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+        }
+
+        selectAddressButton.snp.makeConstraints { make in
+            make.bottom.equalToSuperview()
+            make.top.equalTo(selectAddressLabel.snp.bottom).offset(10)
+            make.height.equalTo(50)
+            make.width.equalTo(50)
+            make.centerX.equalToSuperview()
+        }
+
+        selectAddressContainerView.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().offset(-80)
+            make.centerX.equalToSuperview()
+        }
+
         mapView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom)
             make.trailing.equalToSuperview()
@@ -110,8 +151,8 @@ class ChooseAddressViewController: UIViewController {
 extension ChooseAddressViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         manager.stopUpdatingLocation()
-        guard let currentLocation = locations.first else { return }
-        currentCoordinate = currentLocation.coordinate
+        guard let currentUserLocation = locations.first else { return }
+        currentUserCoordinate = currentUserLocation.coordinate
         mapView.userTrackingMode = .followWithHeading
     }
 }
@@ -119,16 +160,45 @@ extension ChooseAddressViewController: CLLocationManagerDelegate {
 extension ChooseAddressViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
-        searchQuery(query: searchBar.text!)
+        var searchText = searchBar.text!
+        // if autocomplete results are non-empty, user expects search to give
+        // first autocomplete result
+        if !searchResults.isEmpty {
+            (searchText, _, _) = searchResults.first!
+        }
+        searchQuery(query: searchText)
     }
 
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty {
+            removeCurrentPin()
+            mapViewHidden = false
+            showAndHideViews()
+        } else {
+            print("Assigning queryFragment to: \(searchText)")
+            searchCompleter.queryFragment = searchText
+        }
+    }
+
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        // no autocomplete results should popup for empty search bar
+        if !searchBar.text!.isEmpty {
+            mapViewHidden = true
+            showAndHideViews()
+        }
+        return true
+    }
+
+    /*
+     query: A query to search
+    */
     private func searchQuery(query: String) {
         mapViewHidden = false
         showAndHideViews()
         let localSearchRequest = MKLocalSearchRequest()
         localSearchRequest.naturalLanguageQuery = query
         var region: MKCoordinateRegion?
-        if let coordinate = currentCoordinate {
+        if let coordinate = currentUserCoordinate {
             region = MKCoordinateRegion(center: coordinate , span: MKCoordinateSpan(latitudeDelta: 0.4, longitudeDelta: 0.4))
         }
 
@@ -154,18 +224,8 @@ extension ChooseAddressViewController: UISearchBarDelegate {
             self.currentPin = pin
             self.mapView.setRegion(region, animated: true)
             self.mapView.addAnnotation(pin)
+            self.selectAddressContainerView.isHidden = false
             self.mapView.selectAnnotation(pin, animated: true)
-        }
-    }
-
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty {
-            removeCurrentPin()
-            mapViewHidden = false
-            showAndHideViews()
-        } else {
-            print("Assigning queryFragment to: \(searchText)")
-            searchCompleter.queryFragment = searchText
         }
     }
 }
@@ -208,9 +268,10 @@ extension ChooseAddressViewController {
         pin.coordinate = touchMapCoordinate
         removeCurrentPin()
         currentPin = pin
-        mapView.addAnnotation(pin)
-        mapView.selectAnnotation(pin, animated: true)
         getAddressFromPin(pin)
+        mapView.addAnnotation(pin)
+        selectAddressContainerView.isHidden = false
+        mapView.selectAnnotation(pin, animated: true)
     }
 
     private func getAddressFromPin(_ pin: MKPointAnnotation) {
@@ -237,6 +298,8 @@ extension ChooseAddressViewController {
     private func removeCurrentPin() {
         if let currPin = currentPin {
             mapView.removeAnnotation(currPin)
+            // only show address button if a pin is on the map
+            self.selectAddressContainerView.isHidden = true
         }
     }
 }
@@ -259,13 +322,13 @@ extension ChooseAddressViewController: MKLocalSearchCompleterDelegate {
 extension ChooseAddressViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Don't want autocomplete results to have section headers
-        return searchResults?.count ?? 0
+        return searchResults.count
 
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.autocompleteSearchResult, for: indexPath) as! AutocompleteResultTableViewCell
-        let (title, subTitle, matchingRanges) = searchResults![indexPath.row]
+        let (title, subTitle, matchingRanges) = searchResults[indexPath.row]
         let highlightedText = boldHighlightedSearchResult(title, matchingRanges)
         cell.updateCell(titleText: highlightedText, descriptionText: subTitle)
         return cell
@@ -273,7 +336,7 @@ extension ChooseAddressViewController: UITableViewDelegate, UITableViewDataSourc
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let (searchTitle, _, _) = searchResults![indexPath.row]
+        let (searchTitle, _, _) = searchResults[indexPath.row]
         print("searchTitle: \(searchTitle)")
         searchBar.text = searchTitle
         searchQuery(query: searchTitle)
