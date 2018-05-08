@@ -37,6 +37,7 @@ class ChooseAddressViewController: UIViewController {
 
     @objc private func selectAddress(_ sender: Any) {
         print("Select address button pressed")
+        navigationController?.pushViewController(EventMetadataViewController(), animated: true)
     }
 
     private func setupSubviews() {
@@ -56,7 +57,7 @@ class ChooseAddressViewController: UIViewController {
         mapView.addGestureRecognizer(longPress)
         view.addSubview(mapView)
 
-        selectAddressLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        selectAddressLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         selectAddressLabel.text = "Select Address"
         selectAddressLabel.textAlignment = .center
         selectAddressContainerView.addSubview(selectAddressLabel)
@@ -66,8 +67,9 @@ class ChooseAddressViewController: UIViewController {
         selectAddressContainerView.addSubview(selectAddressButton)
 
         selectAddressContainerView.backgroundColor = .white
-        selectAddressContainerView.layer.cornerRadius = 4
+        selectAddressContainerView.layer.cornerRadius = 10
         selectAddressContainerView.isHidden = true
+        selectAddressContainerView.alpha = 0.95
         view.addSubview(selectAddressContainerView)
 
         // add table view after mapView so it can lay over it
@@ -114,8 +116,8 @@ class ChooseAddressViewController: UIViewController {
         }
 
         selectAddressLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.leading.equalTo(selectAddressContainerView.snp.leadingMargin)
+            make.trailing.equalTo(selectAddressContainerView.snp.trailingMargin)
             make.top.equalToSuperview()
         }
 
