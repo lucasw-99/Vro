@@ -11,17 +11,9 @@ import FirebaseDatabase
 import FirebaseAuth
 
 class NewEventViewController: UIViewController, UIScrollViewDelegate {
-    lazy var scrollView: UIScrollView = {
-        let view = UIScrollView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.contentSize.height = 2000
-        view.backgroundColor = .brown
-        return view
-    }()
     private let contentView = UIView()
 
     private let addressLabel = UILabel()
-    private let eventAddress = UITextField()
 
     private let captionLabel = UILabel()
     private let captionText = UITextView()
@@ -35,11 +27,19 @@ class NewEventViewController: UIViewController, UIScrollViewDelegate {
     private let postEventButton = UIButton()
     private let cancelButton = UIButton()
 
+    private var address: String?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()
         setupLayout()
-        scrollView.contentSize = contentView.frame.size
+    }
+
+    // address: An address passed from the previous view controller
+    // This function is used to initialize the address field in this controller.
+    func setAddress(address: String) {
+        self.address = address
+        print("Set address to: \(address)")
     }
 
     @IBAction func uploadEventImage(_ sender: Any) {
@@ -51,13 +51,6 @@ class NewEventViewController: UIViewController, UIScrollViewDelegate {
     }
 
     @IBAction func postNewEvent(_ sender: Any) {
-        guard let address: String = eventAddress.text, address != "" else {
-            // TODO: Make sure address is actually valid
-            let alert = Util.makeOKAlert(alertTitle: "New Event Error", message: "The address field is empty.")
-            self.present(alert, animated: true, completion: nil)
-            return
-        }
-
         // More error checking on date?
         let eventTime = eventDate.date
 
@@ -104,15 +97,17 @@ class NewEventViewController: UIViewController, UIScrollViewDelegate {
     }
 
     private func setupSubviews() {
-        addressLabel.text = "Address of Event"
-        addressLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-        addressLabel.numberOfLines = 1
+        let addressPrompt = "Address of Event: "
+        let providedAddress = address ?? "Not Provided"
+        let addressLabelString = "\(addressPrompt)\(providedAddress)"
+        let nsrange = NSMakeRange(addressPrompt.count, providedAddress.count)
+        let attributedString: NSMutableAttributedString = NSMutableAttributedString(string: providedAddress)
+        attributedString.addAttribute(NSAttributedStringKey.font, value: UIFont.systemFont(ofSize: 20, weight: .semibold), range: nsrange)
+        addressLabel.attributedText = attributedString
+        addressLabel.font = UIFont.systemFont(ofSize: 20)
+        addressLabel.numberOfLines = 0
         addressLabel.textAlignment = .center
         contentView.addSubview(addressLabel)
-
-        eventAddress.autocorrectionType = .no
-        Util.roundedCorners(ofColor: .lightGray, element: eventAddress)
-        contentView.addSubview(eventAddress)
 
         captionLabel.text = "Caption of Event"
         captionLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
@@ -162,25 +157,12 @@ class NewEventViewController: UIViewController, UIScrollViewDelegate {
         contentView.addSubview(cancelButton)
 
         contentView.backgroundColor = .white
-        scrollView.addSubview(contentView)
-
-        scrollView.contentSize = CGSize(width: contentView.frame.width, height: contentView.frame.height)
-        view.addSubview(scrollView)
+        view.addSubview(contentView)
     }
 
     private func setupLayout() {
-        scrollView.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-        }
-
         contentView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview()
-            make.width.equalToSuperview()
-            make.height.greaterThanOrEqualToSuperview()
+            make.edges.equalToSuperview()
         }
 
         addressLabel.snp.makeConstraints { make in
@@ -189,15 +171,8 @@ class NewEventViewController: UIViewController, UIScrollViewDelegate {
             make.trailing.equalToSuperview()
         }
 
-        eventAddress.snp.makeConstraints { make in
-            make.top.equalTo(addressLabel.snp.bottom).offset(15)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(225)
-            make.height.equalTo(30)
-        }
-
         captionLabel.snp.makeConstraints { make in
-            make.top.equalTo(eventAddress.snp.bottom).offset(35)
+            make.top.equalTo(addressLabel.snp.bottom).offset(35)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }

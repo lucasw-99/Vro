@@ -37,7 +37,9 @@ class ChooseAddressViewController: UIViewController {
 
     @objc private func selectAddress(_ sender: Any) {
         print("Select address button pressed")
-        navigationController?.pushViewController(EventMetadataViewController(), animated: true)
+        guard let pin = currentPin else { fatalError() }
+        let eventMetadataViewController = EventMetadataViewController(frame: view.frame, selectedPin: pin)
+        navigationController?.pushViewController(eventMetadataViewController, animated: true)
     }
 
     private func setupSubviews() {
@@ -163,16 +165,18 @@ extension ChooseAddressViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
         var searchText = searchBar.text!
-        // if autocomplete results are non-empty, user expects search to give
-        // first autocomplete result
+        // user expects search to give first autocomplete result
         if !searchResults.isEmpty {
-            (searchText, _, _) = searchResults.first!
+            let (title, description, _) = searchResults.first!
+            searchText = "\(title) \(description)"
         }
         searchQuery(query: searchText)
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchCompleter.cancel()
         if searchText.isEmpty {
+            print("search text is empty")
             removeCurrentPin()
             mapViewHidden = false
             showAndHideViews()
@@ -217,7 +221,8 @@ extension ChooseAddressViewController: UISearchBarDelegate {
             }
             let pin = MKPointAnnotation()
             pin.coordinate = firstMapItem.placemark.coordinate
-            pin.title = firstMapItem.name
+            let fullName = self.extractAddress(firstMapItem.placemark)
+            pin.title = fullName
 
             let span = MKCoordinateSpanMake(0.75, 0.75)
             let region = MKCoordinateRegion(center: pin.coordinate, span: span)
@@ -285,6 +290,7 @@ extension ChooseAddressViewController {
                 let name = self.extractAddress(firstPlacemark)
                 self.searchBar.text = name
                 pin.title = name
+                pin.coordinate = firstPlacemark.location!.coordinate
                 print("Set searchBar text to \(self.searchBar.text)")
             } else {
                 print("Error: \(error!.localizedDescription)")
@@ -308,9 +314,10 @@ extension ChooseAddressViewController {
 
 extension ChooseAddressViewController: MKLocalSearchCompleterDelegate {
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        searchResults = completer.results.map { ($0.title, $0.subtitle, $0.titleHighlightRanges) }
         mapViewHidden = true
         showAndHideViews()
+        print("map view is now hidden")
+        searchResults = completer.results.map { ($0.title, $0.subtitle, $0.titleHighlightRanges) }
         DispatchQueue.main.async {
             self.autocompleteResultTable.reloadData()
         }
@@ -338,10 +345,11 @@ extension ChooseAddressViewController: UITableViewDelegate, UITableViewDataSourc
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let (searchTitle, _, _) = searchResults[indexPath.row]
+        let (searchTitle, searchDescription, _) = searchResults[indexPath.row]
         print("searchTitle: \(searchTitle)")
-        searchBar.text = searchTitle
-        searchQuery(query: searchTitle)
+        let titleAndDescription = "\(searchTitle) \(searchDescription)"
+        searchBar.text = titleAndDescription
+        searchQuery(query: titleAndDescription)
     }
 
     /*
