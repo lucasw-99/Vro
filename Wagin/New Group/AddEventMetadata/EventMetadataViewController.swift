@@ -20,11 +20,12 @@ class EventMetadataViewController: UIViewController {
     private let timeLabel = UILabel()
     private let eventDate = UIDatePicker()
 
+    private let confirmButton = UIButton()
     private let cancelButton = UIButton()
 
     private var selectedPin: MKPointAnnotation
 
-    init(frame: CGRect, selectedPin: MKPointAnnotation) {
+    init(selectedPin: MKPointAnnotation) {
         self.selectedPin = selectedPin
         super.init(nibName: nil, bundle: nil)
     }
@@ -42,7 +43,7 @@ class EventMetadataViewController: UIViewController {
     // address: An address passed from the previous view controller
     // This function is used to initialize the address field in this controller.
     func setAddressLabelText() {
-        let addressPrompt = "Address of Event: "
+        let addressPrompt = "Address of Event: \n"
         let providedAddress = selectedPin.title ?? "Not Provided"
         let addressLabelString = "\(addressPrompt)\(providedAddress)"
         let nsrange = NSMakeRange(addressPrompt.count, providedAddress.count)
@@ -51,10 +52,20 @@ class EventMetadataViewController: UIViewController {
         addressLabel.attributedText = attributedString
     }
 
+    @IBAction func confirmSelections(_ sender: Any) {
+        // TODO: Check for nil caption?
+        let uploadEventViewController = UploadEventViewController(pin: selectedPin, date: eventDate.date, caption: captionLabel.text!)
+        navigationController?.pushViewController(uploadEventViewController, animated: true)
+    }
+
     @IBAction func popEventMetadataView(_ sender: Any) {
         navigationController?.popViewController(animated: true)
     }
 
+}
+
+// MARK: Subview setup
+extension EventMetadataViewController {
     private func setupSubviews() {
         addressLabel.font = UIFont.systemFont(ofSize: 20)
         addressLabel.numberOfLines = 0
@@ -84,11 +95,18 @@ class EventMetadataViewController: UIViewController {
         contentView.addSubview(eventDate)
 
         cancelButton.setTitle("Cancel", for: .normal)
-        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         cancelButton.addTarget(self, action: #selector(EventMetadataViewController.popEventMetadataView(_:)), for: .touchUpInside)
         cancelButton.backgroundColor = .lightGray
         Util.roundedCorners(ofColor: .lightGray, element: cancelButton)
         contentView.addSubview(cancelButton)
+
+        confirmButton.setTitle("Confirm", for: .normal)
+        confirmButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        confirmButton.addTarget(self, action: #selector(EventMetadataViewController.confirmSelections(_:)), for: .touchUpInside)
+        confirmButton.backgroundColor = .lightGray
+        Util.roundedCorners(ofColor: .lightGray, element: confirmButton)
+        contentView.addSubview(confirmButton)
 
         contentView.backgroundColor = .white
         view.addSubview(contentView)
@@ -133,6 +151,13 @@ class EventMetadataViewController: UIViewController {
 
         cancelButton.snp.makeConstraints { make in
             make.top.equalTo(eventDate.snp.bottom).offset(20)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(90)
+            make.height.equalTo(40)
+        }
+
+        confirmButton.snp.makeConstraints { make in
+            make.top.equalTo(cancelButton.snp.bottom).offset(20)
             make.centerX.equalToSuperview()
             make.width.equalTo(90)
             make.height.equalTo(40)

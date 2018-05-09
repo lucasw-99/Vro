@@ -170,7 +170,6 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
         let storageRef = Storage.storage().reference().child(filename)
 
         guard let imageData = UIImageJPEGRepresentation(image, 0.75) else {
-            print()
             return
         }
         let metaData = StorageMetadata()

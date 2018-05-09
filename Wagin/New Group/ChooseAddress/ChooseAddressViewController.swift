@@ -38,7 +38,7 @@ class ChooseAddressViewController: UIViewController {
     @objc private func selectAddress(_ sender: Any) {
         print("Select address button pressed")
         guard let pin = currentPin else { fatalError() }
-        let eventMetadataViewController = EventMetadataViewController(frame: view.frame, selectedPin: pin)
+        let eventMetadataViewController = EventMetadataViewController(selectedPin: pin)
         navigationController?.pushViewController(eventMetadataViewController, animated: true)
     }
 
@@ -95,7 +95,10 @@ class ChooseAddressViewController: UIViewController {
 
         view.backgroundColor = .white
     }
+}
 
+// MARK: Setup subviews
+extension ChooseAddressViewController {
     private func setupLayout() {
         headerView.snp.makeConstraints { make in
             make.top.equalTo(view.layoutMarginsGuide.snp.topMargin)
@@ -332,7 +335,6 @@ extension ChooseAddressViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Don't want autocomplete results to have section headers
         return searchResults.count
-
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
