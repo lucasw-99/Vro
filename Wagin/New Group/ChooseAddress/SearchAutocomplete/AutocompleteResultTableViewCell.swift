@@ -47,6 +47,7 @@ class AutocompleteResultTableViewCell: UITableViewCell {
 
     private func setupLayout() {
         titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
@@ -55,6 +56,7 @@ class AutocompleteResultTableViewCell: UITableViewCell {
             make.top.equalTo(titleLabel.snp.bottom)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
     }
 }

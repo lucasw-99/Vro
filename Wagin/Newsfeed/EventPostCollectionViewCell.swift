@@ -184,7 +184,10 @@ class EventPostCollectionViewCell: UICollectionViewCell {
         userImage.layer.borderWidth = 1
         userImage.layer.borderColor = UIColor.lightGray.cgColor
 
-        eventImageView.image = eventPost.event.eventImage
+        ImageService.getImage(withURL: URL(string: eventPost.event.eventImageURL)!) { image in
+            self.eventImageView.image = image
+
+        }
 
         let likeCount = eventPost.likedBy.count
         numberOfLikes.text = "💗 \(likeCount) like\(likeCount != 1 ? "s" : "")"

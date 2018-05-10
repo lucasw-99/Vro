@@ -209,6 +209,14 @@
 			path = EventMap;
 			sourceTree = "<group>";
 		};
+		A0E64CD620A3F18400C77835 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				A0FF469A209176BA006FE799 /* Assets.xcassets */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
 		A0FF4687209176B9006FE799 = {
 			isa = PBXGroup;
 			children = (
@@ -230,6 +238,7 @@
 		A0FF4692209176B9006FE799 /* Wagin */ = {
 			isa = PBXGroup;
 			children = (
+				A0E64CD620A3F18400C77835 /* Images */,
 				A0228F73209A51B300E71C80 /* Models */,
 				A0228F7C209B482B00E71C80 /* Services */,
 				A0228F77209AC4E600E71C80 /* Global */,
@@ -241,7 +250,6 @@
 				A0D1854F209A387400FC58D1 /* Login */,
 				A0FF4693209176B9006FE799 /* AppDelegate.swift */,
 				A0FF4697209176B9006FE799 /* Main.storyboard */,
-				A0FF469A209176BA006FE799 /* Assets.xcassets */,
 				A0FF469C209176BA006FE799 /* LaunchScreen.storyboard */,
 				A0FF469F209176BA006FE799 /* Info.plist */,
 				A0FF46A720918B65006FE799 /* GoogleService-Info.plist */,

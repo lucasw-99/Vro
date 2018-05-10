@@ -62,5 +62,7 @@
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Using yo location</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Used to upload event and profile photos</string>
 </dict>
 </plist>

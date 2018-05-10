@@ -16,7 +16,7 @@ class MapViewController: UIViewController {
     private let mapView = MKMapView()
 
     private let locationManager = CLLocationManager()
-    private var currentCoordinate: CLLocationCoordinate2D!
+    private var currentCoordinate: CLLocationCoordinate2D?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,7 +78,7 @@ class MapViewController: UIViewController {
     }
 
     private func getDirections(to destinationMapItem: MKMapItem) {
-        let sourcePlacemark = MKPlacemark(coordinate: currentCoordinate)
+        let sourcePlacemark = MKPlacemark(coordinate: currentCoordinate ?? CLLocationCoordinate2D())
         let sourceMapItem = MKMapItem(placemark: sourcePlacemark)
 
         let directionsRequest = MKDirectionsRequest()
@@ -125,7 +125,7 @@ extension MapViewController: UISearchBarDelegate {
         searchBar.endEditing(true)
         let localSearchRequest = MKLocalSearchRequest()
         localSearchRequest.naturalLanguageQuery = searchBar.text
-        let region = MKCoordinateRegion(center: currentCoordinate, span: MKCoordinateSpan(latitudeDelta: 0.4, longitudeDelta: 0.4))
+        let region = MKCoordinateRegion(center: currentCoordinate ?? CLLocationCoordinate2D(), span: MKCoordinateSpan(latitudeDelta: 0.4, longitudeDelta: 0.4))
         localSearchRequest.region = region
         let localSearch = MKLocalSearch(request: localSearchRequest)
         localSearch.start { (response, error) in
