@@ -136,7 +136,7 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
         if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             changeProfileButton.setImage(pickedImage, for: .normal)
             Util.makeImageCircular(image: changeProfileButton.imageView!)
-            ImageService.uploadImage(pickedImage) { url in
+            ImageService.uploadImage(pickedImage, "users") { url in
                 guard let url = url else {
                     print("Url was nil")
                     return
@@ -150,7 +150,7 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
                             if success {
                                 self.dismiss(animated: true, completion: nil)
                             } else {
-                                print("Error")
+                                print("Error with committing profile photo url")
                             }
                         }
                     } else {

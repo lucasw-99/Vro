@@ -11,6 +11,7 @@ import MapKit
 
 class ChooseAddressViewController: UIViewController {
     private let headerView = UIView()
+    private let cancelButton = UIButton()
     private let headerLabel = UILabel()
     private let searchBar = UISearchBar()
     private let mapView = MKMapView()
@@ -35,19 +36,32 @@ class ChooseAddressViewController: UIViewController {
         setupLayout()
     }
 
+    @objc private func cancelButtonPressed(_ sender: Any) {
+        print("cancel button pressed")
+        self.dismiss(animated: true, completion: nil)
+    }
+
     @objc private func selectAddress(_ sender: Any) {
         print("Select address button pressed")
         guard let pin = currentPin else { fatalError() }
         let eventMetadataViewController = EventMetadataViewController(selectedPin: pin)
-        navigationController?.pushViewController(eventMetadataViewController, animated: true)
+        present(eventMetadataViewController, animated: true, completion: nil)
     }
+}
 
+// MARK: Setup subviews
+extension ChooseAddressViewController {
     private func setupSubviews() {
         headerLabel.text = "Enter Event Address"
         headerLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         headerLabel.numberOfLines = 1
         headerLabel.textAlignment = .center
         headerView.addSubview(headerLabel)
+
+        cancelButton.setImage(#imageLiteral(resourceName: "cancel"), for: .normal)
+        cancelButton.addTarget(self, action: #selector(ChooseAddressViewController.cancelButtonPressed(_:)), for: .touchUpInside)
+        headerView.addSubview(cancelButton)
+
         view.addSubview(headerView)
 
         view.addSubview(searchBar)
@@ -95,10 +109,7 @@ class ChooseAddressViewController: UIViewController {
 
         view.backgroundColor = .white
     }
-}
 
-// MARK: Setup subviews
-extension ChooseAddressViewController {
     private func setupLayout() {
         headerView.snp.makeConstraints { make in
             make.top.equalTo(view.layoutMarginsGuide.snp.topMargin)
@@ -108,9 +119,16 @@ extension ChooseAddressViewController {
         }
 
         headerLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
+            make.leading.equalTo(cancelButton.snp.trailing)
             make.trailing.equalToSuperview()
             make.centerY.equalToSuperview()
+        }
+
+        cancelButton.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.top.equalToSuperview()
+            make.width.equalTo(50)
+            make.height.equalTo(50)
         }
 
         searchBar.snp.makeConstraints { make in

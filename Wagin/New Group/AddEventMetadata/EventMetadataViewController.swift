@@ -54,12 +54,12 @@ class EventMetadataViewController: UIViewController {
 
     @IBAction func confirmSelections(_ sender: Any) {
         // TODO: Check for nil caption?
-        let uploadEventViewController = UploadEventViewController(pin: selectedPin, date: eventDate.date, caption: captionLabel.text!)
-        navigationController?.pushViewController(uploadEventViewController, animated: true)
+        let uploadEventViewController = UploadEventViewController(pin: selectedPin, date: eventDate.date, caption: captionText.text)
+        present(uploadEventViewController, animated: true, completion: nil)
     }
 
     @IBAction func popEventMetadataView(_ sender: Any) {
-        navigationController?.popViewController(animated: true)
+        dismiss(animated: true, completion: nil)
     }
 
 }

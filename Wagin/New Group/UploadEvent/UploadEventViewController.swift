@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import FirebaseAuth
+import FirebaseDatabase
 
 class UploadEventViewController: UIViewController {
     private let pin: MKPointAnnotation
@@ -47,11 +48,7 @@ class UploadEventViewController: UIViewController {
 
     @IBAction func backButtonPressed(_ sender: Any) {
         print("Back button pressed")
-    }
-
-    @IBAction func postNewEvent(_ sender: Any) {
-        // TODO: Disable button until all fields are filled in
-        print("Post new event pressed")
+        dismiss(animated: true, completion: nil)
     }
 }
 
@@ -141,6 +138,7 @@ extension UploadEventViewController {
     }
 }
 
+// MARK: Pick & upload event image
 extension UploadEventViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBAction func uploadEventImage(_ sender: Any) {
         print("Upload button pressed")
@@ -154,7 +152,7 @@ extension UploadEventViewController: UIImagePickerControllerDelegate, UINavigati
 
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
-            ImageService.uploadImage(pickedImage) { eventImageURL in
+            ImageService.uploadImage(pickedImage, "events") { eventImageURL in
                 if let url = eventImageURL {
                     self.event = Event(host: UserService.currentUserProfile!, eventImageURL: url.absoluteString, description: "Not implemented yet 😒", address: self.pin.title!, eventTime: self.date)
                     self.eventImageView.image = pickedImage
@@ -167,5 +165,60 @@ extension UploadEventViewController: UIImagePickerControllerDelegate, UINavigati
 
         }
         picker.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension UploadEventViewController {
+    @IBAction func postNewEvent(_ sender: Any) {
+        // TODO: Disable button until all fields are filled in
+        print("Post new event pressed")
+        let eventRef = Database.database().reference().child(Constants.eventPosts).childByAutoId()
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = Constants.dateFormat
+        let eventTimeString = dateFormatter.string(from: date)
+
+        guard let userProfile = UserService.currentUserProfile else { fatalError("Posting new event without valid userProfile") }
+
+        let eventPostObject = [
+            "postedBy": [
+                "uid": userProfile.uid,
+                "username": userProfile.username,
+                "photoURL": userProfile.photoURL.absoluteString
+            ],
+            "event": [
+                "host": [
+                    "uid": userProfile.uid,
+                    "username": userProfile.username,
+                    "photoURL": userProfile.photoURL.absoluteString
+                ],
+                // TODO: Change this to a valid description of event
+                "description": "",
+                "address": pin.title ?? "",
+                "eventImageURL": event?.eventImageURL ?? "",
+                "eventTime": eventTimeString
+            ],
+            "likedBy": [],
+            "caption": caption,
+            "timestamp": [".sv": "timestamp"]
+            ] as [String: Any]
+
+        eventRef.setValue(eventPostObject) { error, ref in
+            if error == nil {
+                print("Successfully posted event!")
+                self.dismissNewEventViewControllers()
+            } else {
+                print("Error: \(error!.localizedDescription)")
+            }
+        }
+    }
+
+    private func dismissNewEventViewControllers() {
+        dismiss(animated: true) {
+            self.presentedViewController?.dismiss(animated: false) {
+                self.presentedViewController?.presentedViewController?.dismiss(animated: false, completion: nil)
+                print("Dismissed all view controllers")
+            }
+        }
     }
 }

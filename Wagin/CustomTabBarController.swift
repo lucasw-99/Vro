@@ -17,7 +17,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         if viewController is NewEventDummyViewController {
             // present modally
-            let modalViewController = NewEventViewController()
+            let modalViewController = ChooseAddressViewController()
             tabBarController.present(modalViewController, animated: true)
             return false
         } else {
@@ -38,7 +38,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         nearYouController.title = "Near You"
         nearYouController.tabBarItem = UITabBarItem(title: "Near You", image: #imageLiteral(resourceName: "map_marker"), tag: 2)
 
-        let newEventController = ChooseAddressViewController()
+        let newEventController = NewEventDummyViewController()
         newEventController.title = "New Event"
         newEventController.tabBarItem = UITabBarItem(title: "New Event", image: #imageLiteral(resourceName: "create_new"), tag: 3)
 

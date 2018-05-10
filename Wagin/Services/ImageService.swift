@@ -43,19 +43,20 @@ class ImageService {
         }
     }
 
-    static func uploadImage(_ image: UIImage, completion: @escaping ((_ url: URL?) -> ())) {
+    static func uploadImage(_ image: UIImage, _ section: String, completion: @escaping ((_ url: URL?) -> ())) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        let filename = "user/\(uid)"
-        let storageRef = Storage.storage().reference().child(filename)
+        let imageName = NSUUID().uuidString
+        let storageRef = Storage.storage().reference().child(section).child("\(uid)").child(imageName)
 
         guard let imageData = UIImageJPEGRepresentation(image, 0.75) else {
             return
         }
+        // TODO: Add an observer
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpg"
         storageRef.putData(imageData, metadata: metaData) { metaData, error in
             if error == nil {
-                Storage.storage().reference().child(filename).downloadURL { (url, error) in
+                storageRef.downloadURL { (url, error) in
                     if error == nil {
                         guard let imageUrl = url?.absoluteURL else {
                             print("Failed to upload photo")

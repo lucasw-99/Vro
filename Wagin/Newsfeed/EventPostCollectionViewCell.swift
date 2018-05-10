@@ -184,9 +184,12 @@ class EventPostCollectionViewCell: UICollectionViewCell {
         userImage.layer.borderWidth = 1
         userImage.layer.borderColor = UIColor.lightGray.cgColor
 
-        ImageService.getImage(withURL: URL(string: eventPost.event.eventImageURL)!) { image in
-            self.eventImageView.image = image
-
+        if let url = URL(string: eventPost.event.eventImageURL) {
+            ImageService.getImage(withURL: url) { image in
+                self.eventImageView.image = image
+            }
+        } else {
+            print("Invalid image URL")
         }
 
         let likeCount = eventPost.likedBy.count

@@ -69,6 +69,7 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
                     let hostPhotoURL = URL(string: hostAbsolutePhotoURL),
                     let eventDescription = eventDict["description"] as? String,
                     let eventAddress = eventDict["address"] as? String,
+                    let eventImageURL = eventDict["eventImageURL"] as? String,
                     let eventTime = eventDict["eventTime"] as? String,
                     let eventPostCaption = eventPostDict["caption"] as? String,
                     let eventPostTimestamp = eventPostDict["timestamp"] as? TimeInterval {
@@ -79,7 +80,7 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
                     let eventDate = Util.stringToDate(dateString: eventTime)
                     let timestamp = Date(timeIntervalSince1970: eventPostTimestamp / 1000)
                     
-                    let event = Event(host: hostUser, eventImageURL: "https://firebasestorage.googleapis.com/v0/b/wagin-5bc40.appspot.com/o/user%2FuzHLmQM6lnaKb750rcgGupYVpxm1?alt=media&token=8d5ee73e-bf53-47f7-873f-d068b43aa5fe", description: eventDescription, address: eventAddress, eventTime: eventDate)
+                    let event = Event(host: hostUser, eventImageURL: eventImageURL, description: eventDescription, address: eventAddress, eventTime: eventDate)
                     let eventPost = EventPost(postedBy: postedByUser, event: event, likedBy: [], caption: eventPostCaption, timestamp: timestamp)
 
                     tempPosts.append(eventPost)
