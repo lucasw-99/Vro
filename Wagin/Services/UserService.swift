@@ -15,15 +15,17 @@ class UserService {
 
     @available(*, introduced: 0.0)
     static func observeUserProfile(_ uid: String, completion: @escaping ( (_ userProfile: UserProfile?) -> () )) {
-        let userRef = Database.database().reference().child("users/profile/\(uid)")
+        let userPath = String(format: Constants.Database.userProfile, uid)
+        print("userPath: \(userPath), uid: \(uid)")
+        let userRef = Database.database().reference().child(userPath)
 
         userRef.observe(.value, with: { snapshot in
             var userProfile: UserProfile?
             if let dict = snapshot.value as? [String: Any],
                 let username = dict["username"] as? String,
-                let photoURL = dict["photoURL"] as? String,
-                let url = URL(string: photoURL) {
-                userProfile = UserProfile(uid: snapshot.key, username: username, photoURL: url)
+                let photoURL = dict["photoURL"] as? String {
+                let url = URL(string: photoURL) ?? URL(string: Constants.newUserProfilePhotoURL)
+                userProfile = UserProfile(uid: uid, username: username, photoURL: url!)
             }
             completion(userProfile)
         })

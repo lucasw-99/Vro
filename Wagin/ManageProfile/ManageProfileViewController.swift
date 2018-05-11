@@ -36,6 +36,7 @@ class ManageProfileViewController: UIViewController {
 
     private func setupSubviews() {
         changeProfileButton.setImage(#imageLiteral(resourceName: "add_user_male"), for: .normal)
+        Util.roundedCorners(ofColor: .black, element: changeProfileButton.imageView!)
         changeProfileButton.addTarget(self, action: #selector(ManageProfileViewController.changeProfilePicture(_:)), for: .touchUpInside)
         view.addSubview(changeProfileButton)
 
@@ -62,7 +63,8 @@ class ManageProfileViewController: UIViewController {
             setProfileImage(currUser.photoURL)
         } else {
             let uid = Auth.auth().currentUser!.uid
-            let userRef = Database.database().reference().child("users/profile/\(uid)/photoURL")
+            let profilePicPath = String(format: Constants.Database.userProfilePhotoURL, uid)
+            let userRef = Database.database().reference().child(profilePicPath)
             userRef.observe(.value) { snapshot in
                 if let absolutePhotoURL = snapshot.value as? String,
                     let photoURL = URL(string: absolutePhotoURL) {
@@ -136,7 +138,9 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
         if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             changeProfileButton.setImage(pickedImage, for: .normal)
             Util.makeImageCircular(image: changeProfileButton.imageView!)
-            ImageService.uploadImage(pickedImage, "users") { url in
+            guard let uid = UserService.currentUserProfile?.uid else { fatalError("Current user is nil") }
+            let profilePicPath = String(format: Constants.Storage.userProfileImage, uid)
+            ImageService.uploadImage(pickedImage, profilePicPath) { url in
                 guard let url = url else {
                     print("Url was nil")
                     return
@@ -166,7 +170,8 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
     func saveProfile(profileImageUrl: URL, completion: @escaping ((_ success: Bool) -> ())) {
         guard let username = Auth.auth().currentUser?.displayName else { return }
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        let databaseRef = Database.database().reference().child("users/profile/\(uid)")
+        let userPath = String(format: Constants.Database.userProfile, uid)
+        let databaseRef = Database.database().reference().child(userPath)
 
         let userObject = [
             "username": username,

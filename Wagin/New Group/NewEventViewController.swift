@@ -57,7 +57,9 @@ class NewEventViewController: UIViewController, UIScrollViewDelegate {
         // Warning if posting empty caption?
         let caption = captionText.text
 
-        let eventRef = Database.database().reference().child(Constants.eventPosts).childByAutoId()
+        guard let uid = UserService.currentUserProfile?.uid else { fatalError() }
+        let eventPath = String(format: Constants.Database.eventPosts, uid, Util.generateID())
+        let eventRef = Database.database().reference().child(eventPath)
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = Constants.dateFormat

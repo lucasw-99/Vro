@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let user = user {
                 // user is logged in
                 UserService.observeUserProfile(user.uid, completion: { userProfile in
+                    print("userProfile: \(userProfile)")
                     UserService.currentUserProfile = userProfile
                 })
 

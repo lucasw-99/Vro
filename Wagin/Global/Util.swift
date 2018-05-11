@@ -60,6 +60,11 @@ class Util {
         return dateFormatter.string(from: date)
     }
 
+    static func generateID() -> String {
+        let generatedID = UUID().uuidString
+        print("returnVal: \(generatedID)")
+        return generatedID
+    }
 }
 
 extension Date {

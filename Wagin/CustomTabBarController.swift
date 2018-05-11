@@ -16,9 +16,11 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         if viewController is NewEventDummyViewController {
-            // present modally
+            // present new navigation controller modally
             let modalViewController = ChooseAddressViewController()
-            tabBarController.present(modalViewController, animated: true)
+            let navController = UINavigationController(rootViewController: modalViewController)
+            navController.setNavigationBarHidden(true, animated: false)
+            tabBarController.present(navController, animated: true)
             return false
         } else {
             return true

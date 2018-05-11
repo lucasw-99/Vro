@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 import MapKit
 import FirebaseAuth
 import FirebaseDatabase
@@ -45,10 +46,9 @@ class UploadEventViewController: UIViewController {
         setupLayout()
     }
 
-
     @IBAction func backButtonPressed(_ sender: Any) {
         print("Back button pressed")
-        dismiss(animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
 }
 
@@ -152,7 +152,9 @@ extension UploadEventViewController: UIImagePickerControllerDelegate, UINavigati
 
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
-            ImageService.uploadImage(pickedImage, "events") { eventImageURL in
+            guard let uid = UserService.currentUserProfile?.uid else { fatalError() }
+            let eventImagePath = String(format: Constants.Storage.eventImages, uid, Util.generateID())
+            ImageService.uploadImage(pickedImage, eventImagePath) { eventImageURL in
                 if let url = eventImageURL {
                     self.event = Event(host: UserService.currentUserProfile!, eventImageURL: url.absoluteString, description: "Not implemented yet 😒", address: self.pin.title!, eventTime: self.date)
                     self.eventImageView.image = pickedImage
@@ -172,7 +174,9 @@ extension UploadEventViewController {
     @IBAction func postNewEvent(_ sender: Any) {
         // TODO: Disable button until all fields are filled in
         print("Post new event pressed")
-        let eventRef = Database.database().reference().child(Constants.eventPosts).childByAutoId()
+        guard let uid = UserService.currentUserProfile?.uid else { fatalError() }
+        let eventPath = String(format: Constants.Database.newEventPost, uid, Util.generateID())
+        let eventRef = Database.database().reference().child(eventPath)
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = Constants.dateFormat
@@ -214,11 +218,6 @@ extension UploadEventViewController {
     }
 
     private func dismissNewEventViewControllers() {
-        dismiss(animated: true) {
-            self.presentedViewController?.dismiss(animated: false) {
-                self.presentedViewController?.presentedViewController?.dismiss(animated: false, completion: nil)
-                print("Dismissed all view controllers")
-            }
-        }
+        navigationController?.dismiss(animated: true, completion: nil)
     }
 }

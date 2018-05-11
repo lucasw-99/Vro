@@ -44,9 +44,7 @@ class ImageService {
     }
 
     static func uploadImage(_ image: UIImage, _ section: String, completion: @escaping ((_ url: URL?) -> ())) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        let imageName = NSUUID().uuidString
-        let storageRef = Storage.storage().reference().child(section).child("\(uid)").child(imageName)
+        let storageRef = Storage.storage().reference().child(section)
 
         guard let imageData = UIImageJPEGRepresentation(image, 0.75) else {
             return

@@ -50,7 +50,8 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     private func observeEventPosts() {
-        let eventPostsRef = Database.database().reference().child(Constants.eventPosts)
+        // TODO: Go through all followers
+        let eventPostsRef = Database.database().reference().child(Constants.Database.newEventPost)
         eventPostsRef.observe(.value, with: { snapshot in
             var tempPosts = [EventPost]()
             for child in snapshot.children {

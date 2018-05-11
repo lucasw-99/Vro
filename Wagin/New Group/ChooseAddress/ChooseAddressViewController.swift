@@ -38,14 +38,14 @@ class ChooseAddressViewController: UIViewController {
 
     @objc private func cancelButtonPressed(_ sender: Any) {
         print("cancel button pressed")
-        self.dismiss(animated: true, completion: nil)
+        navigationController?.dismiss(animated: true, completion: nil)
     }
 
     @objc private func selectAddress(_ sender: Any) {
         print("Select address button pressed")
         guard let pin = currentPin else { fatalError() }
         let eventMetadataViewController = EventMetadataViewController(selectedPin: pin)
-        present(eventMetadataViewController, animated: true, completion: nil)
+        navigationController?.pushViewController(eventMetadataViewController, animated: true)
     }
 }
 
@@ -120,7 +120,7 @@ extension ChooseAddressViewController {
 
         headerLabel.snp.makeConstraints { make in
             make.leading.equalTo(cancelButton.snp.trailing)
-            make.trailing.equalToSuperview()
+            make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
         }
 

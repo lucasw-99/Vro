@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseDatabase
 
 class SignupViewController: UIViewController {
 
@@ -162,24 +163,39 @@ class SignupViewController: UIViewController {
     private func createUser(_ email: String, _ username: String, _ password: String) {
         let spinner = Util.displaySpinner(onView: view)
         Auth.auth().createUser(withEmail: email, password: password) { user, error in
-            if user != nil && error == nil {
-                // reassign userID to username
-                let changeUsernameRequest = Auth.auth().currentUser?.createProfileChangeRequest()
-                changeUsernameRequest?.displayName = username
-                changeUsernameRequest?.commitChanges { error in
-                    if error == nil {
-                        Util.removeSpinner(spinner)
-                        self.navigationController?.popViewController(animated: true)
-                    } else {
-                        let alert = Util.makeOKAlert(alertTitle: self.alertTitle, message: error!.localizedDescription)
-                        Util.removeSpinner(spinner)
-                        self.present(alert, animated: true, completion: nil)
-                    }
-                }
-            } else {
+            guard let user = user else {
                 let alert = Util.makeOKAlert(alertTitle: self.alertTitle, message: error!.localizedDescription)
                 Util.removeSpinner(spinner)
                 self.present(alert, animated: true, completion: nil)
+                return
+            }
+
+            // reassign userID to username
+            let changeUsernameRequest = Auth.auth().currentUser?.createProfileChangeRequest()
+            changeUsernameRequest?.displayName = username
+            changeUsernameRequest?.commitChanges { error in
+                if error == nil {
+                    Util.removeSpinner(spinner)
+                    self.navigationController?.popViewController(animated: true)
+                } else {
+                    let alert = Util.makeOKAlert(alertTitle: self.alertTitle, message: error!.localizedDescription)
+                    Util.removeSpinner(spinner)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }
+
+            let userPath = String(format: Constants.Database.userProfile, user.uid)
+            print("userPath: \(userPath), uid: \(user.uid)")
+            let currentUser = [
+            "uid": user.uid,
+            "username": username,
+            "photoURL": user.photoURL?.absoluteString ?? ""
+                ] as [String: Any]
+            let userRef = Database.database().reference().child(userPath)
+            userRef.setValue(currentUser) { error, ref in
+                if error != nil {
+                    print("Error: \(error!.localizedDescription)")
+                }
             }
         }
     }

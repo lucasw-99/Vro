@@ -59,7 +59,7 @@
 		A0228F7A209ACBAC00E71C80 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		A0228F7D209B483A00E71C80 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		A0228F7F209B488500E71C80 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
-		A0283D2120A295A100F4E700 /* UploadEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UploadEventViewController.swift; path = UploadEvent/UploadEventViewController.swift; sourceTree = "<group>"; };
+		A0283D2120A295A100F4E700 /* UploadEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadEventViewController.swift; sourceTree = "<group>"; };
 		A050022B20A12B0900BBCA6D /* EventMetadataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMetadataViewController.swift; sourceTree = "<group>"; };
 		A05D5A33209E75460025E8C7 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		A05D5A35209ECD580025E8C7 /* ChooseAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseAddressViewController.swift; sourceTree = "<group>"; };
@@ -100,6 +100,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A0001A0720A509F000F0EB24 /* UploadEvent */ = {
+			isa = PBXGroup;
+			children = (
+				A0283D2120A295A100F4E700 /* UploadEventViewController.swift */,
+			);
+			name = UploadEvent;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		A0228F73209A51B300E71C80 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -115,11 +124,11 @@
 		A0228F76209AC34600E71C80 /* NewEvent */ = {
 			isa = PBXGroup;
 			children = (
+				A0001A0720A509F000F0EB24 /* UploadEvent */,
 				A050022A20A12AC100BBCA6D /* AddEventMetadata */,
 				A05D5A3920A09F5C0025E8C7 /* ChooseAddress */,
 				A0228F74209AC32D00E71C80 /* NewEventViewController.swift */,
 				A0F2FB2B209C11A80018F465 /* NewEventDummyViewController.swift */,
-				A0283D2120A295A100F4E700 /* UploadEventViewController.swift */,
 			);
 			name = NewEvent;
 			path = "New Group";
