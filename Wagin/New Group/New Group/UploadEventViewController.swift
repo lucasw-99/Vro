@@ -175,8 +175,8 @@ extension UploadEventViewController {
         // TODO: Disable button until all fields are filled in
         print("Post new event pressed")
         guard let uid = UserService.currentUserProfile?.uid else { fatalError() }
-        let eventPath = String(format: Constants.Database.newEventPost, uid, Util.generateID())
-        let eventRef = Database.database().reference().child(eventPath)
+        let eventPath = String(format: Constants.Database.newEventPost, uid)
+        let eventRef = Database.database().reference().child(eventPath).childByAutoId()
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = Constants.dateFormat
@@ -188,13 +188,17 @@ extension UploadEventViewController {
             "postedBy": [
                 "uid": userProfile.uid,
                 "username": userProfile.username,
-                "photoURL": userProfile.photoURL.absoluteString
+                "photoURL": userProfile.photoURL.absoluteString,
+                "followers": ["Bobby"],
+                "following": ["Jill"]
             ],
             "event": [
                 "host": [
                     "uid": userProfile.uid,
                     "username": userProfile.username,
-                    "photoURL": userProfile.photoURL.absoluteString
+                    "photoURL": userProfile.photoURL.absoluteString,
+                    "followers": ["Bobby"],
+                    "following": ["Jill"]
                 ],
                 // TODO: Change this to a valid description of event
                 "description": "",

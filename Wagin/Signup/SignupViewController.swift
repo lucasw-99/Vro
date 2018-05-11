@@ -189,7 +189,9 @@ class SignupViewController: UIViewController {
             let currentUser = [
             "uid": user.uid,
             "username": username,
-            "photoURL": user.photoURL?.absoluteString ?? ""
+            "photoURL": user.photoURL?.absoluteString ?? Constants.newUserProfilePhotoURL,
+            "followers": [],
+            "following": []
                 ] as [String: Any]
             let userRef = Database.database().reference().child(userPath)
             userRef.setValue(currentUser) { error, ref in

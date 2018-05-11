@@ -8,8 +8,8 @@
 
 class Constants {
     class Database {
-        // 1: uid, 2: Randomly generated ID
-        static let newEventPost = "users/%@/events/%@"
+        // 1: uid
+        static let newEventPost = "users/%@/events"
         // 1: uid
         static let userProfile = "users/%@/profile"
         // 1: uid

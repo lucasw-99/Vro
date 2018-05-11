@@ -12,10 +12,16 @@ class UserProfile {
     let uid: String
     let username: String
     let photoURL: URL
+    // array of uid's
+    let followers: [String]
+    // array of uid's
+    let following: [String]
 
-    init(uid: String, username: String, photoURL: URL) {
+    init(_ uid: String, _ username: String, _ photoURL: URL, _ followers: [String], _ following: [String]) {
         self.uid = uid
         self.username = username
         self.photoURL = photoURL
+        self.followers = followers
+        self.following = following
     }
 }

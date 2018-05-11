@@ -50,7 +50,7 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     private func observeEventPosts() {
-        // TODO: Go through all followers
+        // TODO: Go through all followers and call the below thing, using followers UID's
         let eventPostsRef = Database.database().reference().child(Constants.Database.newEventPost)
         eventPostsRef.observe(.value, with: { snapshot in
             var tempPosts = [EventPost]()
@@ -61,12 +61,16 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
                     let postedByUid = postedByDict["uid"] as? String,
                     let postedByUsername = postedByDict["username"] as? String,
                     let postedByAbsolutePhotoURL = postedByDict["photoURL"] as? String,
+                    let postedByFollowers = postedByDict["followers"] as? [String],
+                    let postedByFollowing = postedByDict["following"] as? [String],
                     let postedByPhotoURL = URL(string: postedByAbsolutePhotoURL),
                     let eventDict = eventPostDict["event"] as? [String: Any],
                     let hostDict = eventDict["host"] as? [String: Any],
                     let hostUid = hostDict["uid"] as? String,
                     let hostUsername = hostDict["username"] as? String,
                     let hostAbsolutePhotoURL = hostDict["photoURL"] as? String,
+                    let hostFollowers = hostDict["followers"] as? [String],
+                    let hostFollowing = hostDict["following"] as? [String],
                     let hostPhotoURL = URL(string: hostAbsolutePhotoURL),
                     let eventDescription = eventDict["description"] as? String,
                     let eventAddress = eventDict["address"] as? String,
@@ -75,8 +79,8 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
                     let eventPostCaption = eventPostDict["caption"] as? String,
                     let eventPostTimestamp = eventPostDict["timestamp"] as? TimeInterval {
 
-                    let hostUser = UserProfile(uid: hostUid, username: hostUsername, photoURL: hostPhotoURL)
-                    let postedByUser = UserProfile(uid: postedByUid, username: postedByUsername, photoURL: postedByPhotoURL)
+                    let hostUser = UserProfile(hostUid, hostUsername, hostPhotoURL, hostFollowers, hostFollowing)
+                    let postedByUser = UserProfile(postedByUid, postedByUsername, postedByPhotoURL, postedByFollowers, postedByFollowing)
 
                     let eventDate = Util.stringToDate(dateString: eventTime)
                     let timestamp = Date(timeIntervalSince1970: eventPostTimestamp / 1000)

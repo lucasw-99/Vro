@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
+        // TODO: Handle deleted users still having valid auth tokens
         let authListener = Auth.auth().addStateDidChangeListener { auth, user in
             if let user = user {
                 // user is logged in

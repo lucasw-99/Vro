@@ -58,8 +58,8 @@ class NewEventViewController: UIViewController, UIScrollViewDelegate {
         let caption = captionText.text
 
         guard let uid = UserService.currentUserProfile?.uid else { fatalError() }
-        let eventPath = String(format: Constants.Database.eventPosts, uid, Util.generateID())
-        let eventRef = Database.database().reference().child(eventPath)
+        let eventPath = String(format: Constants.Database.newEventPost, uid)
+        let eventRef = Database.database().reference().child(eventPath).childByAutoId()
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = Constants.dateFormat
