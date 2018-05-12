@@ -42,8 +42,8 @@ extension UserProfileViewController {
         ImageService.getImage(withURL: selectedUser.photoURL) { image in
             guard let image = image else { fatalError("User image was nil") }
             self.profilePhotoView.image = image
+            Util.makeImageCircular(image: self.profilePhotoView)
         }
-        Util.makeImageCircular(image: profilePhotoView, 50)
         view.addSubview(profilePhotoView)
 
         usernameLabel.text = selectedUser.username
