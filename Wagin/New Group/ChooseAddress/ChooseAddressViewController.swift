@@ -90,7 +90,7 @@ extension ChooseAddressViewController {
 
         // add table view after mapView so it can lay over it
         view.addSubview(autocompleteResultTable)
-        autocompleteResultTable.register(AutocompleteResultTableViewCell.self, forCellReuseIdentifier: Constants.autocompleteSearchResult)
+        autocompleteResultTable.register(AutocompleteResultTableViewCell.self, forCellReuseIdentifier: Constants.autocompleteSearchResultCell)
         autocompleteResultTable.isHidden = !mapViewHidden
         autocompleteResultTable.delegate = self
         autocompleteResultTable.dataSource = self
@@ -182,6 +182,7 @@ extension ChooseAddressViewController: CLLocationManagerDelegate {
     }
 }
 
+// MARK: Search bar
 extension ChooseAddressViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
@@ -349,14 +350,19 @@ extension ChooseAddressViewController: MKLocalSearchCompleterDelegate {
     }
 }
 
+// MARK: Table view
 extension ChooseAddressViewController: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Don't want autocomplete results to have section headers
         return searchResults.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.autocompleteSearchResult, for: indexPath) as! AutocompleteResultTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.autocompleteSearchResultCell, for: indexPath) as! AutocompleteResultTableViewCell
         let (title, subTitle, matchingRanges) = searchResults[indexPath.row]
         let highlightedText = boldHighlightedSearchResult(title, matchingRanges)
         cell.updateCell(titleText: highlightedText, descriptionText: subTitle)

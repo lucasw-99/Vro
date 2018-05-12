@@ -21,10 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let authListener = Auth.auth().addStateDidChangeListener { auth, user in
             if let user = user {
                 // user is logged in
-                UserService.observeUserProfile(user.uid, completion: { userProfile in
-                    print("userProfile: \(userProfile)")
-                    UserService.currentUserProfile = userProfile
-                })
+                UserService.modifyLoggedInUser(user.uid)
 
                 let tabBar = CustomTabBarController()
                 tabBar.initializeTabViewControllers()

@@ -13,6 +13,7 @@ import FirebaseStorage
 
 class ImageService {
     static let cache = NSCache<NSString, UIImage>()
+    static var currentUserImage: UIImage?
 
     static func downloadImage(withURL url: URL, completion: @escaping (_ image: UIImage?) -> ()) {
         let dataTask = URLSession.shared.dataTask(with: url) { data, responseURL, error in
@@ -76,5 +77,12 @@ class ImageService {
                 completion(nil)
             }
         }
+    }
+
+    static func updateUserImage(_ userPhotoURL: URL) {
+        ImageService.getImage(withURL: userPhotoURL, completion: { userImage in
+            guard let userImage = userImage else { fatalError("User image is nil") }
+            ImageService.currentUserImage = userImage
+        })
     }
 }

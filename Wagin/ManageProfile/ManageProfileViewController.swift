@@ -138,6 +138,7 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
         if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             changeProfileButton.setImage(pickedImage, for: .normal)
             Util.makeImageCircular(image: changeProfileButton.imageView!)
+            ImageService.currentUserImage = pickedImage
             guard let uid = UserService.currentUserProfile?.uid else { fatalError("Current user is nil") }
             let profilePicPath = String(format: Constants.Storage.userProfileImage, uid)
             ImageService.uploadImage(pickedImage, profilePicPath) { url in
@@ -152,6 +153,7 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
                     if error == nil {
                         self.saveProfile(profileImageUrl: url) { success in
                             if success {
+                                // TODO: Change user photo URL
                                 self.dismiss(animated: true, completion: nil)
                             } else {
                                 print("Error with committing profile photo url")

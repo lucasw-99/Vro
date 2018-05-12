@@ -32,19 +32,23 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         newsFeedController.title = "News Feed"
         newsFeedController.tabBarItem = UITabBarItem(title: "News Feed", image: #imageLiteral(resourceName: "people"), tag: 0)
 
-        let manageProfileController = ManageProfileViewController()
-        manageProfileController.title = "Manage Profile"
-        manageProfileController.tabBarItem = UITabBarItem(title: "Manage Profile", image: #imageLiteral(resourceName: "settings"), tag: 1)
-
-        let nearYouController = MapViewController()
-        nearYouController.title = "Near You"
-        nearYouController.tabBarItem = UITabBarItem(title: "Near You", image: #imageLiteral(resourceName: "map_marker"), tag: 2)
+        let searchUsersController = SearchUsersViewController()
+        searchUsersController.title = "Search Users"
+        searchUsersController.tabBarItem = UITabBarItem(title: "Search Users", image: #imageLiteral(resourceName: "search"), tag: 1)
 
         let newEventController = NewEventDummyViewController()
         newEventController.title = "New Event"
-        newEventController.tabBarItem = UITabBarItem(title: "New Event", image: #imageLiteral(resourceName: "create_new"), tag: 3)
+        newEventController.tabBarItem = UITabBarItem(title: "New Event", image: #imageLiteral(resourceName: "create_new"), tag: 2)
 
-        let tabBarItems = [newsFeedController, manageProfileController, nearYouController, newEventController]
+        let nearYouController = MapViewController()
+        nearYouController.title = "Near You"
+        nearYouController.tabBarItem = UITabBarItem(title: "Near You", image: #imageLiteral(resourceName: "map_marker"), tag: 3)
+
+        let manageProfileController = ManageProfileViewController()
+        manageProfileController.title = "Manage Profile"
+        manageProfileController.tabBarItem = UITabBarItem(title: "Manage Profile", image: #imageLiteral(resourceName: "settings"), tag: 4)
+
+        let tabBarItems = [newsFeedController, searchUsersController, newEventController, nearYouController, manageProfileController]
 
         self.viewControllers = tabBarItems
     }

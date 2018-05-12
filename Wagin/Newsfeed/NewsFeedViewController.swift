@@ -44,11 +44,6 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
         observeEventPosts()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     private func observeEventPosts() {
         // TODO: Go through all followers and call the below thing, using followers UID's
         let eventPostsRef = Database.database().reference().child(Constants.Database.newEventPost)
@@ -61,16 +56,12 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
                     let postedByUid = postedByDict["uid"] as? String,
                     let postedByUsername = postedByDict["username"] as? String,
                     let postedByAbsolutePhotoURL = postedByDict["photoURL"] as? String,
-                    let postedByFollowers = postedByDict["followers"] as? [String],
-                    let postedByFollowing = postedByDict["following"] as? [String],
                     let postedByPhotoURL = URL(string: postedByAbsolutePhotoURL),
                     let eventDict = eventPostDict["event"] as? [String: Any],
                     let hostDict = eventDict["host"] as? [String: Any],
                     let hostUid = hostDict["uid"] as? String,
                     let hostUsername = hostDict["username"] as? String,
                     let hostAbsolutePhotoURL = hostDict["photoURL"] as? String,
-                    let hostFollowers = hostDict["followers"] as? [String],
-                    let hostFollowing = hostDict["following"] as? [String],
                     let hostPhotoURL = URL(string: hostAbsolutePhotoURL),
                     let eventDescription = eventDict["description"] as? String,
                     let eventAddress = eventDict["address"] as? String,
@@ -79,7 +70,10 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
                     let eventPostCaption = eventPostDict["caption"] as? String,
                     let eventPostTimestamp = eventPostDict["timestamp"] as? TimeInterval {
 
+                    let (hostFollowers, hostFollowing) = Util.getFollowers(hostDict)
                     let hostUser = UserProfile(hostUid, hostUsername, hostPhotoURL, hostFollowers, hostFollowing)
+
+                    let (postedByFollowers, postedByFollowing) = Util.getFollowers(postedByDict)
                     let postedByUser = UserProfile(postedByUid, postedByUsername, postedByPhotoURL, postedByFollowers, postedByFollowing)
 
                     let eventDate = Util.stringToDate(dateString: eventTime)

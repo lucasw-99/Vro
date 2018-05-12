@@ -24,6 +24,9 @@
 		A0AD860C20978D6400D5F793 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD860B20978D6400D5F793 /* User.swift */; };
 		A0C8B6C9209A163400A98D53 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C8B6C8209A163400A98D53 /* MapViewController.swift */; };
 		A0C8B6CB209A185C00A98D53 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0C8B6CA209A185C00A98D53 /* MapKit.framework */; };
+		A0E73FF920A68D0C007E72D3 /* SearchUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E73FF820A68D0C007E72D3 /* SearchUsersViewController.swift */; };
+		A0E73FFB20A6912E007E72D3 /* SearchUsersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E73FFA20A6912E007E72D3 /* SearchUsersTableViewCell.swift */; };
+		A0E73FFD20A7573D007E72D3 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E73FFC20A7573D007E72D3 /* UserProfileViewController.swift */; };
 		A0F2FB2A209C0CCD0018F465 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F2FB29209C0CCD0018F465 /* CustomTabBarController.swift */; };
 		A0F2FB2C209C11A80018F465 /* NewEventDummyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F2FB2B209C11A80018F465 /* NewEventDummyViewController.swift */; };
 		A0F2FB2E209CA5DB0018F465 /* NewsFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F2FB2D209CA5DB0018F465 /* NewsFeedViewController.swift */; };
@@ -70,6 +73,9 @@
 		A0AD860B20978D6400D5F793 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		A0C8B6C8209A163400A98D53 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		A0C8B6CA209A185C00A98D53 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		A0E73FF820A68D0C007E72D3 /* SearchUsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersViewController.swift; sourceTree = "<group>"; };
+		A0E73FFA20A6912E007E72D3 /* SearchUsersTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersTableViewCell.swift; sourceTree = "<group>"; };
+		A0E73FFC20A7573D007E72D3 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		A0F2FB29209C0CCD0018F465 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		A0F2FB2B209C11A80018F465 /* NewEventDummyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NewEventDummyViewController.swift; path = Wagin/NewEvent/NewEventDummyViewController.swift; sourceTree = SOURCE_ROOT; };
 		A0F2FB2D209CA5DB0018F465 /* NewsFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedViewController.swift; sourceTree = "<group>"; };
@@ -226,6 +232,16 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
+		A0E73FF720A68CE6007E72D3 /* SearchUsers */ = {
+			isa = PBXGroup;
+			children = (
+				A0E73FF820A68D0C007E72D3 /* SearchUsersViewController.swift */,
+				A0E73FFA20A6912E007E72D3 /* SearchUsersTableViewCell.swift */,
+				A0E73FFC20A7573D007E72D3 /* UserProfileViewController.swift */,
+			);
+			path = SearchUsers;
+			sourceTree = "<group>";
+		};
 		A0FF4687209176B9006FE799 = {
 			isa = PBXGroup;
 			children = (
@@ -247,6 +263,7 @@
 		A0FF4692209176B9006FE799 /* Wagin */ = {
 			isa = PBXGroup;
 			children = (
+				A0E73FF720A68CE6007E72D3 /* SearchUsers */,
 				A0E64CD620A3F18400C77835 /* Images */,
 				A0228F73209A51B300E71C80 /* Models */,
 				A0228F7C209B482B00E71C80 /* Services */,
@@ -445,11 +462,14 @@
 				A0283D2220A295A100F4E700 /* UploadEventViewController.swift in Sources */,
 				A0AD860C20978D6400D5F793 /* User.swift in Sources */,
 				A0FF4694209176B9006FE799 /* AppDelegate.swift in Sources */,
+				A0E73FFB20A6912E007E72D3 /* SearchUsersTableViewCell.swift in Sources */,
 				A0228F7E209B483A00E71C80 /* UserService.swift in Sources */,
 				A0F2FB30209CA9380018F465 /* EventPost.swift in Sources */,
 				A0F2FB2A209C0CCD0018F465 /* CustomTabBarController.swift in Sources */,
+				A0E73FF920A68D0C007E72D3 /* SearchUsersViewController.swift in Sources */,
 				A05D5A3C20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift in Sources */,
 				A0228F80209B488500E71C80 /* UserProfile.swift in Sources */,
+				A0E73FFD20A7573D007E72D3 /* UserProfileViewController.swift in Sources */,
 				A0228F75209AC32D00E71C80 /* NewEventViewController.swift in Sources */,
 				A0228F7B209ACBAC00E71C80 /* Event.swift in Sources */,
 				A050022C20A12B0900BBCA6D /* EventMetadataViewController.swift in Sources */,
