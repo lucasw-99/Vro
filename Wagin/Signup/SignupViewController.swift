@@ -180,6 +180,7 @@ class SignupViewController: UIViewController {
                 } else {
                     let alert = Util.makeOKAlert(alertTitle: self.alertTitle, message: error!.localizedDescription)
                     Util.removeSpinner(spinner)
+                    print("alert: \(alert)")
                     self.present(alert, animated: true, completion: nil)
                 }
             }

@@ -11,9 +11,7 @@ import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
     var window: UIWindow?
-
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
@@ -24,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // TODO: Add these calls appwide
                 UserService.updateCurrentUser(user.uid)
 
+                // TODO: Only make these calls after currentUser is initialized
                 let tabBar = CustomTabBarController()
                 tabBar.initializeTabViewControllers()
 

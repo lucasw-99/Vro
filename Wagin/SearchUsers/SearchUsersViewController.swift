@@ -94,6 +94,7 @@ extension SearchUsersViewController: UITableViewDelegate, UITableViewDataSource 
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        // TODO: Empty table view here
         let selectedUser = dataSource[indexPath.row]
         let userProfileController = UserProfileViewController(selectedUser)
         navigationController?.pushViewController(userProfileController, animated: true)

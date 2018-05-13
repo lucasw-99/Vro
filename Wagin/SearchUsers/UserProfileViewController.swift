@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseDatabase
+import SnapKit
 
 class UserProfileViewController: UIViewController {
     private let selectedUser: UserProfile
@@ -18,7 +19,8 @@ class UserProfileViewController: UIViewController {
     private let followButton = UIButton()
     private let backButton = UIButton()
 
-    // TODO: Add selectable followers and following, possibly in scroll view
+    // TODO: Add selectable followers and following, possibly in scroll view. Maybe
+    // make it linkable text??
 
     init(_ userProfile: UserProfile) {
         selectedUser = userProfile
@@ -66,6 +68,8 @@ extension UserProfileViewController {
         // set state to selected if currentUser is already following selectedUser
         followButton.isSelected = UserService.currentUserProfile!.following.contains(selectedUser.uid)
         followButton.addTarget(self, action: #selector(UserProfileViewController.followButtonPressed(_:)), for: .touchUpInside)
+        // don't show follow button if you're looking up your own profile
+        followButton.isHidden = UserService.currentUserProfile!.uid == selectedUser.uid ? true : false
         Util.roundedCorners(ofColor: .black, element: followButton)
         view.addSubview(followButton)
 
@@ -106,8 +110,10 @@ extension UserProfileViewController {
             make.centerX.equalToSuperview()
         }
 
+        let (backButtonTopAnchor, offset) = UserService.currentUserProfile!.uid != selectedUser.uid ? (followButton.snp.bottom, 20) : (followerStatsLabel.snp.bottom, 50)
+
         backButton.snp.makeConstraints { make in
-            make.top.equalTo(followButton.snp.bottom).offset(20)
+            make.top.equalTo(backButtonTopAnchor).offset(offset)
             make.width.equalTo(100)
             make.height.equalTo(40)
             make.centerX.equalToSuperview()
@@ -115,8 +121,8 @@ extension UserProfileViewController {
     }
 
     private func setupFollowingLabelText() {
-        let followerCount = selectedUser.following.count
-        let followingCount = selectedUser.followers.count
+        let followerCount = selectedUser.followers.count
+        let followingCount = selectedUser.following.count
         followerStatsLabel.text = "\(followerCount) follower\(followerCount != 1 ? "s" : "")\n\(followingCount) following"
     }
 }

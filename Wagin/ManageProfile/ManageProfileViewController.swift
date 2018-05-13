@@ -16,6 +16,7 @@ class ManageProfileViewController: UIViewController {
 
     private let changeProfileButton = UIButton()
     private let profileLabel = UILabel()
+    private let followerStatsLabel = UILabel()
 
     private let logoutButton = UIButton()
     private let logoutLabel = UILabel()
@@ -47,6 +48,15 @@ class ManageProfileViewController: UIViewController {
         profileLabel.textAlignment = .center
         view.addSubview(profileLabel)
 
+        guard let currentUser = UserService.currentUserProfile else { fatalError("Current User shouldn't be nil") }
+        let followerCount = currentUser.followers.count
+        let followingCount = currentUser.following.count
+        followerStatsLabel.text = "\(followerCount) follower\(followerCount != 1 ? "s" : "")\n\(followingCount) following"
+        followerStatsLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        followerStatsLabel.numberOfLines = 0
+        followerStatsLabel.textAlignment = .center
+        view.addSubview(followerStatsLabel)
+
         logoutButton.setImage(#imageLiteral(resourceName: "exit"), for: .normal)
         logoutButton.addTarget(self, action: #selector(ManageProfileViewController.logoutUser(_:)), for: .touchUpInside)
         view.addSubview(logoutButton)
@@ -62,6 +72,7 @@ class ManageProfileViewController: UIViewController {
         if let currUser = UserService.currentUserProfile {
             setProfileImage(currUser.photoURL)
         } else {
+            print("ERROR: Current user has not been set yet")
             let uid = Auth.auth().currentUser!.uid
             let profilePicPath = String(format: Constants.Database.userProfilePhotoURL, uid)
             let userRef = Database.database().reference().child(profilePicPath)
@@ -101,8 +112,14 @@ class ManageProfileViewController: UIViewController {
             make.top.equalTo(changeProfileButton.snp.bottom).offset(15)
         }
 
+        followerStatsLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalTo(profileLabel.snp.bottom).offset(10)
+        }
+
         logoutButton.snp.makeConstraints { make in
-            make.top.equalTo(profileLabel.snp.bottom).offset(20)
+            make.top.equalTo(followerStatsLabel.snp.bottom).offset(20)
             make.centerX.equalToSuperview()
             make.width.equalTo(50)
             make.height.equalTo(50)
@@ -148,17 +165,14 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
                 }
                 let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
                 changeRequest?.photoURL = url
-
                 changeRequest?.commitChanges { error in
                     if error == nil {
-                        self.saveProfile(profileImageUrl: url) { success in
-                            if success {
-                                // TODO: Change user photo URL
-                                self.dismiss(animated: true, completion: nil)
-                            } else {
-                                print("Error with committing profile photo url")
-                            }
-                        }
+                        let photoURLPath = String(format: Constants.Database.userProfilePhotoURL, UserService.currentUserProfile!.uid)
+                        let photoURLRef = Database.database().reference().child(photoURLPath)
+                        photoURLRef.setValue(url.absoluteString)
+                        // photo url changed, so we need to update current user
+                        UserService.updateCurrentUser(uid)
+                        self.dismiss(animated: true, completion: nil)
                     } else {
                         print("Error: \(error!.localizedDescription)")
                     }
@@ -167,21 +181,5 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
 
         }
         picker.dismiss(animated: true, completion: nil)
-    }
-
-    func saveProfile(profileImageUrl: URL, completion: @escaping ((_ success: Bool) -> ())) {
-        guard let username = Auth.auth().currentUser?.displayName else { return }
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        let userPath = String(format: Constants.Database.userProfile, uid)
-        let databaseRef = Database.database().reference().child(userPath)
-
-        let userObject = [
-            "username": username,
-            "photoURL": profileImageUrl.absoluteString
-        ] as [String: Any]
-
-        databaseRef.setValue(userObject) { error, ref in
-            completion(error == nil)
-        }
     }
 }

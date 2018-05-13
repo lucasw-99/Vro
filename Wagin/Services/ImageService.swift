@@ -64,14 +64,13 @@ class ImageService {
                         }
                         // cache image
                         cache.setObject(image, forKey: imageUrl.absoluteString as NSString)
-
+                        print("Successfully uploaded photo")
                         completion(imageUrl)
                     } else {
                         print("Failed to upload photo")
                         completion(nil)
                     }
                 }
-                print("Successfully uploaded photo")
             } else {
                 print("Failed to upload photo")
                 completion(nil)
