@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let user = user {
                 // user is logged in
                 // TODO: Add these calls appwide
-                UserService.modifyLoggedInUser(user.uid)
+                UserService.updateCurrentUser(user.uid)
 
                 let tabBar = CustomTabBarController()
                 tabBar.initializeTabViewControllers()

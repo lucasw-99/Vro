@@ -15,7 +15,9 @@ class Constants {
         // 1: uid
         static let userProfilePhotoURL = "users/%@/profile/photoURL"
         // 1: uid
-        static let userFollowers = "users/%@/followers"
+        static let userFollowers = "users/%@/profile/followers"
+        // 1: uid
+        static let userFollowing = "users/%@/profile/following"
 
         static let users = "users"
         // 1: uid

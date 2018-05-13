@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseDatabase
 
 class UserProfileViewController: UIViewController {
     private let selectedUser: UserProfile
@@ -52,17 +53,19 @@ extension UserProfileViewController {
         usernameLabel.textAlignment = .center
         view.addSubview(usernameLabel)
 
-        let followerCount = selectedUser.following.count
-        let followingCount = selectedUser.followers.count
-        followerStatsLabel.text = "\(followerCount) follower\(followerCount != 1 ? "s" : "")\n\(followingCount) following"
+        setupFollowingLabelText()
         followerStatsLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         followerStatsLabel.numberOfLines = 0
         followerStatsLabel.textAlignment = .center
         view.addSubview(followerStatsLabel)
 
         followButton.setTitle("Follow", for: .normal)
+        followButton.setTitle("Following", for: .selected)
         followButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .bold)
         followButton.setTitleColor(.black, for: .normal)
+        // set state to selected if currentUser is already following selectedUser
+        followButton.isSelected = UserService.currentUserProfile!.following.contains(selectedUser.uid)
+        followButton.addTarget(self, action: #selector(UserProfileViewController.followButtonPressed(_:)), for: .touchUpInside)
         Util.roundedCorners(ofColor: .black, element: followButton)
         view.addSubview(followButton)
 
@@ -110,6 +113,12 @@ extension UserProfileViewController {
             make.centerX.equalToSuperview()
         }
     }
+
+    private func setupFollowingLabelText() {
+        let followerCount = selectedUser.following.count
+        let followingCount = selectedUser.followers.count
+        followerStatsLabel.text = "\(followerCount) follower\(followerCount != 1 ? "s" : "")\n\(followingCount) following"
+    }
 }
 
 // MARK: Button functions
@@ -117,4 +126,41 @@ extension UserProfileViewController {
     @objc private func backButtonPressed(_ sender: Any) {
         navigationController?.popViewController(animated: true)
     }
+
+    @objc private func followButtonPressed(_ sender: Any) {
+        // disable button while editing
+        followButton.isEnabled = false
+        let wasSelected = followButton.isSelected
+        followButton.isSelected = !followButton.isSelected
+        let currentUser = UserService.currentUserProfile!
+        if wasSelected {
+            guard let followingIndex = currentUser.following.index(of: selectedUser.uid) else { fatalError("Says that user was following other user, but they weren't in the following list") }
+            currentUser.following.remove(at: followingIndex)
+
+            guard let followerIndex = selectedUser.followers.index(of: currentUser.uid) else { fatalError("Issue with follower counts") }
+            selectedUser.followers.remove(at: followerIndex)
+
+        } else {
+            currentUser.following.append(selectedUser.uid)
+            selectedUser.followers.append(currentUser.uid)
+        }
+        updateFollowArrays(currentUser: currentUser, selectedUser: selectedUser)
+        UserService.updateCurrentUser(currentUser.uid)
+        setupFollowingLabelText()
+        followButton.isEnabled = true
+    }
+
+    private func updateFollowArrays(currentUser: UserProfile, selectedUser: UserProfile) {
+        // edit the selectedUser's followers list, and the currentUser's following list
+        let followersPath = String(format: Constants.Database.userFollowers, selectedUser.uid)
+        let followingPath = String(format: Constants.Database.userFollowing, currentUser.uid)
+
+        let followersRef = Database.database().reference().child(followersPath)
+        followersRef.setValue(selectedUser.followers)
+
+        let followingRef = Database.database().reference().child(followingPath)
+        followingRef.setValue(currentUser.following)
+        print("Updated database!")
+    }
+
 }

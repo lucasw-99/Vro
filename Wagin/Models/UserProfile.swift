@@ -13,9 +13,9 @@ class UserProfile {
     let username: String
     let photoURL: URL
     // array of uid's
-    let followers: [String]
+    var followers: [String]
     // array of uid's
-    let following: [String]
+    var following: [String]
 
     init(_ uid: String, _ username: String, _ photoURL: URL, _ followers: [String], _ following: [String]) {
         self.uid = uid

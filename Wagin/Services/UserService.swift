@@ -57,7 +57,8 @@ class UserService {
         }
     }
 
-    static func modifyLoggedInUser(_ uid: String) {
+    // uid: The uid of the user who is logged in
+    static func updateCurrentUser(_ uid: String) {
         UserService.observeUserProfile(uid, completion: { userProfile in
             guard let userProfile = userProfile else { fatalError("User profile is nil") }
             print("userProfile: \(userProfile)")
