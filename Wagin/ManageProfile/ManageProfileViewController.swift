@@ -23,8 +23,6 @@ class ManageProfileViewController: UIViewController {
 
     private var imagePicker = UIImagePickerController()
 
-    private var setProfileImage = false
-
     @IBAction func logoutUser(_ sender: Any) {
         try! Auth.auth().signOut()
     }
@@ -68,21 +66,8 @@ class ManageProfileViewController: UIViewController {
         logoutLabel.textAlignment = .center
         view.addSubview(logoutLabel)
 
-        changeProfileButton.setImage(#imageLiteral(resourceName: "add_user_male"), for: .normal)
-        if let currUser = UserService.currentUserProfile {
-            setProfileImage(currUser.photoURL)
-        } else {
-            print("ERROR: Current user has not been set yet")
-            let uid = Auth.auth().currentUser!.uid
-            let profilePicPath = String(format: Constants.Database.userProfilePhotoURL, uid)
-            let userRef = Database.database().reference().child(profilePicPath)
-            userRef.observe(.value) { snapshot in
-                if let absolutePhotoURL = snapshot.value as? String,
-                    let photoURL = URL(string: absolutePhotoURL) {
-                    self.setProfileImage(photoURL)
-                }
-            }
-        }
+        guard let currUser = UserService.currentUserProfile else { fatalError("Current user is nil") }
+        setProfileImage(currUser.photoURL)
 
         imagePicker.allowsEditing = true
         imagePicker.sourceType = .photoLibrary
@@ -171,8 +156,11 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
                         let photoURLRef = Database.database().reference().child(photoURLPath)
                         photoURLRef.setValue(url.absoluteString)
                         // photo url changed, so we need to update current user
-                        UserService.updateCurrentUser(uid)
-                        self.dismiss(animated: true, completion: nil)
+                        UserService.updateCurrentUser(uid) {
+                            // dismiss view after user has been updated
+                            print("dismissing image picker")
+                            self.dismiss(animated: true, completion: nil)
+                        }
                     } else {
                         print("Error: \(error!.localizedDescription)")
                     }

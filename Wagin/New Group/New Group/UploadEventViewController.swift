@@ -189,16 +189,16 @@ extension UploadEventViewController {
                 "uid": userProfile.uid,
                 "username": userProfile.username,
                 "photoURL": userProfile.photoURL.absoluteString,
-                "followers": ["Bobby"],
-                "following": ["Jill"]
+                "followers": userProfile.followers,
+                "following": userProfile.following
             ],
             "event": [
                 "host": [
                     "uid": userProfile.uid,
                     "username": userProfile.username,
                     "photoURL": userProfile.photoURL.absoluteString,
-                    "followers": ["Bobby"],
-                    "following": ["Jill"]
+                    "followers": userProfile.followers,
+                    "following": userProfile.following
                 ],
                 // TODO: Change this to a valid description of event
                 "description": "",

@@ -20,7 +20,7 @@ class UserService {
         print("userPath: \(userPath), uid: \(uid)")
         let userRef = Database.database().reference().child(userPath)
 
-        userRef.observe(.value, with: { snapshot in
+        userRef.observeSingleEvent(of: .value) { snapshot in
             var userProfile: UserProfile?
             if let dict = snapshot.value as? [String: Any],
                 let username = dict["username"] as? String,
@@ -31,7 +31,7 @@ class UserService {
                 userProfile = UserProfile(uid, username, url!, followers, following)
             }
             completion(userProfile)
-        })
+        }
     }
 
     static func fetchUser(_ searchUsername: String, completion: @escaping ( (_ userProfile: UserProfile?) -> () )) {
@@ -59,8 +59,8 @@ class UserService {
     }
 
     // uid: The uid of the user who is logged in
-    static func updateCurrentUser(_ uid: String) {
-        UserService.observeUserProfile(uid, completion: { userProfile in
+    static func updateCurrentUser(_ uid: String, completion: @escaping ( () -> () )) {
+        UserService.observeUserProfile(uid) { userProfile in
             guard let userProfile = userProfile else {
                 print("No user with uid \(uid) exists, signing out to delete their auth token.")
                 try! Auth.auth().signOut()
@@ -77,6 +77,8 @@ class UserService {
                 ImageService.updateUserImage(userProfile.photoURL)
             }
             UserService.currentUserProfile = userProfile
-        })
+            print("userProfile has been set")
+            completion()
+        }
     }
 }

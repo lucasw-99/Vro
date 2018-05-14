@@ -176,6 +176,7 @@ class SignupViewController: UIViewController {
             changeUsernameRequest?.commitChanges { error in
                 if error == nil {
                     Util.removeSpinner(spinner)
+                    self.addUserToDatabase(user.uid, username)
                     self.navigationController?.popViewController(animated: true)
                 } else {
                     let alert = Util.makeOKAlert(alertTitle: self.alertTitle, message: error!.localizedDescription)
@@ -184,21 +185,24 @@ class SignupViewController: UIViewController {
                     self.present(alert, animated: true, completion: nil)
                 }
             }
+        }
+    }
 
-            let userPath = String(format: Constants.Database.userProfile, user.uid)
-            print("userPath: \(userPath), uid: \(user.uid)")
-            let currentUser = [
-            "uid": user.uid,
+    private func addUserToDatabase(_ uid: String, _ username: String) {
+        let userPath = String(format: Constants.Database.userProfile, uid)
+        print("userPath: \(userPath), uid: \(uid)")
+        let currentUser = [
+            "uid": uid,
             "username": username,
-            "photoURL": user.photoURL?.absoluteString ?? Constants.newUserProfilePhotoURL,
+            // set photo to default profile photo
+            "photoURL": Constants.newUserProfilePhotoURL,
             "followers": [],
             "following": []
-                ] as [String: Any]
-            let userRef = Database.database().reference().child(userPath)
-            userRef.setValue(currentUser) { error, ref in
-                if error != nil {
-                    print("Error: \(error!.localizedDescription)")
-                }
+            ] as [String: Any]
+        let userRef = Database.database().reference().child(userPath)
+        userRef.setValue(currentUser) { error, ref in
+            if error != nil {
+                print("Error: \(error!.localizedDescription)")
             }
         }
     }

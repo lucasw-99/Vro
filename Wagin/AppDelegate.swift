@@ -20,16 +20,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let user = user {
                 // user is logged in
                 // TODO: Add these calls appwide
-                UserService.updateCurrentUser(user.uid)
+                UserService.updateCurrentUser(user.uid) {
+                    // current user is initialized, now log in
+                    let tabBar = CustomTabBarController()
+                    tabBar.initializeTabViewControllers()
 
-                // TODO: Only make these calls after currentUser is initialized
-                let tabBar = CustomTabBarController()
-                tabBar.initializeTabViewControllers()
-
-                let navigationController = UINavigationController(rootViewController: tabBar)
-                navigationController.isNavigationBarHidden = true
-                self.window?.rootViewController = navigationController
-                self.window?.makeKeyAndVisible()
+                    let navigationController = UINavigationController(rootViewController: tabBar)
+                    navigationController.isNavigationBarHidden = true
+                    self.window?.rootViewController = navigationController
+                    self.window?.makeKeyAndVisible()
+                }
             } else {
                 UserService.currentUserProfile = nil
 

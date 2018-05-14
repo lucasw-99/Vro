@@ -56,11 +56,15 @@ class LoginViewController: UIViewController {
         Auth.auth().signIn(withEmail: email, password: password) { user, error in
             if error == nil && user != nil {
                 Util.removeSpinner(spinner)
-                self.dismiss(animated: false, completion: nil)
-                self.transitionToHome()
+                UserService.updateCurrentUser(user!.uid) {
+                    // current user is initialized, now log in
+                    self.dismiss(animated: false, completion: nil)
+                    self.transitionToHome()
+                }
             } else {
                 let alert = Util.makeOKAlert(alertTitle: "Error with Sign In", message: error!.localizedDescription)
                 Util.removeSpinner(spinner)
+                Util.toggleButton(button: self.loginButton, isEnabled: true)
                 self.present(alert, animated: true, completion: nil)
             }
         }

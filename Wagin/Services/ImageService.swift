@@ -80,6 +80,7 @@ class ImageService {
 
     static func updateUserImage(_ userPhotoURL: URL) {
         ImageService.getImage(withURL: userPhotoURL, completion: { userImage in
+            // TODO: Figure out why this occasionally fatal errors...
             guard let userImage = userImage else { fatalError("User image is nil") }
             ImageService.currentUserImage = userImage
         })

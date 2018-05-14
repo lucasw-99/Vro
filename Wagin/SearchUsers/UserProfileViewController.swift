@@ -136,6 +136,7 @@ extension UserProfileViewController {
     @objc private func followButtonPressed(_ sender: Any) {
         // disable button while editing
         followButton.isEnabled = false
+        print("follow button disabled")
         let wasSelected = followButton.isSelected
         followButton.isSelected = !followButton.isSelected
         let currentUser = UserService.currentUserProfile!
@@ -151,9 +152,12 @@ extension UserProfileViewController {
             selectedUser.followers.append(currentUser.uid)
         }
         updateFollowArrays(currentUser: currentUser, selectedUser: selectedUser)
-        UserService.updateCurrentUser(currentUser.uid)
+        UserService.updateCurrentUser(currentUser.uid) {
+            // re-enable follow button after current user is valid
+            print("follow button re-enabled")
+            self.followButton.isEnabled = true
+        }
         setupFollowingLabelText()
-        followButton.isEnabled = true
     }
 
     private func updateFollowArrays(currentUser: UserProfile, selectedUser: UserProfile) {
