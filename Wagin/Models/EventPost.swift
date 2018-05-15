@@ -9,14 +9,15 @@
 import UIKit
 
 class EventPost {
-    let postedBy: UserProfile
+    let postedByUser: UserProfile
     let event: Event
-    var likedBy: [UserProfile]
+    // array of UID's
+    var likedBy: [String]
     let caption: String
     let timestamp: Date
 
-    init(postedBy: UserProfile, event: Event, likedBy: [UserProfile], caption: String, timestamp: Date) {
-        self.postedBy = postedBy
+    init(postedByUser: UserProfile, event: Event, likedBy: [String], caption: String, timestamp: Date) {
+        self.postedByUser = postedByUser
         self.event = event
         self.likedBy = likedBy
         self.caption = caption

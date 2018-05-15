@@ -144,23 +144,19 @@ extension NewsFeedViewController {
     // uid: Fetches event post belonging to user with passed in uid
     private func observeUserEventPosts(_ uid: String, completion: @escaping ( (_ userPosts: [EventPost]) -> () )) {
         var userPosts = [EventPost]()
-        let followedUserEvents = String(format: Constants.Database.newEventPost, uid)
+        let followedUserEvents = String(format: Constants.Database.userEventPosts, uid)
         let eventPostsRef = Database.database().reference().child(followedUserEvents)
         eventPostsRef.observeSingleEvent(of: .value, with: { snapshot in
             for child in snapshot.children {
                 if let childSnapshot = child as? DataSnapshot,
                     let eventPostDict = childSnapshot.value as? [String: Any],
-                    let postedByDict = eventPostDict["postedBy"] as? [String: Any],
-                    let postedByUid = postedByDict["uid"] as? String,
-                    let postedByUsername = postedByDict["username"] as? String,
-                    let postedByAbsolutePhotoURL = postedByDict["photoURL"] as? String,
-                    let postedByPhotoURL = URL(string: postedByAbsolutePhotoURL),
+                    let postedByUserDict = eventPostDict["postedByUser"] as? [String: Any],
+                    let postedByUID = postedByUserDict["uid"] as? String,
+                    let postedByUsername = postedByUserDict["username"] as? String,
+                    let postedByPhotoURLString = postedByUserDict["photoURL"] as? String,
+                    let postedByPhotoURL = URL(string: postedByPhotoURLString),
                     let eventDict = eventPostDict["event"] as? [String: Any],
-                    let hostDict = eventDict["host"] as? [String: Any],
-                    let hostUid = hostDict["uid"] as? String,
-                    let hostUsername = hostDict["username"] as? String,
-                    let hostAbsolutePhotoURL = hostDict["photoURL"] as? String,
-                    let hostPhotoURL = URL(string: hostAbsolutePhotoURL),
+                    let hostUID = eventDict["hostUID"] as? String,
                     let eventDescription = eventDict["description"] as? String,
                     let eventAddress = eventDict["address"] as? String,
                     let eventImageURL = eventDict["eventImageURL"] as? String,
@@ -170,17 +166,13 @@ extension NewsFeedViewController {
 
                     print("postedByPhotoURL: \(postedByPhotoURL), uid: \(uid)")
 
-                    let (hostFollowers, hostFollowing) = Util.getFollowers(hostDict)
-                    let hostUser = UserProfile(hostUid, hostUsername, hostPhotoURL, hostFollowers, hostFollowing)
-
-                    let (postedByFollowers, postedByFollowing) = Util.getFollowers(postedByDict)
-                    let postedByUser = UserProfile(postedByUid, postedByUsername, postedByPhotoURL, postedByFollowers, postedByFollowing)
-
                     let eventDate = Util.stringToDate(dateString: eventTime)
                     let timestamp = Date(timeIntervalSince1970: eventPostTimestamp / 1000)
 
-                    let event = Event(host: hostUser, eventImageURL: eventImageURL, description: eventDescription, address: eventAddress, eventTime: eventDate)
-                    let eventPost = EventPost(postedBy: postedByUser, event: event, likedBy: [], caption: eventPostCaption, timestamp: timestamp)
+                    let postedByUser = UserProfile(postedByUID, postedByUsername, postedByPhotoURL, [], [])
+
+                    let event = Event(hostUID: hostUID, eventImageURL: eventImageURL, description: eventDescription, address: eventAddress, eventTime: eventDate)
+                    let eventPost = EventPost(postedByUser: postedByUser, event: event, likedBy: [], caption: eventPostCaption, timestamp: timestamp)
 
                     userPosts.append(eventPost)
                 }

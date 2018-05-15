@@ -126,6 +126,7 @@ class ManageProfileViewController: UIViewController {
     }
 }
 
+// MARK: Image picker
 extension ManageProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBAction func changeProfilePicture(_ sender: Any) {
         // open image picker
@@ -135,6 +136,8 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
+
+    // TODO: Let user update username?
 
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
@@ -152,7 +155,7 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
                 changeRequest?.photoURL = url
                 changeRequest?.commitChanges { error in
                     if error == nil {
-                        let photoURLPath = String(format: Constants.Database.userProfilePhotoURL, UserService.currentUserProfile!.uid)
+                        let photoURLPath = String(format: Constants.Database.userProfilePhotoURL, uid)
                         let photoURLRef = Database.database().reference().child(photoURLPath)
                         photoURLRef.setValue(url.absoluteString)
                         // photo url changed, so we need to update current user
@@ -161,6 +164,8 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
                             print("dismissing image picker")
                             self.dismiss(animated: true, completion: nil)
                         }
+                        // update users events
+                        self.updateEventProfilePhotos(uid, url.absoluteString)
                     } else {
                         print("Error: \(error!.localizedDescription)")
                     }
@@ -169,5 +174,24 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
 
         }
         picker.dismiss(animated: true, completion: nil)
+    }
+
+    // uid: User identifier
+    // newPhotoURL: New Profile Photo URL of this user
+    // Updates all event profile photo URL's to the new user profile photo
+    private func updateEventProfilePhotos(_ uid: String, _ newPhotoURL: String) {
+        let userEventsPath = String(format: Constants.Database.userEventPosts, uid)
+        let eventsRef = Database.database().reference().child(userEventsPath)
+
+        eventsRef.observeSingleEvent(of: .value) { snapshot in
+            for child in snapshot.children {
+                if let childSnapshot = child as? DataSnapshot {
+                    let eventID = childSnapshot.key
+                    let userEventPhotoURLPath = String(format: Constants.Database.userEventPhotoURL, uid, eventID)
+                    let userEventPostedByPhotoRef = Database.database().reference().child(userEventPhotoURLPath)
+                    userEventPostedByPhotoRef.setValue(newPhotoURL)
+                }
+            }
+        }
     }
 }

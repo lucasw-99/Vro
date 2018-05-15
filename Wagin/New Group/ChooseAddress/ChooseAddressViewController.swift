@@ -186,6 +186,7 @@ extension ChooseAddressViewController: CLLocationManagerDelegate {
 extension ChooseAddressViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
+        searchBar.resignFirstResponder()
         var searchText = searchBar.text!
         // user expects search to give first autocomplete result
         if !searchResults.isEmpty {
@@ -244,7 +245,8 @@ extension ChooseAddressViewController: UISearchBarDelegate {
             let pin = MKPointAnnotation()
             pin.coordinate = firstMapItem.placemark.coordinate
             let fullName = self.extractAddress(firstMapItem.placemark)
-            pin.title = fullName
+            print("Fullname: \(fullName), query: \(query)")
+            pin.title = query
 
             let span = MKCoordinateSpanMake(0.75, 0.75)
             let region = MKCoordinateRegion(center: pin.coordinate, span: span)
@@ -371,9 +373,12 @@ extension ChooseAddressViewController: UITableViewDelegate, UITableViewDataSourc
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        searchBar.endEditing(true)
+        searchBar.resignFirstResponder()
         let (searchTitle, searchDescription, _) = searchResults[indexPath.row]
         print("searchTitle: \(searchTitle)")
         let titleAndDescription = "\(searchTitle) \(searchDescription)"
+        print("titleAndDescription: \(titleAndDescription)")
         searchBar.text = titleAndDescription
         searchQuery(query: titleAndDescription)
     }

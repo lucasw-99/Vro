@@ -8,16 +8,22 @@
 
 import UIKit
 
+protocol EventPostCellDelegate {
+    func didTapLikeButton(_ likedByUID: String, _ postUID: String, _ eventPostID: String)
+    func didTapCommentButton(_ postUID: String, eventPostID: String)
+    func didTapShareButton(_ postUID: String, eventPostID: String)
+}
+
 class EventPostCollectionViewCell: UICollectionViewCell {
     private let userHeaderView = UIView()
     private let userImage = UIImageView()
     private let usernameLabel = UILabel()
-    private let shareButton = UIButton()
 
     private let eventImageView = UIImageView()
 
     private let likeButton = UIButton()
     private let commentButton = UIButton()
+    private let shareButton = UIButton()
 
     private let separatorView = UIView()
 
@@ -28,6 +34,8 @@ class EventPostCollectionViewCell: UICollectionViewCell {
     private let daysAgo = UILabel()
 
     private let containerView = UIView()
+
+    var buttonDelegate: EventPostCellDelegate?
 
     var eventPost: EventPost! {
         didSet {
@@ -45,6 +53,73 @@ class EventPostCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+
+    private func updateUI() {
+        usernameLabel.text = eventPost.postedByUser.username
+
+        print("photoURL: \(eventPost.postedByUser.photoURL), caption: \(eventPost.caption)")
+        ImageService.getImage(withURL: eventPost.postedByUser.photoURL, completion: { image in
+            self.userImage.image = image
+            Util.makeImageCircular(image: self.userImage)
+        })
+        userImage.layer.borderWidth = 1
+        userImage.layer.borderColor = UIColor.lightGray.cgColor
+
+        if let url = URL(string: eventPost.event.eventImageURL) {
+            ImageService.getImage(withURL: url) { image in
+                self.eventImageView.image = image
+            }
+        } else {
+            ImageService.getImage(withURL: URL(string: Constants.noImageProvidedPhotoURL)!) { image in
+                self.eventImageView.image = image
+            }
+            print("Invalid image URL")
+        }
+
+        let likeCount = eventPost.likedBy.count
+        numberOfLikes.text = "💗 \(likeCount) like\(likeCount != 1 ? "s" : "")"
+
+        captionLabel.text = eventPost.caption
+
+        daysAgo.text = smallestTimeUnit(from: eventPost.timestamp)
+    }
+
+    private func smallestTimeUnit(from date: Date) -> String {
+        let todaysDate = Date()
+        var n = todaysDate.years(from: date)
+        guard n >= 0 else { fatalError("Date posted is later than todays date: \(date)") }
+        if n != 0 {
+            return "\(n) year\(n != 1 ? "s" : "") ago"
+        }
+        n = todaysDate.months(from: date)
+        if n != 0 {
+            return "\(n) month\(n != 1 ? "s" : "") ago"
+        }
+        n = todaysDate.days(from: date)
+        if n != 0 {
+            return "\(n) day\(n != 1 ? "s" : "") ago"
+        }
+        n = todaysDate.hours(from: date)
+        if n != 0 {
+            return "\(n) hour\(n != 1 ? "s" : "") ago"
+        }
+        n = todaysDate.minutes(from: date)
+        if n != 0 {
+            return "\(n) minute\(n != 1 ? "s" : "") ago"
+        }
+        return "less than a minute ago"
+    }
+}
+
+// MARK: Button functions
+extension EventPostCollectionViewCell {
+    @objc private func likeButtonPressed(_ sender: Any) {
+        print("Like button pressed")
+    }
+}
+
+// MARK: Setup subviews
+extension EventPostCollectionViewCell {
     private func setupSubviews() {
         userImage.image = #imageLiteral(resourceName: "user_group_man_woman")
         userHeaderView.addSubview(userImage)
@@ -61,6 +136,7 @@ class EventPostCollectionViewCell: UICollectionViewCell {
         containerView.addSubview(eventImageView)
 
         likeButton.setImage(#imageLiteral(resourceName: "following"), for: .normal)
+        likeButton.addTarget(self, action: #selector(EventPostCollectionViewCell.likeButtonPressed(_:)), for: .touchUpInside)
         containerView.addSubview(likeButton)
 
         commentButton.setImage(#imageLiteral(resourceName: "speech_buble"), for: .normal)
@@ -171,58 +247,5 @@ class EventPostCollectionViewCell: UICollectionViewCell {
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-    }
-
-    private func updateUI() {
-        usernameLabel.text = eventPost.postedBy.username
-
-        print("photoURL: \(eventPost.postedBy.photoURL), caption: \(eventPost.caption)")
-        ImageService.getImage(withURL: eventPost.postedBy.photoURL, completion: { image in
-            self.userImage.image = image
-            Util.makeImageCircular(image: self.userImage)
-        })
-        userImage.layer.borderWidth = 1
-        userImage.layer.borderColor = UIColor.lightGray.cgColor
-
-        if let url = URL(string: eventPost.event.eventImageURL) {
-            ImageService.getImage(withURL: url) { image in
-                self.eventImageView.image = image
-            }
-        } else {
-            print("Invalid image URL")
-        }
-
-        let likeCount = eventPost.likedBy.count
-        numberOfLikes.text = "💗 \(likeCount) like\(likeCount != 1 ? "s" : "")"
-
-        captionLabel.text = eventPost.caption
-
-        daysAgo.text = smallestTimeUnit(from: eventPost.timestamp)
-    }
-
-    private func smallestTimeUnit(from date: Date) -> String {
-        let todaysDate = Date()
-        var n = todaysDate.years(from: date)
-        guard n >= 0 else { fatalError("Date posted is later than todays date: \(date)") }
-        if n != 0 {
-            return "\(n) year\(n != 1 ? "s" : "") ago"
-        }
-        n = todaysDate.months(from: date)
-        if n != 0 {
-            return "\(n) month\(n != 1 ? "s" : "") ago"
-        }
-        n = todaysDate.days(from: date)
-        if n != 0 {
-            return "\(n) day\(n != 1 ? "s" : "") ago"
-        }
-        n = todaysDate.hours(from: date)
-        if n != 0 {
-            return "\(n) hour\(n != 1 ? "s" : "") ago"
-        }
-        n = todaysDate.minutes(from: date)
-        if n != 0 {
-            return "\(n) minute\(n != 1 ? "s" : "") ago"
-        }
-        return "less than a minute ago"
     }
 }

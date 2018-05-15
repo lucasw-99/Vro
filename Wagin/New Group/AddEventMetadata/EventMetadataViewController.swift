@@ -80,6 +80,7 @@ extension EventMetadataViewController {
         contentView.addSubview(captionLabel)
 
         Util.roundedCorners(ofColor: .lightGray, element: captionText)
+        captionText.doneAccessory = true
         contentView.addSubview(captionText)
 
         timeLabel.text = "Time of Event"

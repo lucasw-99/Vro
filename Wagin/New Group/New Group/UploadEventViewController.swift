@@ -150,21 +150,24 @@ extension UploadEventViewController: UIImagePickerControllerDelegate, UINavigati
         picker.dismiss(animated: true, completion: nil)
     }
 
+    // TODO: Upload image so early?
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             guard let uid = UserService.currentUserProfile?.uid else { fatalError() }
             let eventImagePath = String(format: Constants.Storage.eventImages, uid, Util.generateID())
+            
+            let spinner = Util.displaySpinner(onView: postEventButton)
             ImageService.uploadImage(pickedImage, eventImagePath) { eventImageURL in
                 if let url = eventImageURL {
-                    self.event = Event(host: UserService.currentUserProfile!, eventImageURL: url.absoluteString, description: "Not implemented yet 😒", address: self.pin.title!, eventTime: self.date)
+                    self.event = Event(hostUID: UserService.currentUserProfile!.uid, eventImageURL: url.absoluteString, description: "Not implemented yet 😒", address: self.pin.title!, eventTime: self.date)
                     self.eventImageView.image = pickedImage
                     Util.roundedCorners(ofColor: .black, element: self.eventImageView)
+                    Util.removeSpinner(spinner)
                     print("set event!")
                 } else {
                     print("Error with uploading event image")
                 }
             }
-
         }
         picker.dismiss(animated: true, completion: nil)
     }
@@ -175,7 +178,7 @@ extension UploadEventViewController {
         // TODO: Disable button until all fields are filled in
         print("Post new event pressed")
         guard let uid = UserService.currentUserProfile?.uid else { fatalError() }
-        let eventPath = String(format: Constants.Database.newEventPost, uid)
+        let eventPath = String(format: Constants.Database.userEventPosts, uid)
         let eventRef = Database.database().reference().child(eventPath).childByAutoId()
 
         let dateFormatter = DateFormatter()
@@ -184,30 +187,27 @@ extension UploadEventViewController {
 
         guard let userProfile = UserService.currentUserProfile else { fatalError("Posting new event without valid userProfile") }
 
+        // TODO: How is this going to evolve?
+        let host = userProfile
+        let postedBy = userProfile
+
         let eventPostObject = [
-            "postedBy": [
-                "uid": userProfile.uid,
-                "username": userProfile.username,
-                "photoURL": userProfile.photoURL.absoluteString,
-                "followers": userProfile.followers,
-                "following": userProfile.following
+            "postedByUser": [
+                "uid": postedBy.uid,
+                "username": postedBy.username,
+                "photoURL": postedBy.photoURL.absoluteString
             ],
             "event": [
-                "host": [
-                    "uid": userProfile.uid,
-                    "username": userProfile.username,
-                    "photoURL": userProfile.photoURL.absoluteString,
-                    "followers": userProfile.followers,
-                    "following": userProfile.following
-                ],
+                "hostUID": host.uid,
                 // TODO: Change this to a valid description of event
-                "description": "",
+                "description": event?.description ?? "",
                 "address": pin.title ?? "",
                 "eventImageURL": event?.eventImageURL ?? "",
                 "eventTime": eventTimeString
             ],
             "likedBy": [],
             "caption": caption,
+            // TODO: Store timestamp as negative value to sort from most recent to least recent?
             "timestamp": [".sv": "timestamp"]
             ] as [String: Any]
 

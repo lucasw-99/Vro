@@ -9,15 +9,15 @@
 import UIKit
 
 class Event {
-    let host: UserProfile
+    let hostUID: String
     let eventImageURL: String
     let description: String
     let address: String
     let eventTime: Date
     // TODO: Make address optional, and add coordinate field
 
-    init(host: UserProfile, eventImageURL: String, description: String, address: String, eventTime: Date) {
-        self.host = host
+    init(hostUID: String, eventImageURL: String, description: String, address: String, eventTime: Date) {
+        self.hostUID = hostUID
         self.eventImageURL = eventImageURL
         self.description = description
         self.address = address
