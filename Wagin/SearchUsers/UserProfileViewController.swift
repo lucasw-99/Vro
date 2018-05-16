@@ -13,6 +13,12 @@ import SnapKit
 class UserProfileViewController: UIViewController {
     private let selectedUser: UserProfile
 
+    private var selectedUserFollowers: UserFollowers?
+    private var currentUserFollowers: UserFollowers?
+
+    private let selectedUserFollowersRef: DatabaseReference
+    private let currentUserFollowersRef: DatabaseReference
+
     private let usernameLabel = UILabel()
     private let profilePhotoView = UIImageView()
     private let followerStatsLabel = UILabel()
@@ -24,13 +30,41 @@ class UserProfileViewController: UIViewController {
 
     init(_ userProfile: UserProfile) {
         selectedUser = userProfile
+        guard let currentUserUID = UserService.currentUserProfile?.uid else { fatalError("current user nil") }
+        let selectedUserFollowersPath = String(format: Constants.Database.userFollowerInfo, selectedUser.uid)
+        selectedUserFollowersRef = Database.database().reference().child(selectedUserFollowersPath)
+        let currentUserFollowersPath = String(format: Constants.Database.userFollowerInfo, currentUserUID)
+        currentUserFollowersRef = Database.database().reference().child(currentUserFollowersPath)
         super.init(nibName: nil, bundle: nil)
+
+        // disable follow button until both observables fire
+        Util.toggleButton(button: followButton, isEnabled: false)
+
+        // TODO: Figure out how to avoid potential race condition with setting followButton.isEnabled
+        // TODO: Put this code in viewDidDisappear and remove the DatabaseReferences
+        UserService.getFollowerInfo(selectedUser.uid, selectedUserFollowersRef) { selectedUserFollowerInfo in
+            print("UserProfileViewController selectedUser observable")
+            self.selectedUserFollowers = selectedUserFollowerInfo
+            self.setupFollowingLabelText()
+            self.setFollowButtonIsSelected()
+            if self.currentUserFollowers != nil {
+                Util.toggleButton(button: self.followButton, isEnabled: true)
+            }
+        }
+
+        UserService.getFollowerInfo(currentUserUID, currentUserFollowersRef) { currentUserFollowerInfo in
+            print("UserProfileViewController currentUser observable")
+            self.currentUserFollowers = currentUserFollowerInfo
+            self.setFollowButtonIsSelected()
+            if self.selectedUserFollowers != nil {
+                Util.toggleButton(button: self.followButton, isEnabled: true)
+            }
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,8 +99,7 @@ extension UserProfileViewController {
         followButton.setTitle("Following", for: .selected)
         followButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .bold)
         followButton.setTitleColor(.black, for: .normal)
-        // set state to selected if currentUser is already following selectedUser
-        followButton.isSelected = UserService.currentUserProfile!.following.contains(selectedUser.uid)
+        setFollowButtonIsSelected()
         followButton.addTarget(self, action: #selector(UserProfileViewController.followButtonPressed(_:)), for: .touchUpInside)
         // don't show follow button if you're looking up your own profile
         followButton.isHidden = UserService.currentUserProfile!.uid == selectedUser.uid ? true : false
@@ -121,56 +154,66 @@ extension UserProfileViewController {
     }
 
     private func setupFollowingLabelText() {
-        let followerCount = selectedUser.followers.count
-        let followingCount = selectedUser.following.count
+        let followerCount = selectedUserFollowers?.followers.count ?? 0
+        let followingCount = selectedUserFollowers?.following.count ?? 0
         followerStatsLabel.text = "\(followerCount) follower\(followerCount != 1 ? "s" : "")\n\(followingCount) following"
+    }
+
+    private func setFollowButtonIsSelected() {
+        // set state to selected if currentUser is already following selectedUser
+        if let currFollowing = currentUserFollowers?.following {
+            followButton.isSelected = currFollowing.contains(selectedUser.uid)
+        } else if let selectedFollowers = selectedUserFollowers?.followers {
+            guard let currUID = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
+            followButton.isSelected = selectedFollowers.contains(currUID)
+        } else {
+            followButton.isSelected = false
+        }
     }
 }
 
 // MARK: Button functions
 extension UserProfileViewController {
     @objc private func backButtonPressed(_ sender: Any) {
+        // Stop observing updates to user followers
+        selectedUserFollowersRef.removeAllObservers()
+        currentUserFollowersRef.removeAllObservers()
         navigationController?.popViewController(animated: true)
     }
 
     @objc private func followButtonPressed(_ sender: Any) {
         // disable button while editing
-        followButton.isEnabled = false
+        Util.toggleButton(button: self.followButton, isEnabled: false)
         print("follow button disabled")
         let wasSelected = followButton.isSelected
         followButton.isSelected = !followButton.isSelected
-        let currentUser = UserService.currentUserProfile!
+        guard let currentUser = currentUserFollowers else { fatalError("follow button pressed before currentUserFollowers was initialized") }
+        guard let followedUser = selectedUserFollowers else { fatalError("follow button pressed before selectedUserFollowers was initialized") }
         if wasSelected {
-            guard let followingIndex = currentUser.following.index(of: selectedUser.uid) else { fatalError("Says that user was following other user, but they weren't in the following list") }
-            currentUser.following.remove(at: followingIndex)
+            guard followedUser.followers.contains(currentUser.uid) else { fatalError("Says that user was following other user, but they weren't in the other users followers list") }
+            followedUser.followers.remove(currentUser.uid)
 
-            guard let followerIndex = selectedUser.followers.index(of: currentUser.uid) else { fatalError("Issue with follower counts") }
-            selectedUser.followers.remove(at: followerIndex)
+            guard currentUser.following.contains(currentUser.uid) else { fatalError("Issue with follower counts") }
+            currentUser.following.remove(currentUser.uid)
 
         } else {
-            currentUser.following.append(selectedUser.uid)
-            selectedUser.followers.append(currentUser.uid)
+            currentUser.following.insert(followedUser.uid)
+            followedUser.followers.insert(currentUser.uid)
         }
-        updateFollowArrays(currentUser: currentUser, selectedUser: selectedUser)
-        UserService.updateCurrentUser(currentUser.uid) {
-            // re-enable follow button after current user is valid
-            print("follow button re-enabled")
-            self.followButton.isEnabled = true
-        }
-        setupFollowingLabelText()
+        updateFollowSets(currentUser: currentUser, followedUser: followedUser)
+        Util.toggleButton(button: self.followButton, isEnabled: true)
     }
 
-    private func updateFollowArrays(currentUser: UserProfile, selectedUser: UserProfile) {
+    private func updateFollowSets(currentUser: UserFollowers, followedUser: UserFollowers) {
         // edit the selectedUser's followers list, and the currentUser's following list
-        let followersPath = String(format: Constants.Database.userFollowers, selectedUser.uid)
+        let followersPath = String(format: Constants.Database.userFollowers, followedUser.uid)
         let followingPath = String(format: Constants.Database.userFollowing, currentUser.uid)
 
         let followersRef = Database.database().reference().child(followersPath)
-        followersRef.setValue(selectedUser.followers)
+        followersRef.setValue(Util.setToDictionary(followedUser.followers))
 
         let followingRef = Database.database().reference().child(followingPath)
-        followingRef.setValue(currentUser.following)
+        followingRef.setValue(Util.setToDictionary(currentUser.following))
         print("Updated database!")
     }
-
 }

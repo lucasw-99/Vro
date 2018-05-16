@@ -26,9 +26,8 @@ class UserService {
                 let username = dict["username"] as? String,
                 let photoURL = dict["photoURL"] as? String {
 
-                let (followers, following) = Util.getFollowers(dict)
-                let url = URL(string: photoURL) ?? URL(string: Constants.newUserProfilePhotoURL)
-                userProfile = UserProfile(uid, username, url!, followers, following)
+                guard let url = (URL(string: photoURL) ?? URL(string: Constants.newUserProfilePhotoURL)) else { fatalError("newUserProfilePhotoURL doesn't exist?") }
+                userProfile = UserProfile(uid, username, url)
             }
             completion(userProfile)
         }
@@ -42,15 +41,14 @@ class UserService {
             var foundUser: UserProfile?
             for child in snapshot.children {
                 let childSnapshot = child as! DataSnapshot
-                if let nextChildSnapshot = snapshot.childSnapshot(forPath: String(format: Constants.Database.getUserProfile, childSnapshot.key)) as? DataSnapshot,
-                    let dict = nextChildSnapshot.value as? [String: Any],
+                let nextChildSnapshot = snapshot.childSnapshot(forPath: String(format: Constants.Database.getUserProfile, childSnapshot.key))
+                if let dict = nextChildSnapshot.value as? [String: Any],
                     let uid = dict["uid"] as? String,
                     let username = dict["username"] as? String,
                     searchUsername == username,
                     let stringPhotoURL = dict["photoURL"] as? String,
                     let photoURL = URL(string: stringPhotoURL) {
-                    let (followers, following) = Util.getFollowers(dict)
-                    foundUser = UserProfile(uid, username, photoURL, followers, following)
+                    foundUser = UserProfile(uid, username, photoURL)
                     break
                 }
             }
@@ -79,6 +77,22 @@ class UserService {
             UserService.currentUserProfile = userProfile
             print("userProfile has been set")
             completion()
+        }
+    }
+
+    // uid: Get follower info for user specified by uid
+    // userFollowersRef: DatabaseReference for observable, need to hold onto it to remove it
+    static func getFollowerInfo(_ uid: String, _ userFollowersRef: DatabaseReference, completion: @escaping ( (_ followerInfo: UserFollowers) -> () )) {
+        userFollowersRef.observe(.value) { snapshot in
+            var followerInfo: UserFollowers = UserFollowers(uid, Set<String>(), Set<String>())
+            if let dict = snapshot.value as? [String: Any] {
+                let followersDict = dict["followers"] as? [String: Any] ?? Dictionary<String, Bool>()
+                let followingDict = (dict["following"] as? [String: Any]) ?? Dictionary<String, Bool>()
+                let followers = Set<String>(followersDict.keys.map { $0 })
+                let following = Set<String>(followingDict.keys.map { $0 })
+                followerInfo = UserFollowers(uid, followers, following)
+            }
+            completion(followerInfo)
         }
     }
 }

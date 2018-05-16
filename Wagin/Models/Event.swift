@@ -16,7 +16,11 @@ class Event {
     let eventTime: Date
     // TODO: Make address optional, and add coordinate field
 
-    init(hostUID: String, eventImageURL: String, description: String, address: String, eventTime: Date) {
+    init(_ hostUID: String,
+         _ eventImageURL: String,
+         _ description: String,
+         _ address: String,
+         _ eventTime: Date) {
         self.hostUID = hostUID
         self.eventImageURL = eventImageURL
         self.description = description

@@ -27,7 +27,7 @@ class NewEventViewController: UIViewController, UIScrollViewDelegate {
     private let postEventButton = UIButton()
     private let cancelButton = UIButton()
 
-    private var address: String?
+    private var address: String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()

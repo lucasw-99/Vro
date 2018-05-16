@@ -12,15 +12,22 @@ class EventPost {
     let postedByUser: UserProfile
     let event: Event
     // array of UID's
-    var likedBy: [String]
+    var likedBy: Set<String>
     let caption: String
     let timestamp: Date
+    let eventPostID: String
 
-    init(postedByUser: UserProfile, event: Event, likedBy: [String], caption: String, timestamp: Date) {
+    init(_ postedByUser: UserProfile,
+         _ event: Event,
+         _ likedBy: Set<String>,
+         _ caption: String,
+         _ timestamp: Date,
+         _ eventPostID: String) {
         self.postedByUser = postedByUser
         self.event = event
         self.likedBy = likedBy
         self.caption = caption
         self.timestamp = timestamp
+        self.eventPostID = eventPostID
     }
 }

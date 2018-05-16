@@ -13,6 +13,8 @@ import FirebaseDatabase
 class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
 
     private var DataSource: [EventPost] = []
+    private var followedUsers: Set<String>?
+    private var userFollowersRef: DatabaseReference?
 
     private let waginLabel = UILabel()
     private let separatorView = UIView()
@@ -45,12 +47,11 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
         super.viewDidLoad()
         setupSubviews()
         setupLayout()
-        observeEventPosts()
+        loadFollowers()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
     }
 
 }
@@ -113,9 +114,9 @@ extension NewsFeedViewController {
 // MARK: Populate timeline
 extension NewsFeedViewController {
     @objc private func observeEventPosts() {
-        guard var followedUsers = UserService.currentUserProfile?.following else { fatalError("current user nil in newsfeed") }
+        guard var followedUsers = followedUsers else { fatalError("observeEventPosts called with nil userFollowersInfo") }
         // add yourself to followedUsers because you want to see your posts
-        followedUsers.append(UserService.currentUserProfile!.uid)
+        followedUsers.insert(UserService.currentUserProfile!.uid)
         var tempPosts = [EventPost]()
         let numFollowed = followedUsers.count
         var usersSeen = 0
@@ -162,17 +163,20 @@ extension NewsFeedViewController {
                     let eventImageURL = eventDict["eventImageURL"] as? String,
                     let eventTime = eventDict["eventTime"] as? String,
                     let eventPostCaption = eventPostDict["caption"] as? String,
-                    let eventPostTimestamp = eventPostDict["timestamp"] as? TimeInterval {
+                    let eventPostTimestamp = eventPostDict["timestamp"] as? TimeInterval,
+                    let eventPostID = eventPostDict["eventPostID"] as? String {
 
                     print("postedByPhotoURL: \(postedByPhotoURL), uid: \(uid)")
 
                     let eventDate = Util.stringToDate(dateString: eventTime)
                     let timestamp = Date(timeIntervalSince1970: eventPostTimestamp / 1000)
 
-                    let postedByUser = UserProfile(postedByUID, postedByUsername, postedByPhotoURL, [], [])
+                    // TODO: Get followers
 
-                    let event = Event(hostUID: hostUID, eventImageURL: eventImageURL, description: eventDescription, address: eventAddress, eventTime: eventDate)
-                    let eventPost = EventPost(postedByUser: postedByUser, event: event, likedBy: [], caption: eventPostCaption, timestamp: timestamp)
+                    let postedByUser = UserProfile(postedByUID, postedByUsername, postedByPhotoURL)
+
+                    let event = Event(hostUID, eventImageURL, eventDescription, eventAddress, eventDate)
+                    let eventPost = EventPost(postedByUser, event, Set<String>(), eventPostCaption, timestamp, eventPostID)
 
                     userPosts.append(eventPost)
                 }
@@ -180,6 +184,23 @@ extension NewsFeedViewController {
             completion(userPosts)
         })
     }
+}
+
+// MARK: Button delegate for EventPostCollectionViewCell
+extension NewsFeedViewController: EventPostCellDelegate {
+    func didTapLikeButton(_ postedByUID: String, _ likePost: Bool, _ eventPostID: String) {
+        print("unimplemented")
+    }
+
+    func didTapCommentButton(_ postedByUID: String, eventPostID: String) {
+        print("unimplemented")
+    }
+
+    func didTapShareButton(_ postedByUID: String, eventPostID: String) {
+        print("unimplemented")
+    }
+
+
 }
 
 // MARK: Collection view
@@ -196,6 +217,7 @@ extension NewsFeedViewController {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventPostCell", for: indexPath) as! EventPostCollectionViewCell
         cell.eventPost = DataSource[indexPath.section]
+        cell.buttonDelegate = self
         return cell
     }
 
@@ -205,5 +227,20 @@ extension NewsFeedViewController {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 5)
+    }
+}
+
+// MARK: Load new followers
+extension NewsFeedViewController {
+    // TODO: Load followers through an observable
+    func loadFollowers() {
+        guard let currentUserUID = UserService.currentUserProfile?.uid else { fatalError("current user is nil") }
+        let userFollowersPath = String(format: Constants.Database.userFollowerInfo, currentUserUID)
+        userFollowersRef = Database.database().reference().child(userFollowersPath)
+
+        UserService.getFollowerInfo(currentUserUID, userFollowersRef!) { followersInfo in
+            self.followedUsers = followersInfo.followers
+            self.observeEventPosts()
+        }
     }
 }

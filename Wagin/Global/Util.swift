@@ -62,25 +62,16 @@ class Util {
 
     static func generateID() -> String {
         let generatedID = UUID().uuidString
-        print("returnVal: \(generatedID)")
+        print("generatedID: \(generatedID)")
         return generatedID
     }
 
-    // Takes a dictionary and returns followers & following if either are non nil
-    static func getFollowers(_ dict: [String: Any]) -> ([String], [String]) {
-        var followers = [String]()
-        var following = [String]()
-
-        // TODO: Do I need to force a downcast?
-        if let val = dict["followers"] {
-            followers = val as! [String]
+    static func setToDictionary(_ set: Set<String>) -> [String: Bool] {
+        var dict = Dictionary<String, Bool>()
+        for element in set {
+            dict[element] = true
         }
-
-        if let val = dict["following"] {
-            following = val as! [String]
-        }
-
-        return (followers, following)
+        return dict
     }
 }
 

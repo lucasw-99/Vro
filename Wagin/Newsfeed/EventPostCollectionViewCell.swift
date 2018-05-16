@@ -9,9 +9,9 @@
 import UIKit
 
 protocol EventPostCellDelegate {
-    func didTapLikeButton(_ likedByUID: String, _ postUID: String, _ eventPostID: String)
-    func didTapCommentButton(_ postUID: String, eventPostID: String)
-    func didTapShareButton(_ postUID: String, eventPostID: String)
+    func didTapLikeButton(_ postedByUID: String, _ didLikePost: Bool, _ eventPostID: String)
+    func didTapCommentButton(_ postedByUID: String, eventPostID: String)
+    func didTapShareButton(_ postedByUID: String, eventPostID: String)
 }
 
 class EventPostCollectionViewCell: UICollectionViewCell {
@@ -115,6 +115,26 @@ class EventPostCollectionViewCell: UICollectionViewCell {
 extension EventPostCollectionViewCell {
     @objc private func likeButtonPressed(_ sender: Any) {
         print("Like button pressed")
+        guard let currentUID = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
+        if let index = eventPost.likedBy.index(of: currentUID) {
+            // unlike post
+            // TODO: Use a set!
+        } else {
+            // like post
+
+        }
+//
+//        buttonDelegate?.didTapLikeButton(eventPost.postedByUser.uid, eventPost.eventPostID)
+    }
+
+    @objc private func commentButtonPressed(_ sender: Any) {
+        print("Comment button pressed")
+        buttonDelegate?.didTapCommentButton(eventPost.postedByUser.uid, eventPostID: eventPost.eventPostID)
+    }
+
+    @objc private func shareButtonPressed(_ sender: Any) {
+        print("Share button pressed")
+        buttonDelegate?.didTapShareButton(eventPost.postedByUser.uid, eventPostID: eventPost.eventPostID)
     }
 }
 

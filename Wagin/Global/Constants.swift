@@ -8,8 +8,10 @@
 
 class Constants {
     class Database {
-        // 1: uid
-        static let userEventPosts = "users/%@/events"
+        // 1: uid, 2: event ID
+        static let userEventPostIDs = "users/%@/events/%@"
+        // 1: event ID
+        static let eventInfo = "events/%@"
         // 1: uid, 2: event ID
         static let userEventPhotoURL = "users/%@/events/%@/postedByUser/photoURL"
         // 1: uid
@@ -17,9 +19,11 @@ class Constants {
         // 1: uid
         static let userProfilePhotoURL = "users/%@/profile/photoURL"
         // 1: uid
-        static let userFollowers = "users/%@/profile/followers"
+        static let userFollowerInfo = "users/%@/followerInfo"
         // 1: uid
-        static let userFollowing = "users/%@/profile/following"
+        static let userFollowers = "users/%@/followerInfo/followers"
+        // 1: uid
+        static let userFollowing = "users/%@/followerInfo/following"
 
         static let users = "users"
         // 1: uid

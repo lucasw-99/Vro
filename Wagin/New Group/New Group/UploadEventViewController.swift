@@ -159,7 +159,7 @@ extension UploadEventViewController: UIImagePickerControllerDelegate, UINavigati
             let spinner = Util.displaySpinner(onView: postEventButton)
             ImageService.uploadImage(pickedImage, eventImagePath) { eventImageURL in
                 if let url = eventImageURL {
-                    self.event = Event(hostUID: UserService.currentUserProfile!.uid, eventImageURL: url.absoluteString, description: "Not implemented yet 😒", address: self.pin.title!, eventTime: self.date)
+                    self.event = Event(UserService.currentUserProfile!.uid, url.absoluteString, "Not implemented yet 😒", self.pin.title!, self.date)
                     self.eventImageView.image = pickedImage
                     Util.roundedCorners(ofColor: .black, element: self.eventImageView)
                     Util.removeSpinner(spinner)
@@ -178,8 +178,9 @@ extension UploadEventViewController {
         // TODO: Disable button until all fields are filled in
         print("Post new event pressed")
         guard let uid = UserService.currentUserProfile?.uid else { fatalError() }
-        let eventPath = String(format: Constants.Database.userEventPosts, uid)
-        let eventRef = Database.database().reference().child(eventPath).childByAutoId()
+        let eventPostID = Util.generateID()
+        let eventPath = String(format: Constants.Database.userEventPosts, uid, eventPostID)
+        let eventRef = Database.database().reference().child(eventPath)
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = Constants.dateFormat
@@ -208,7 +209,8 @@ extension UploadEventViewController {
             "likedBy": [],
             "caption": caption,
             // TODO: Store timestamp as negative value to sort from most recent to least recent?
-            "timestamp": [".sv": "timestamp"]
+            "timestamp": [".sv": "timestamp"],
+            "eventPostID": eventPostID
             ] as [String: Any]
 
         eventRef.setValue(eventPostObject) { error, ref in
