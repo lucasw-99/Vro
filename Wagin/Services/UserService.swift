@@ -80,19 +80,20 @@ class UserService {
         }
     }
 
-    // uid: Get follower info for user specified by uid
-    // userFollowersRef: DatabaseReference for observable, need to hold onto it to remove it
-    static func getFollowerInfo(_ uid: String, _ userFollowersRef: DatabaseReference, completion: @escaping ( (_ followerInfo: UserFollowers) -> () )) {
-        userFollowersRef.observe(.value) { snapshot in
-            var followerInfo: UserFollowers = UserFollowers(uid, Set<String>(), Set<String>())
-            if let dict = snapshot.value as? [String: Any] {
-                let followersDict = dict["followers"] as? [String: Any] ?? Dictionary<String, Bool>()
-                let followingDict = (dict["following"] as? [String: Any]) ?? Dictionary<String, Bool>()
-                let followers = Set<String>(followersDict.keys.map { $0 })
-                let following = Set<String>(followingDict.keys.map { $0 })
-                followerInfo = UserFollowers(uid, followers, following)
+    // uid: uid of user
+    static func getUserEvents(_ uid: String, completion: @escaping ( (String?) -> () )) {
+        let userEventsPath = String(format: Constants.Database.userEvents, uid)
+        let eventsRef = Database.database().reference().child(userEventsPath)
+
+        // TODO: Should this be observe?
+        eventsRef.observeSingleEvent(of: .value) { snapshot in
+            var user: UserProfile?
+            for child in snapshot.children {
+                // TODO: Use DispatchGroup, or OperationQueue
+                if let childSnapshot = child as? DataSnapshot{
+                    completion(childSnapshot.key)
+                }
             }
-            completion(followerInfo)
         }
     }
 }

@@ -177,48 +177,26 @@ extension UploadEventViewController {
     @IBAction func postNewEvent(_ sender: Any) {
         // TODO: Disable button until all fields are filled in
         print("Post new event pressed")
-        guard let uid = UserService.currentUserProfile?.uid else { fatalError() }
+        guard let currentUser = UserService.currentUserProfile else { fatalError("Posting new event without valid userProfile") }
         let eventPostID = Util.generateID()
-        let eventPath = String(format: Constants.Database.userEventPosts, uid, eventPostID)
-        let eventRef = Database.database().reference().child(eventPath)
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = Constants.dateFormat
-        let eventTimeString = dateFormatter.string(from: date)
-
-        guard let userProfile = UserService.currentUserProfile else { fatalError("Posting new event without valid userProfile") }
-
         // TODO: How is this going to evolve?
-        let host = userProfile
-        let postedBy = userProfile
+        let postedBy = currentUser
 
-        let eventPostObject = [
-            "postedByUser": [
-                "uid": postedBy.uid,
-                "username": postedBy.username,
-                "photoURL": postedBy.photoURL.absoluteString
-            ],
-            "event": [
-                "hostUID": host.uid,
-                // TODO: Change this to a valid description of event
-                "description": event?.description ?? "",
-                "address": pin.title ?? "",
-                "eventImageURL": event?.eventImageURL ?? "",
-                "eventTime": eventTimeString
-            ],
-            "likedBy": [],
-            "caption": caption,
-            // TODO: Store timestamp as negative value to sort from most recent to least recent?
-            "timestamp": [".sv": "timestamp"],
-            "eventPostID": eventPostID
-            ] as [String: Any]
-
-        eventRef.setValue(eventPostObject) { error, ref in
-            if error == nil {
-                print("Successfully posted event!")
+        // TODO: Make sure event is non-nil
+        let eventPost = EventPost(postedBy, event!, Set<String>(), caption, Date(), eventPostID)
+        EventPostService.setEvent(eventPost)
+        EventPostService.setEventPostID(currentUser.uid, eventPostID)
+        // TODO: Do things more serially
+        let userFollowersPath = String(format: Constants.Database.userFollowers, currentUser.uid)
+        let userFollowersRef = Database.database().reference().child(userFollowersPath)
+        FollowersService.getFollowerInfo(currentUser.uid, userFollowersRef) { followerInfo in
+            // add your uid so you can see your own posts
+            var followers = followerInfo.followers
+            followers.insert(currentUser.uid)
+            // TODO: How does this work when posts are deleted?
+            TimelineService.addPostToTimelines(followers, eventPostID) {
+                // TODO: Learn how to use DispatchGroups so you don't have to do this BS
                 self.dismissNewEventViewControllers()
-            } else {
-                print("Error: \(error!.localizedDescription)")
             }
         }
     }

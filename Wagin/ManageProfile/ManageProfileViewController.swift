@@ -96,18 +96,9 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
     // newPhotoURL: New Profile Photo URL of this user
     // Updates all event profile photo URL's to the new user profile photo
     private func updateEventProfilePhotos(_ uid: String, _ newPhotoURL: String) {
-        let userEventsPath = String(format: Constants.Database.userEventPosts, uid)
-        let eventsRef = Database.database().reference().child(userEventsPath)
-
-        eventsRef.observeSingleEvent(of: .value) { snapshot in
-            for child in snapshot.children {
-                if let childSnapshot = child as? DataSnapshot {
-                    let eventID = childSnapshot.key
-                    let userEventPhotoURLPath = String(format: Constants.Database.userEventPhotoURL, uid, eventID)
-                    let userEventPostedByPhotoRef = Database.database().reference().child(userEventPhotoURLPath)
-                    userEventPostedByPhotoRef.setValue(newPhotoURL)
-                }
-            }
+        UserService.getUserEvents(uid) { eventPostID in
+            guard let eventPostID = eventPostID else { fatalError("Received nil eventPostID") }
+            EventPostService.updateEventPhotoURL(eventPostID, newPhotoURL)
         }
     }
 }
@@ -201,7 +192,7 @@ extension ManageProfileViewController {
         let userFollowersPath = String(format: Constants.Database.userFollowerInfo, currentUserUID)
         followerDatabaseRef = Database.database().reference().child(userFollowersPath)
 
-        UserService.getFollowerInfo(currentUserUID, followerDatabaseRef!) { userFollowerStats in
+        FollowersService.getFollowerInfo(currentUserUID, followerDatabaseRef!) { userFollowerStats in
             print("user follower stats observable fired")
             let followerCount = userFollowerStats.followers.count
             let followingCount = userFollowerStats.following.count

@@ -38,26 +38,26 @@ class UserProfileViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
 
         // disable follow button until both observables fire
-        Util.toggleButton(button: followButton, isEnabled: false)
+        followButton.isUserInteractionEnabled = false
 
         // TODO: Figure out how to avoid potential race condition with setting followButton.isEnabled
         // TODO: Put this code in viewDidDisappear and remove the DatabaseReferences
-        UserService.getFollowerInfo(selectedUser.uid, selectedUserFollowersRef) { selectedUserFollowerInfo in
+        FollowersService.getFollowerInfo(selectedUser.uid, selectedUserFollowersRef) { selectedUserFollowerInfo in
             print("UserProfileViewController selectedUser observable")
             self.selectedUserFollowers = selectedUserFollowerInfo
             self.setupFollowingLabelText()
             self.setFollowButtonIsSelected()
             if self.currentUserFollowers != nil {
-                Util.toggleButton(button: self.followButton, isEnabled: true)
+                self.followButton.isUserInteractionEnabled = true
             }
         }
 
-        UserService.getFollowerInfo(currentUserUID, currentUserFollowersRef) { currentUserFollowerInfo in
+        FollowersService.getFollowerInfo(currentUserUID, currentUserFollowersRef) { currentUserFollowerInfo in
             print("UserProfileViewController currentUser observable")
             self.currentUserFollowers = currentUserFollowerInfo
             self.setFollowButtonIsSelected()
             if self.selectedUserFollowers != nil {
-                Util.toggleButton(button: self.followButton, isEnabled: true)
+                self.followButton.isUserInteractionEnabled = true
             }
         }
     }
@@ -200,8 +200,10 @@ extension UserProfileViewController {
             currentUser.following.insert(followedUser.uid)
             followedUser.followers.insert(currentUser.uid)
         }
-        updateFollowSets(currentUser: currentUser, followedUser: followedUser)
-        Util.toggleButton(button: self.followButton, isEnabled: true)
+        // TODO: Check for adding vs removing followers, use wasSelected
+        FollowersService.updateFollowers(uid: currentUser.uid, followedUid: followedUser.uid, addFollower: !wasSelected) {
+            Util.toggleButton(button: self.followButton, isEnabled: true)
+        }
     }
 
     private func updateFollowSets(currentUser: UserFollowers, followedUser: UserFollowers) {

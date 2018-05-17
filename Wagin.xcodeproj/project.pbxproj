@@ -16,6 +16,11 @@
 		A0283D2220A295A100F4E700 /* UploadEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0283D2120A295A100F4E700 /* UploadEventViewController.swift */; };
 		A050022C20A12B0900BBCA6D /* EventMetadataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A050022B20A12B0900BBCA6D /* EventMetadataViewController.swift */; };
 		A056D7E120AB3C8F00FA3F43 /* UserFollowers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A056D7E020AB3C8F00FA3F43 /* UserFollowers.swift */; };
+		A056D80620AD156E00FA3F43 /* EventPostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A056D80520AD156E00FA3F43 /* EventPostService.swift */; };
+		A056D80820AD157D00FA3F43 /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A056D80720AD157D00FA3F43 /* CommentService.swift */; };
+		A056D80A20AD159600FA3F43 /* LikeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A056D80920AD159600FA3F43 /* LikeService.swift */; };
+		A056D80C20AD15AD00FA3F43 /* TimelineService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A056D80B20AD15AD00FA3F43 /* TimelineService.swift */; };
+		A056D80E20AD15C100FA3F43 /* FollowersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A056D80D20AD15C100FA3F43 /* FollowersService.swift */; };
 		A05D5A34209E75470025E8C7 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05D5A33209E75460025E8C7 /* ImageService.swift */; };
 		A05D5A36209ECD580025E8C7 /* ChooseAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05D5A35209ECD580025E8C7 /* ChooseAddressViewController.swift */; };
 		A05D5A3C20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05D5A3B20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift */; };
@@ -64,6 +69,11 @@
 		A0283D2120A295A100F4E700 /* UploadEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadEventViewController.swift; sourceTree = "<group>"; };
 		A050022B20A12B0900BBCA6D /* EventMetadataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMetadataViewController.swift; sourceTree = "<group>"; };
 		A056D7E020AB3C8F00FA3F43 /* UserFollowers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFollowers.swift; sourceTree = "<group>"; };
+		A056D80520AD156E00FA3F43 /* EventPostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPostService.swift; sourceTree = "<group>"; };
+		A056D80720AD157D00FA3F43 /* CommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentService.swift; sourceTree = "<group>"; };
+		A056D80920AD159600FA3F43 /* LikeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeService.swift; sourceTree = "<group>"; };
+		A056D80B20AD15AD00FA3F43 /* TimelineService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineService.swift; sourceTree = "<group>"; };
+		A056D80D20AD15C100FA3F43 /* FollowersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersService.swift; sourceTree = "<group>"; };
 		A05D5A33209E75460025E8C7 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		A05D5A35209ECD580025E8C7 /* ChooseAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseAddressViewController.swift; sourceTree = "<group>"; };
 		A05D5A3B20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteResultTableViewCell.swift; sourceTree = "<group>"; };
@@ -151,6 +161,11 @@
 			children = (
 				A0228F7D209B483A00E71C80 /* UserService.swift */,
 				A05D5A33209E75460025E8C7 /* ImageService.swift */,
+				A056D80520AD156E00FA3F43 /* EventPostService.swift */,
+				A056D80720AD157D00FA3F43 /* CommentService.swift */,
+				A056D80920AD159600FA3F43 /* LikeService.swift */,
+				A056D80B20AD15AD00FA3F43 /* TimelineService.swift */,
+				A056D80D20AD15C100FA3F43 /* FollowersService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -447,8 +462,11 @@
 			files = (
 				A0C8B6C9209A163400A98D53 /* MapViewController.swift in Sources */,
 				A0FF46AA20919435006FE799 /* SignupViewController.swift in Sources */,
+				A056D80A20AD159600FA3F43 /* LikeService.swift in Sources */,
 				A0F2FB2E209CA5DB0018F465 /* NewsFeedViewController.swift in Sources */,
 				A0FF4696209176B9006FE799 /* LoginViewController.swift in Sources */,
+				A056D80E20AD15C100FA3F43 /* FollowersService.swift in Sources */,
+				A056D80820AD157D00FA3F43 /* CommentService.swift in Sources */,
 				A0648FFD20981138001417D7 /* ManageProfileViewController.swift in Sources */,
 				A05D5A34209E75470025E8C7 /* ImageService.swift in Sources */,
 				A0F2FB2C209C11A80018F465 /* NewEventDummyViewController.swift in Sources */,
@@ -469,7 +487,9 @@
 				A0228F75209AC32D00E71C80 /* NewEventViewController.swift in Sources */,
 				A0228F7B209ACBAC00E71C80 /* Event.swift in Sources */,
 				A050022C20A12B0900BBCA6D /* EventMetadataViewController.swift in Sources */,
+				A056D80620AD156E00FA3F43 /* EventPostService.swift in Sources */,
 				A0F2FB32209CAC590018F465 /* EventPostCollectionViewCell.swift in Sources */,
+				A056D80C20AD15AD00FA3F43 /* TimelineService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

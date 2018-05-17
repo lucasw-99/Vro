@@ -10,6 +10,7 @@ import UIKit
 
 class Event {
     let hostUID: String
+    // TODO: Make it a URL???
     let eventImageURL: String
     let description: String
     let address: String
