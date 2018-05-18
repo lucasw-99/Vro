@@ -193,8 +193,8 @@ extension UserProfileViewController {
             guard followedUser.followers.contains(currentUser.uid) else { fatalError("Says that user was following other user, but they weren't in the other users followers list") }
             followedUser.followers.remove(currentUser.uid)
 
-            guard currentUser.following.contains(currentUser.uid) else { fatalError("Issue with follower counts") }
-            currentUser.following.remove(currentUser.uid)
+            guard currentUser.following.contains(followedUser.uid) else { fatalError("Issue with follower counts") }
+            currentUser.following.remove(followedUser.uid)
 
         } else {
             currentUser.following.insert(followedUser.uid)

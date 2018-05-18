@@ -123,6 +123,7 @@ extension NewsFeedViewController {
         // TODO: Any point of refresh control? Should I just have it call reloadData?
         TimelineService.populateUserTimeline(currentUID, ref) { posts in
             self.DataSource = posts
+            // Do UI updating on main thread
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
                 // stop refresher from spinning, but not too quickly
@@ -140,10 +141,6 @@ extension NewsFeedViewController {
 
 // MARK: Button delegate for EventPostCollectionViewCell
 extension NewsFeedViewController: EventPostCellDelegate {
-    func didTapLikeButton(_ postedByUID: String, _ likePost: Bool, _ eventPostID: String) {
-        print("unimplemented")
-    }
-
     func didTapCommentButton(_ postedByUID: String, eventPostID: String) {
         print("unimplemented")
     }
@@ -174,25 +171,10 @@ extension NewsFeedViewController {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width - 10, height: 550)
+        return CGSize(width: view.frame.width, height: 550)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 5)
+        return UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
     }
 }
-//
-//// MARK: Load new followers
-//extension NewsFeedViewController {
-//    // TODO: Load followers through an observable
-//    func loadFollowers() {
-//        guard let currentUserUID = UserService.currentUserProfile?.uid else { fatalError("current user is nil") }
-//        let userFollowersPath = String(format: Constants.Database.userFollowerInfo, currentUserUID)
-//        userFollowersRef = Database.database().reference().child(userFollowersPath)
-//
-//        FollowersService.getFollowerInfo(currentUserUID, userFollowersRef!) { followersInfo in
-//            self.followedUsers = followersInfo.followers
-//            self.observeEventPosts()
-//        }
-//    }
-//}

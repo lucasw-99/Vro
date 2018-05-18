@@ -30,10 +30,13 @@ class Constants {
         static let users = "users"
         // 1: uid
         static let getUserProfile = "%@/profile/"
-        // 1: uid, 2: event ID
+        // 1: uid, 2: EventPost ID
         static let addToTimeline = "timeline/%@/%@"
         // 1: uid
         static let getTimelinePosts = "timeline/%@"
+
+        // 1: uid, 2: EventPost ID
+        static let userPostLikes = "likes/%@/%@"
     }
     class Storage {
         // 1: uid, 2: Randomly generated ID

@@ -7,9 +7,9 @@
 //
 
 import UIKit
+import FirebaseDatabase
 
 protocol EventPostCellDelegate {
-    func didTapLikeButton(_ postedByUID: String, _ didLikePost: Bool, _ eventPostID: String)
     func didTapCommentButton(_ postedByUID: String, eventPostID: String)
     func didTapShareButton(_ postedByUID: String, eventPostID: String)
 }
@@ -36,6 +36,8 @@ class EventPostCollectionViewCell: UICollectionViewCell {
     private let containerView = UIView()
 
     var buttonDelegate: EventPostCellDelegate?
+    private var eventPostLikesRef: DatabaseReference?
+    private var userLikes: Set<String>
 
     var eventPost: EventPost! {
         didSet {
@@ -44,6 +46,7 @@ class EventPostCollectionViewCell: UICollectionViewCell {
     }
 
     override init(frame: CGRect) {
+        self.userLikes = Set<String>()
         super.init(frame: frame)
         setupSubviews()
         setupLayout()
@@ -52,7 +55,6 @@ class EventPostCollectionViewCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 
     private func updateUI() {
         usernameLabel.text = eventPost.postedByUser.username
@@ -76,12 +78,26 @@ class EventPostCollectionViewCell: UICollectionViewCell {
             print("Invalid image URL")
         }
 
-        let likeCount = eventPost.likedBy.count
-        numberOfLikes.text = "💗 \(likeCount) like\(likeCount != 1 ? "s" : "")"
+        // start like count at zero, because user likes is empty
+        updateNumberOfLikes(numLikes: userLikes.count)
+        // disable user interaction until button has updated number
+        likeButton.isUserInteractionEnabled = false
+        // TODO: Rework logic, possibly do this in the collection view so you don't make
+        // a ton of observables
+        LikeService.getLikesForPost(eventPost.postedByUser.uid, eventPost.eventPostID) { userLikes, likesRef in
+            self.eventPostLikesRef = likesRef
+            self.updateNumberOfLikes(numLikes: userLikes.keys.count)
+            self.userLikes = Set<String>(userLikes.keys)
+            self.likeButton.isUserInteractionEnabled = true
+        }
 
         captionLabel.text = eventPost.caption
 
         daysAgo.text = smallestTimeUnit(from: eventPost.timestamp)
+    }
+
+    private func updateNumberOfLikes(numLikes: Int) {
+        numberOfLikes.text = "💗 \(numLikes) like\(numLikes != 1 ? "s" : "")"
     }
 
     private func smallestTimeUnit(from date: Date) -> String {
@@ -116,15 +132,14 @@ extension EventPostCollectionViewCell {
     @objc private func likeButtonPressed(_ sender: Any) {
         print("Like button pressed")
         guard let currentUID = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
-        if let index = eventPost.likedBy.index(of: currentUID) {
-            // unlike post
-            // TODO: Use a set!
-        } else {
-            // like post
-
-        }
-//
-//        buttonDelegate?.didTapLikeButton(eventPost.postedByUser.uid, eventPost.eventPostID)
+        let likedPost = !userLikes.contains(currentUID)
+        let currentNumLikes = userLikes.count
+        // TODO: Make sure userLikes gets updated properly
+        let numLikes = likedPost ? currentNumLikes + 1 : currentNumLikes - 1
+        updateNumberOfLikes(numLikes: numLikes)
+        // TODO: Add this to delegate? Why?
+        // TODO: Verify this triggers other observable to fire
+        LikeService.updateLikesForPost(currentUID, eventPost.postedByUser.uid, eventPostID: eventPost.eventPostID, likedPost: likedPost)
     }
 
     @objc private func commentButtonPressed(_ sender: Any) {
@@ -152,7 +167,7 @@ extension EventPostCollectionViewCell {
 
         containerView.addSubview(userHeaderView)
 
-        eventImageView.contentMode = .scaleAspectFill
+        eventImageView.contentMode = .scaleToFill
         containerView.addSubview(eventImageView)
 
         likeButton.setImage(#imageLiteral(resourceName: "following"), for: .normal)

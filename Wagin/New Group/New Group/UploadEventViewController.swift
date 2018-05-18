@@ -183,7 +183,7 @@ extension UploadEventViewController {
         let postedBy = currentUser
 
         // TODO: Make sure event is non-nil
-        let eventPost = EventPost(postedBy, event!, Set<String>(), caption, Date(), eventPostID)
+        let eventPost = EventPost(postedBy, event!, caption, Date(), eventPostID)
         EventPostService.setEvent(eventPost)
         EventPostService.setEventPostID(currentUser.uid, eventPostID)
         // TODO: Do things more serially

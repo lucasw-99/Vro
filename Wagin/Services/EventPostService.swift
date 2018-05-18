@@ -92,7 +92,7 @@ class EventPostService {
                 let postedByUser = UserProfile(postedByUID, postedByUsername, postedByPhotoURL)
 
                 let event = Event(hostUID, eventImageURL, eventDescription, eventAddress, eventDate)
-                let eventPost = EventPost(postedByUser, event, Set<String>(), eventPostCaption, timestamp, eventPostID)
+                let eventPost = EventPost(postedByUser, event, eventPostCaption, timestamp, eventPostID)
                 completion(eventPost)
             } else {
                 fatalError("event ID was there but it was nil")

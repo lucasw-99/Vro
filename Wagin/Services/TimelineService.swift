@@ -41,7 +41,6 @@ class TimelineService {
     // uid: uid of user
     // Populates a users timeline with an observable
     static func populateUserTimeline(_ uid: String, _ timelineObservable: DatabaseReference, completion: @escaping ( (_ posts: [EventPost]) -> () )) {
-        var posts = [EventPost]()
         timelineObservable.observe(.value) { snapshot in
             var posts = [EventPost]()
             let dispatchGroup = DispatchGroup()
@@ -60,6 +59,9 @@ class TimelineService {
                 }
             }
             dispatchGroup.notify(queue: DispatchQueue.global()) {
+                posts.sort { e1, e2 -> Bool in
+                    e1.timestamp.compare(e2.timestamp) == .orderedDescending
+                }
                 completion(posts)
             }
         }
