@@ -24,13 +24,13 @@ class LikeService {
         }
     }
 
-    static func getLikesForPost(_ postedByUID: String, _ eventPostID: String, completion: @escaping ( (_ userLikes: [String: Any], _ databaseRef: DatabaseReference) -> () )) {
+    static func getLikesForPost(_ postedByUID: String, _ eventPostID: String, completion: @escaping ( (_ userLikes: [String: Bool], _ databaseRef: DatabaseReference) -> () )) {
         let postLikesPath = String(format: Constants.Database.userPostLikes, postedByUID, eventPostID)
         let postLikesRef = Database.database().reference().child(postLikesPath)
 
         postLikesRef.observe(.value) { snapshot in
             // TODO: DOES THIS WORK
-            let userLikes = (snapshot.value as? [String: Any]) ?? [String: Any]()
+            let userLikes = (snapshot.value as? [String: Bool]) ?? [String: Bool]()
             completion(userLikes, postLikesRef)
         }
     }

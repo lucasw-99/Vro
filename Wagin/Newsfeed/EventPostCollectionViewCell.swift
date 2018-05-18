@@ -78,25 +78,19 @@ class EventPostCollectionViewCell: UICollectionViewCell {
             print("Invalid image URL")
         }
 
-        // start like count at zero, because user likes is empty
-        updateNumberOfLikes(numLikes: userLikes.count)
-        // disable user interaction until button has updated number
-        likeButton.isUserInteractionEnabled = false
-        // TODO: Rework logic, possibly do this in the collection view so you don't make
-        // a ton of observables
-        LikeService.getLikesForPost(eventPost.postedByUser.uid, eventPost.eventPostID) { userLikes, likesRef in
-            self.eventPostLikesRef = likesRef
-            self.updateNumberOfLikes(numLikes: userLikes.keys.count)
-            self.userLikes = Set<String>(userLikes.keys)
-            self.likeButton.isUserInteractionEnabled = true
-        }
-
         captionLabel.text = eventPost.caption
 
         daysAgo.text = smallestTimeUnit(from: eventPost.timestamp)
     }
 
-    private func updateNumberOfLikes(numLikes: Int) {
+    func updateLikes(numLikes: Int, userLikes: Set<String>) {
+        likeButton.isUserInteractionEnabled = false
+        updateNumberOfLikes(numLikes: numLikes)
+        self.userLikes = userLikes
+        likeButton.isUserInteractionEnabled = true
+    }
+
+    func updateNumberOfLikes(numLikes: Int) {
         numberOfLikes.text = "💗 \(numLikes) like\(numLikes != 1 ? "s" : "")"
     }
 

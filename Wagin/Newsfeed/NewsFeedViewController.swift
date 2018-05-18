@@ -15,6 +15,10 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
     private var DataSource: [EventPost] = []
     private var followedUsers: Set<String>?
     private var userTimelineRef: DatabaseReference?
+    // eventPostID => cell
+    private var eventPostCells = [String: EventPostCollectionViewCell]()
+    // eventPostID => likesReference
+    private var eventPostLikesObserver = [String: DatabaseReference]()
 
     private let waginLabel = UILabel()
     private let separatorView = UIView()
@@ -54,6 +58,13 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
         super.viewDidAppear(animated)
     }
 
+    // remove all observers when view disappears
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        for observer in eventPostLikesObserver.values {
+            observer.removeAllObservers()
+        }
+    }
 }
 
 // MARK: Setup subviews
@@ -165,7 +176,19 @@ extension NewsFeedViewController {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventPostCell", for: indexPath) as! EventPostCollectionViewCell
-        cell.eventPost = DataSource[indexPath.section]
+        let eventPost = DataSource[indexPath.section]
+        cell.eventPost = eventPost
+        eventPostCells[eventPost.eventPostID] = cell
+        if !eventPostLikesObserver.keys.contains(eventPost.eventPostID) {
+            print("making new observer")
+            LikeService.getLikesForPost(eventPost.postedByUser.uid, eventPost.eventPostID) { userLikes, likesRef in
+                self.eventPostLikesObserver[eventPost.eventPostID] = likesRef
+                guard let currentCell = self.eventPostCells[eventPost.eventPostID] else { fatalError("cell is nil") }
+                let userLikesSet = Set<String>(userLikes.keys)
+                currentCell.updateLikes(numLikes: userLikesSet.count, userLikes: userLikesSet)
+            }
+        }
+
         cell.buttonDelegate = self
         return cell
     }
