@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import FirebaseDatabase
 
-class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+class NewsFeedViewController: UIViewController {
 
     private var DataSource: [EventPost] = []
     private var followedUsers: Set<String>?
@@ -32,6 +32,7 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
         cv.backgroundColor = .clear
         return cv
     }()
+
     private lazy var refresher: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = .black
@@ -123,8 +124,8 @@ extension NewsFeedViewController {
     }
 }
 
-// MARK: Populate timeline
-extension NewsFeedViewController {
+// MARK: Populate DataSource
+extension NewsFeedViewController: UICollectionViewDataSource {
     @objc private func observeEventPosts() {
         guard let currentUID = UserService.currentUserProfile?.uid else { fatalError("Current user is nil") }
         if let ref = userTimelineRef {
@@ -172,8 +173,6 @@ extension NewsFeedViewController: EventPostCellDelegate {
                 likeButton.isSelected = !likeButton.isSelected
             }
         }
-
-
     }
 
     func didTapCommentButton(_ postedByUID: String, eventPostID: String) {
@@ -184,11 +183,13 @@ extension NewsFeedViewController: EventPostCellDelegate {
         print("unimplemented")
     }
 
-
+    func didTapShowCommentsButton(showCommentsButton: UIButton, forEvent event: EventPost) {
+        print("unimplemented")
+    }
 }
 
 // MARK: Collection view
-extension NewsFeedViewController {
+extension NewsFeedViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return DataSource.count
     }
@@ -207,25 +208,10 @@ extension NewsFeedViewController {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 550)
+        return CGSize(width: view.frame.width, height: 600)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
     }
-
-//    private func setLikes(forCell cell: EventPostCollectionViewCell, eventPost: EventPost) {
-//        eventPostCells[eventPost.eventPostID] = cell
-//        if let (userLikes, _) = eventPostLikesObserver[eventPost.eventPostID] {
-//            cell.updateLikes(numLikes: userLikes.count, userLikes: userLikes)
-//        } else {
-//            LikeService.getLikesForPost(eventPost.postedByUser.uid, eventPost.eventPostID) { userLikes, likesRef in
-//                let userLikesSet = Set<String>(userLikes.keys)
-//                self.eventPostLikesObserver[eventPost.eventPostID] = (userLikesSet, likesRef)
-//                // TODO: Should I update the cell in the observable?
-//                guard let currentCell = self.eventPostCells[eventPost.eventPostID] else { fatalError("cell is nil") }
-//                currentCell.updateLikes(numLikes: userLikesSet.count, userLikes: userLikesSet)
-//            }
-//        }
-//    }
 }

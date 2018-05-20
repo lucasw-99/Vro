@@ -9,5 +9,11 @@
 import FirebaseDatabase
 
 class CommentService {
-    
+    static func postComment(comment: Comment, success: @escaping ( (_ success: Bool) -> Void )) {
+        print("called postComment")
+    }
+
+    static func getComment(commentID: String, completion: @escaping ( (_ comment: Comment?) -> Void )) {
+        print("Called getComment")
+    }
 }

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4C005FA9770D32F8CE39A680 /* Pods_Wagin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11E51E9EF17703E72D3A9BBC /* Pods_Wagin.framework */; };
-		A0228F75209AC32D00E71C80 /* NewEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F74209AC32D00E71C80 /* NewEventViewController.swift */; };
 		A0228F79209AC4F700E71C80 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F78209AC4F700E71C80 /* Constants.swift */; };
 		A0228F7B209ACBAC00E71C80 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F7A209ACBAC00E71C80 /* Event.swift */; };
 		A0228F7E209B483A00E71C80 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F7D209B483A00E71C80 /* UserService.swift */; };
@@ -26,6 +25,9 @@
 		A05D5A3C20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05D5A3B20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift */; };
 		A0648FFD20981138001417D7 /* ManageProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0648FFC20981138001417D7 /* ManageProfileViewController.swift */; };
 		A0AD85FA2093ED9B00D5F793 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD85F92093ED9B00D5F793 /* Util.swift */; };
+		A0AF4DE120B1E3A8001A9E09 /* ShowCommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AF4DE020B1E3A8001A9E09 /* ShowCommentsViewController.swift */; };
+		A0AF4DE320B1E3CA001A9E09 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AF4DE220B1E3CA001A9E09 /* Comment.swift */; };
+		A0AF4DE520B1E603001A9E09 /* CommentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AF4DE420B1E603001A9E09 /* CommentCollectionViewCell.swift */; };
 		A0C8B6C9209A163400A98D53 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C8B6C8209A163400A98D53 /* MapViewController.swift */; };
 		A0C8B6CB209A185C00A98D53 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0C8B6CA209A185C00A98D53 /* MapKit.framework */; };
 		A0E73FF920A68D0C007E72D3 /* SearchUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E73FF820A68D0C007E72D3 /* SearchUsersViewController.swift */; };
@@ -61,7 +63,6 @@
 		11E51E9EF17703E72D3A9BBC /* Pods_Wagin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Wagin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CC27F84E82DE7DA30E870D7 /* Pods-Wagin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wagin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Wagin/Pods-Wagin.release.xcconfig"; sourceTree = "<group>"; };
 		A00219A420927451009982BD /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
-		A0228F74209AC32D00E71C80 /* NewEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventViewController.swift; sourceTree = "<group>"; };
 		A0228F78209AC4F700E71C80 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A0228F7A209ACBAC00E71C80 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		A0228F7D209B483A00E71C80 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
@@ -79,6 +80,9 @@
 		A05D5A3B20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteResultTableViewCell.swift; sourceTree = "<group>"; };
 		A0648FFC20981138001417D7 /* ManageProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageProfileViewController.swift; sourceTree = "<group>"; };
 		A0AD85F92093ED9B00D5F793 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		A0AF4DE020B1E3A8001A9E09 /* ShowCommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowCommentsViewController.swift; sourceTree = "<group>"; };
+		A0AF4DE220B1E3CA001A9E09 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
+		A0AF4DE420B1E603001A9E09 /* CommentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCollectionViewCell.swift; sourceTree = "<group>"; };
 		A0C8B6C8209A163400A98D53 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		A0C8B6CA209A185C00A98D53 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A0E73FF820A68D0C007E72D3 /* SearchUsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersViewController.swift; sourceTree = "<group>"; };
@@ -130,6 +134,7 @@
 				A0228F7F209B488500E71C80 /* UserProfile.swift */,
 				A0F2FB2F209CA9380018F465 /* EventPost.swift */,
 				A056D7E020AB3C8F00FA3F43 /* UserFollowers.swift */,
+				A0AF4DE220B1E3CA001A9E09 /* Comment.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -140,7 +145,6 @@
 				A0001A0720A509F000F0EB24 /* UploadEvent */,
 				A050022A20A12AC100BBCA6D /* AddEventMetadata */,
 				A05D5A3920A09F5C0025E8C7 /* ChooseAddress */,
-				A0228F74209AC32D00E71C80 /* NewEventViewController.swift */,
 				A0F2FB2B209C11A80018F465 /* NewEventDummyViewController.swift */,
 			);
 			name = NewEvent;
@@ -195,6 +199,15 @@
 			path = SearchAutocomplete;
 			sourceTree = "<group>";
 		};
+		A0AF4DDF20B1E324001A9E09 /* ShowComments */ = {
+			isa = PBXGroup;
+			children = (
+				A0AF4DE020B1E3A8001A9E09 /* ShowCommentsViewController.swift */,
+				A0AF4DE420B1E603001A9E09 /* CommentCollectionViewCell.swift */,
+			);
+			path = ShowComments;
+			sourceTree = "<group>";
+		};
 		A0D1854F209A387400FC58D1 /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -214,6 +227,7 @@
 		A0D18551209A38A500FC58D1 /* Newsfeed */ = {
 			isa = PBXGroup;
 			children = (
+				A0AF4DDF20B1E324001A9E09 /* ShowComments */,
 				A0F2FB31209CAC590018F465 /* EventPostCollectionViewCell.swift */,
 				A0F2FB2D209CA5DB0018F465 /* NewsFeedViewController.swift */,
 			);
@@ -468,6 +482,7 @@
 				A056D80E20AD15C100FA3F43 /* FollowersService.swift in Sources */,
 				A056D80820AD157D00FA3F43 /* CommentService.swift in Sources */,
 				A0648FFD20981138001417D7 /* ManageProfileViewController.swift in Sources */,
+				A0AF4DE120B1E3A8001A9E09 /* ShowCommentsViewController.swift in Sources */,
 				A05D5A34209E75470025E8C7 /* ImageService.swift in Sources */,
 				A0F2FB2C209C11A80018F465 /* NewEventDummyViewController.swift in Sources */,
 				A0228F79209AC4F700E71C80 /* Constants.swift in Sources */,
@@ -479,12 +494,13 @@
 				A0228F7E209B483A00E71C80 /* UserService.swift in Sources */,
 				A056D7E120AB3C8F00FA3F43 /* UserFollowers.swift in Sources */,
 				A0F2FB30209CA9380018F465 /* EventPost.swift in Sources */,
+				A0AF4DE520B1E603001A9E09 /* CommentCollectionViewCell.swift in Sources */,
 				A0F2FB2A209C0CCD0018F465 /* CustomTabBarController.swift in Sources */,
 				A0E73FF920A68D0C007E72D3 /* SearchUsersViewController.swift in Sources */,
 				A05D5A3C20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift in Sources */,
 				A0228F80209B488500E71C80 /* UserProfile.swift in Sources */,
 				A0E73FFD20A7573D007E72D3 /* UserProfileViewController.swift in Sources */,
-				A0228F75209AC32D00E71C80 /* NewEventViewController.swift in Sources */,
+				A0AF4DE320B1E3CA001A9E09 /* Comment.swift in Sources */,
 				A0228F7B209ACBAC00E71C80 /* Event.swift in Sources */,
 				A050022C20A12B0900BBCA6D /* EventMetadataViewController.swift in Sources */,
 				A056D80620AD156E00FA3F43 /* EventPostService.swift in Sources */,

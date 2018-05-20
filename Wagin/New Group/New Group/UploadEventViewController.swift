@@ -62,7 +62,7 @@ extension UploadEventViewController {
         eventLabel.textColor = .lightGray
         contentView.addSubview(eventLabel)
         uploadEventImageButton.setImage(#imageLiteral(resourceName: "upload"), for: .normal)
-        uploadEventImageButton.addTarget(self, action: #selector(NewEventViewController.uploadEventImage(_:)), for: .touchUpInside)
+        uploadEventImageButton.addTarget(self, action: #selector(UploadEventViewController.uploadEventImage(_:)), for: .touchUpInside)
         Util.roundedCorners(ofColor: .lightGray, element: uploadEventImageButton)
         contentView.addSubview(uploadEventImageButton)
 
