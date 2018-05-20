@@ -43,6 +43,12 @@ class Constants {
 
         // 1: uid, 2: EventPost ID
         static let postLikes = "likes/%@/%@"
+
+        // 1: EventPost ID
+        static let eventComments = "comments/%@"
+
+        // 1: EventPost ID, 2: Comment ID
+        static let eventPostComment = "comments/%@/%@"
     }
     class Storage {
         // 1: uid, 2: Randomly generated ID
@@ -52,8 +58,13 @@ class Constants {
         // 1: uid
         static let userProfileImage = "users/%@/profile"
     }
-    static let autocompleteSearchResultCell = "AutocompleteSearchResultCell"
-    static let searchUsersCell = "SearchUsersCell"
+
+    class Cells {
+        static let autocompleteSearchResultCell = "AutocompleteSearchResultCell"
+        static let searchUsersCell = "SearchUsersCell"
+        static let commentsCell = "CommentsCell"
+    }
+
     static let dateFormat = "MM/dd/yyyy hh:mm a"
     static let newUserProfilePhotoURL = "https://firebasestorage.googleapis.com/v0/b/wagin-5bc40.appspot.com/o/newUser.png?alt=media&token=22eed082-71ff-41d2-b30d-f7529186a60d"
     static let noImageProvidedPhotoURL = "https://firebasestorage.googleapis.com/v0/b/wagin-5bc40.appspot.com/o/imageNotAvailable.png?alt=media&token=c4364e2b-e430-49ce-801e-86acbec3d53b"

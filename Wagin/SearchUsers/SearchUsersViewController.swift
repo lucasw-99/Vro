@@ -30,7 +30,7 @@ extension SearchUsersViewController {
         searchBar.delegate = self
         view.addSubview(searchBar)
 
-        userTable.register(SearchUsersTableViewCell.self, forCellReuseIdentifier: Constants.searchUsersCell)
+        userTable.register(SearchUsersTableViewCell.self, forCellReuseIdentifier: Constants.Cells.searchUsersCell)
         userTable.delegate = self
         userTable.dataSource = self
         view.addSubview(userTable)
@@ -86,7 +86,7 @@ extension SearchUsersViewController: UITableViewDelegate, UITableViewDataSource 
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.searchUsersCell, for: indexPath) as! SearchUsersTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Cells.searchUsersCell, for: indexPath) as! SearchUsersTableViewCell
         let user = dataSource[indexPath.row]
         cell.updateCell(username: user.username)
         return cell

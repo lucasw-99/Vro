@@ -184,7 +184,9 @@ extension NewsFeedViewController: EventPostCellDelegate {
     }
 
     func didTapShowCommentsButton(showCommentsButton: UIButton, forEvent event: EventPost) {
-        print("unimplemented")
+        print("Presenting comments view")
+        let commentsViewController = ShowCommentsViewController()
+        navigationController?.pushViewController(commentsViewController, animated: true)
     }
 }
 

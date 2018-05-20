@@ -90,7 +90,7 @@ extension ChooseAddressViewController {
 
         // add table view after mapView so it can lay over it
         view.addSubview(autocompleteResultTable)
-        autocompleteResultTable.register(AutocompleteResultTableViewCell.self, forCellReuseIdentifier: Constants.autocompleteSearchResultCell)
+        autocompleteResultTable.register(AutocompleteResultTableViewCell.self, forCellReuseIdentifier: Constants.Cells.autocompleteSearchResultCell)
         autocompleteResultTable.isHidden = !mapViewHidden
         autocompleteResultTable.delegate = self
         autocompleteResultTable.dataSource = self
@@ -364,7 +364,7 @@ extension ChooseAddressViewController: UITableViewDelegate, UITableViewDataSourc
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.autocompleteSearchResultCell, for: indexPath) as! AutocompleteResultTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Cells.autocompleteSearchResultCell, for: indexPath) as! AutocompleteResultTableViewCell
         let (title, subTitle, matchingRanges) = searchResults[indexPath.row]
         let highlightedText = boldHighlightedSearchResult(title, matchingRanges)
         cell.updateCell(titleText: highlightedText, descriptionText: subTitle)

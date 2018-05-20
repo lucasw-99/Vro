@@ -11,6 +11,8 @@ import UIKit
 class ShowCommentsViewController: UIViewController {
     private var dataSource = [Comment]()
 
+    private let titleLabel = UILabel()
+
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 16
@@ -30,8 +32,8 @@ class ShowCommentsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        setupSubviews()
+        setupLayout()
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,7 +45,7 @@ class ShowCommentsViewController: UIViewController {
 // MARK: Populate DataSource
 extension ShowCommentsViewController: UICollectionViewDataSource {
     @objc private func observeEventComments() {
-        
+
     }
 }
 
@@ -65,11 +67,41 @@ extension ShowCommentsViewController: UICollectionViewDelegate, UICollectionView
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 600)
-    }
-
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+    }
+}
+
+// MARK: Setup subviews
+extension ShowCommentsViewController {
+    private func setupSubviews() {
+        titleLabel.text = "Comments"
+        titleLabel.textAlignment = .center
+        titleLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
+        view.addSubview(titleLabel)
+
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.refreshControl = refresher
+        collectionView.register(CommentCollectionViewCell.self, forCellWithReuseIdentifier: Constants.Cells.commentsCell)
+        view.addSubview(collectionView)
+
+        view.backgroundColor = .white
+    }
+
+    private func setupLayout() {
+        titleLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.height.equalTo(100)
+        }
+
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
     }
 }
