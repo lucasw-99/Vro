@@ -17,8 +17,8 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
     private var userTimelineRef: DatabaseReference?
     // eventPostID => cell
     private var eventPostCells = [String: EventPostCollectionViewCell]()
-    // eventPostID => likesReference
-    private var eventPostLikesObserver = [String: DatabaseReference]()
+    // eventPostID => userLikes, likesReference
+    private var eventPostLikesObserver = [String: (Set<String>, DatabaseReference)]()
 
     private let waginLabel = UILabel()
     private let separatorView = UIView()
@@ -61,7 +61,8 @@ class NewsFeedViewController: UIViewController, UICollectionViewDelegate, UIColl
     // remove all observers when view disappears
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        for observer in eventPostLikesObserver.values {
+        for values in eventPostLikesObserver.values {
+            let observer = values.1
             observer.removeAllObservers()
         }
     }
@@ -152,6 +153,29 @@ extension NewsFeedViewController {
 
 // MARK: Button delegate for EventPostCollectionViewCell
 extension NewsFeedViewController: EventPostCellDelegate {
+    func didTapLikeButton(likeButton: UIButton, forCell cell: EventPostCollectionViewCell) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { fatalError("Couldn't get index path") }
+        likeButton.isUserInteractionEnabled = false
+        let post = DataSource[indexPath.item]
+        let wasPreviouslyLiked = likeButton.isSelected
+        LikeService.setLiked(didLikePost: !wasPreviouslyLiked, for: post) { (success) in
+            defer {
+                likeButton.isUserInteractionEnabled = true
+            }
+            guard success else {
+                print("Failure")
+                return
+            }
+
+            DispatchQueue.main.async {
+                cell.numLikes += !wasPreviouslyLiked ? 1 : -1
+                likeButton.isSelected = !likeButton.isSelected
+            }
+        }
+
+
+    }
+
     func didTapCommentButton(_ postedByUID: String, eventPostID: String) {
         print("unimplemented")
     }
@@ -178,17 +202,6 @@ extension NewsFeedViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventPostCell", for: indexPath) as! EventPostCollectionViewCell
         let eventPost = DataSource[indexPath.section]
         cell.eventPost = eventPost
-        eventPostCells[eventPost.eventPostID] = cell
-        if !eventPostLikesObserver.keys.contains(eventPost.eventPostID) {
-            print("making new observer")
-            LikeService.getLikesForPost(eventPost.postedByUser.uid, eventPost.eventPostID) { userLikes, likesRef in
-                self.eventPostLikesObserver[eventPost.eventPostID] = likesRef
-                guard let currentCell = self.eventPostCells[eventPost.eventPostID] else { fatalError("cell is nil") }
-                let userLikesSet = Set<String>(userLikes.keys)
-                currentCell.updateLikes(numLikes: userLikesSet.count, userLikes: userLikesSet)
-            }
-        }
-
         cell.buttonDelegate = self
         return cell
     }
@@ -200,4 +213,19 @@ extension NewsFeedViewController {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
     }
+
+//    private func setLikes(forCell cell: EventPostCollectionViewCell, eventPost: EventPost) {
+//        eventPostCells[eventPost.eventPostID] = cell
+//        if let (userLikes, _) = eventPostLikesObserver[eventPost.eventPostID] {
+//            cell.updateLikes(numLikes: userLikes.count, userLikes: userLikes)
+//        } else {
+//            LikeService.getLikesForPost(eventPost.postedByUser.uid, eventPost.eventPostID) { userLikes, likesRef in
+//                let userLikesSet = Set<String>(userLikes.keys)
+//                self.eventPostLikesObserver[eventPost.eventPostID] = (userLikesSet, likesRef)
+//                // TODO: Should I update the cell in the observable?
+//                guard let currentCell = self.eventPostCells[eventPost.eventPostID] else { fatalError("cell is nil") }
+//                currentCell.updateLikes(numLikes: userLikesSet.count, userLikes: userLikesSet)
+//            }
+//        }
+//    }
 }

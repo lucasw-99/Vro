@@ -16,6 +16,7 @@ class ManageProfileViewController: UIViewController {
 
     private let changeProfileButton = UIButton()
     private let profileLabel = UILabel()
+    private let usernameLabel = UILabel()
     private let followerStatsLabel = UILabel()
     private var followerDatabaseRef: DatabaseReference?
 
@@ -106,6 +107,8 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
 // MARK: Setup subviews
 extension ManageProfileViewController {
     private func setupSubviews() {
+        guard let currUser = UserService.currentUserProfile else { fatalError("Current user is nil") }
+
         changeProfileButton.setImage(#imageLiteral(resourceName: "add_user_male"), for: .normal)
         Util.roundedCorners(ofColor: .black, element: changeProfileButton.imageView!)
         changeProfileButton.addTarget(self, action: #selector(ManageProfileViewController.changeProfilePicture(_:)), for: .touchUpInside)
@@ -117,6 +120,13 @@ extension ManageProfileViewController {
         profileLabel.numberOfLines = 1
         profileLabel.textAlignment = .center
         view.addSubview(profileLabel)
+
+        usernameLabel.text = currUser.username
+        usernameLabel.textAlignment = .center
+        usernameLabel.numberOfLines = 0
+        usernameLabel.shadowColor = UIColor.gray
+        usernameLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        view.addSubview(usernameLabel)
 
         setFollowerStatsLabelText()
         followerStatsLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
@@ -135,7 +145,6 @@ extension ManageProfileViewController {
         logoutLabel.textAlignment = .center
         view.addSubview(logoutLabel)
 
-        guard let currUser = UserService.currentUserProfile else { fatalError("Current user is nil") }
         setProfileImage(currUser.photoURL)
 
         imagePicker.allowsEditing = true
@@ -166,10 +175,16 @@ extension ManageProfileViewController {
             make.top.equalTo(changeProfileButton.snp.bottom).offset(15)
         }
 
+        usernameLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalTo(profileLabel.snp.bottom).offset(25)
+        }
+
         followerStatsLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.top.equalTo(profileLabel.snp.bottom).offset(10)
+            make.top.equalTo(usernameLabel.snp.bottom).offset(15)
         }
 
         logoutButton.snp.makeConstraints { make in

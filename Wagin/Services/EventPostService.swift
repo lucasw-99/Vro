@@ -13,38 +13,26 @@ class EventPostService {
     // user: UserProfile that is making the post
     // eventPostID: The id of the EventPost
     // date: date of the event
-    static func setEvent(_ eventPost: EventPost) {
+    static func setEvent(_ eventPost: EventPost, success: @escaping ( () -> () )) {
+        guard eventPost.likeCount == 0 else { fatalError("Like count not zero when posting new event") }
+
         let eventIDPath = String(format: Constants.Database.eventInfo, eventPost.eventPostID)
         let eventRef = Database.database().reference().child(eventIDPath)
 
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = Constants.dateFormat
-        let eventTimeString = dateFormatter.string(from: eventPost.event.eventTime)
+        eventRef.setValue(eventPost.dictValue)
 
-        let eventPostObject = [
-            "postedByUser": [
-                "uid": eventPost.postedByUser.uid,
-                "username": eventPost.postedByUser.username,
-                "photoURL": eventPost.postedByUser.photoURL.absoluteString
-            ],
-            "event": [
-                "hostUID": eventPost.event.hostUID,
-                // TODO: Change this to a valid description of event
-                "description": eventPost.event.description,
-                "address": eventPost.event.address,
-                "eventImageURL": eventPost.event.eventImageURL,
-                "eventTime": eventTimeString
-            ],
-            "likedBy": [],
-            "caption": eventPost.caption,
-            // TODO: Store timestamp as negative value to sort from most recent to least recent?
-            "timestamp": [".sv": "timestamp"],
-            "eventPostID": eventPost.eventPostID
-            ] as [String: Any]
-
-        eventRef.setValue(eventPostObject)
+        let userFollowersPath = String(format: Constants.Database.userFollowerInfo, eventPost.postedByUser.uid)
+        let userFollowersRef = Database.database().reference().child(userFollowersPath)
+        FollowersService.getFollowerInfo(eventPost.postedByUser.uid, userFollowersRef) { followerInfo in
+            // add this event to all followers timelines
+            var followers = followerInfo.followers
+            followers.insert(eventPost.postedByUser.uid)
+            TimelineService.addPostToTimelines(followers, eventPost.eventPostID) {
+                print("Finished!")
+                success()
+            }
+        }
     }
-
 
     // uid: User id
     // eventPostID: Event post ID
@@ -69,34 +57,8 @@ class EventPostService {
         let eventRef = Database.database().reference().child(eventPath)
 
         eventRef.observeSingleEvent(of: .value) { snapshot in
-            if let eventPostDict = snapshot.value as? [String: Any],
-                let postedByUserDict = eventPostDict["postedByUser"] as? [String: Any],
-                let postedByUID = postedByUserDict["uid"] as? String,
-                let postedByUsername = postedByUserDict["username"] as? String,
-                let postedByPhotoURLString = postedByUserDict["photoURL"] as? String,
-                let postedByPhotoURL = URL(string: postedByPhotoURLString),
-                let eventDict = eventPostDict["event"] as? [String: Any],
-                let hostUID = eventDict["hostUID"] as? String,
-                let eventDescription = eventDict["description"] as? String,
-                let eventAddress = eventDict["address"] as? String,
-                let eventImageURL = eventDict["eventImageURL"] as? String,
-                let eventTime = eventDict["eventTime"] as? String,
-                let eventPostCaption = eventPostDict["caption"] as? String,
-                let eventPostTimestamp = eventPostDict["timestamp"] as? TimeInterval,
-                let eventPostID = eventPostDict["eventPostID"] as? String {
-//                print("postedByPhotoURL: \(postedByPhotoURL), uid: \(uid)")
-
-                let eventDate = Util.stringToDate(dateString: eventTime)
-                let timestamp = Date(timeIntervalSince1970: eventPostTimestamp / 1000)
-
-                let postedByUser = UserProfile(postedByUID, postedByUsername, postedByPhotoURL)
-
-                let event = Event(hostUID, eventImageURL, eventDescription, eventAddress, eventDate)
-                let eventPost = EventPost(postedByUser, event, eventPostCaption, timestamp, eventPostID)
-                completion(eventPost)
-            } else {
-                fatalError("event ID was there but it was nil")
-            }
+            let eventPost = EventPost(forSnapshot: snapshot)
+            completion(eventPost)
         }
     }
 }

@@ -14,6 +14,9 @@ class Constants {
         static let userEvents = "users/%@/events"
         // 1: event ID
         static let eventInfo = "events/%@"
+
+        // 1: event ID
+        static let eventLikeCount = "events/%@/likeCount"
         // 1: event ID
         static let userEventPhotoURL = "events/%@/postedByUser/photoURL"
         // 1: uid
@@ -35,8 +38,11 @@ class Constants {
         // 1: uid
         static let getTimelinePosts = "timeline/%@"
 
+        // 1: uid, 2: EventPost ID, 3: uid of user liking post
+        static let userPostLikes = "likes/%@/%@/%@"
+
         // 1: uid, 2: EventPost ID
-        static let userPostLikes = "likes/%@/%@"
+        static let postLikes = "likes/%@/%@"
     }
     class Storage {
         // 1: uid, 2: Randomly generated ID

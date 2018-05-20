@@ -179,26 +179,11 @@ extension UploadEventViewController {
         print("Post new event pressed")
         guard let currentUser = UserService.currentUserProfile else { fatalError("Posting new event without valid userProfile") }
         let eventPostID = Util.generateID()
-        // TODO: How is this going to evolve?
-        let postedBy = currentUser
 
         // TODO: Make sure event is non-nil
-        let eventPost = EventPost(postedBy, event!, caption, Date(), eventPostID)
-        EventPostService.setEvent(eventPost)
+        let eventPost = EventPost(event!, caption, Date(), eventPostID)
+        EventPostService.setEvent(eventPost, success: dismissNewEventViewControllers)
         EventPostService.setEventPostID(currentUser.uid, eventPostID)
-        // TODO: Do things more serially
-        let userFollowersPath = String(format: Constants.Database.userFollowers, currentUser.uid)
-        let userFollowersRef = Database.database().reference().child(userFollowersPath)
-        FollowersService.getFollowerInfo(currentUser.uid, userFollowersRef) { followerInfo in
-            // add your uid so you can see your own posts
-            var followers = followerInfo.followers
-            followers.insert(currentUser.uid)
-            // TODO: How does this work when posts are deleted?
-            TimelineService.addPostToTimelines(followers, eventPostID) {
-                // TODO: Learn how to use DispatchGroups so you don't have to do this BS
-                self.dismissNewEventViewControllers()
-            }
-        }
     }
 
     private func dismissNewEventViewControllers() {

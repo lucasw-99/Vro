@@ -10,6 +10,7 @@ import UIKit
 import FirebaseDatabase
 
 protocol EventPostCellDelegate {
+    func didTapLikeButton(likeButton: UIButton, forCell cell: EventPostCollectionViewCell)
     func didTapCommentButton(_ postedByUID: String, eventPostID: String)
     func didTapShareButton(_ postedByUID: String, eventPostID: String)
 }
@@ -37,7 +38,6 @@ class EventPostCollectionViewCell: UICollectionViewCell {
 
     var buttonDelegate: EventPostCellDelegate?
     private var eventPostLikesRef: DatabaseReference?
-    private var userLikes: Set<String>
 
     var eventPost: EventPost! {
         didSet {
@@ -45,8 +45,13 @@ class EventPostCollectionViewCell: UICollectionViewCell {
         }
     }
 
+    var numLikes: Int = 0 {
+        didSet {
+            setLikes(numLikes: numLikes)
+        }
+    }
+
     override init(frame: CGRect) {
-        self.userLikes = Set<String>()
         super.init(frame: frame)
         setupSubviews()
         setupLayout()
@@ -80,60 +85,29 @@ class EventPostCollectionViewCell: UICollectionViewCell {
 
         captionLabel.text = eventPost.caption
 
-        daysAgo.text = smallestTimeUnit(from: eventPost.timestamp)
+        numLikes = eventPost.likeCount
+
+        setIsLiked(isLiked: eventPost.isLiked)
+
+        daysAgo.text = Util.smallestTimeUnit(from: eventPost.timestamp)
     }
 
-    func updateLikes(numLikes: Int, userLikes: Set<String>) {
+    private func setLikes(numLikes: Int) {
         likeButton.isUserInteractionEnabled = false
-        updateNumberOfLikes(numLikes: numLikes)
-        self.userLikes = userLikes
+        numberOfLikes.text = "💗 \(numLikes) like\(numLikes != 1 ? "s" : "")"
         likeButton.isUserInteractionEnabled = true
     }
 
-    func updateNumberOfLikes(numLikes: Int) {
-        numberOfLikes.text = "💗 \(numLikes) like\(numLikes != 1 ? "s" : "")"
-    }
-
-    private func smallestTimeUnit(from date: Date) -> String {
-        let todaysDate = Date()
-        var n = todaysDate.years(from: date)
-        guard n >= 0 else { fatalError("Date posted is later than todays date: \(date)") }
-        if n != 0 {
-            return "\(n) year\(n != 1 ? "s" : "") ago"
-        }
-        n = todaysDate.months(from: date)
-        if n != 0 {
-            return "\(n) month\(n != 1 ? "s" : "") ago"
-        }
-        n = todaysDate.days(from: date)
-        if n != 0 {
-            return "\(n) day\(n != 1 ? "s" : "") ago"
-        }
-        n = todaysDate.hours(from: date)
-        if n != 0 {
-            return "\(n) hour\(n != 1 ? "s" : "") ago"
-        }
-        n = todaysDate.minutes(from: date)
-        if n != 0 {
-            return "\(n) minute\(n != 1 ? "s" : "") ago"
-        }
-        return "less than a minute ago"
+    private func setIsLiked(isLiked: Bool) {
+        likeButton.isSelected = isLiked
     }
 }
 
 // MARK: Button functions
 extension EventPostCollectionViewCell {
-    @objc private func likeButtonPressed(_ sender: Any) {
+    @objc private func likeButtonPressed(_ sender: UIButton) {
         print("Like button pressed")
-        guard let currentUID = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
-        let likedPost = !userLikes.contains(currentUID)
-        let currentNumLikes = userLikes.count
-        // TODO: Make sure userLikes gets updated properly
-        let numLikes = likedPost ? currentNumLikes + 1 : currentNumLikes - 1
-        updateNumberOfLikes(numLikes: numLikes)
-        // TODO: Add this to delegate? Why?
-        // TODO: Verify this triggers other observable to fire
-        LikeService.updateLikesForPost(currentUID, eventPost.postedByUser.uid, eventPostID: eventPost.eventPostID, likedPost: likedPost)
+        buttonDelegate?.didTapLikeButton(likeButton: likeButton, forCell: self)
     }
 
     @objc private func commentButtonPressed(_ sender: Any) {
@@ -164,7 +138,9 @@ extension EventPostCollectionViewCell {
         eventImageView.contentMode = .scaleToFill
         containerView.addSubview(eventImageView)
 
-        likeButton.setImage(#imageLiteral(resourceName: "following"), for: .normal)
+        let heartView: UIImage = #imageLiteral(resourceName: "heart")
+        likeButton.setImage(heartView, for: .normal)
+        likeButton.setImage(heartView.maskWithColor(color: .red), for: .selected)
         likeButton.addTarget(self, action: #selector(EventPostCollectionViewCell.likeButtonPressed(_:)), for: .touchUpInside)
         containerView.addSubview(likeButton)
 
