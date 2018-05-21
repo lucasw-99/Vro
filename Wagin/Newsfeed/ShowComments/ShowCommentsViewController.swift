@@ -11,7 +11,12 @@ import UIKit
 class ShowCommentsViewController: UIViewController {
     private var dataSource = [Comment]()
 
+    private let titleView = UIView()
     private let titleLabel = UILabel()
+    private let backButton = UIButton()
+
+    private let commentView = UIView()
+    private let commentTextField = UITextField()
 
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -35,16 +40,24 @@ class ShowCommentsViewController: UIViewController {
         setupSubviews()
         setupLayout()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 }
 
 // MARK: Populate DataSource
 extension ShowCommentsViewController: UICollectionViewDataSource {
     @objc private func observeEventComments() {
+
+    }
+}
+
+// MARK: Button functions
+extension ShowCommentsViewController {
+    @objc private func didTapBackButton(_ sender: UIButton) {
+        print("Tapped back button")
+        navigationController?.popViewController(animated: true)
+    }
+
+    @objc private func didTapAddCommentButton(_ sender: UIButton) {
+        print("Tapped add comment button")
 
     }
 }
@@ -75,10 +88,18 @@ extension ShowCommentsViewController: UICollectionViewDelegate, UICollectionView
 // MARK: Setup subviews
 extension ShowCommentsViewController {
     private func setupSubviews() {
+        guard let currentUser = UserService.currentUserProfile else { fatalError("User nil") }
+
         titleLabel.text = "Comments"
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
-        view.addSubview(titleLabel)
+        titleView.addSubview(titleLabel)
+
+        backButton.setImage(#imageLiteral(resourceName: "cancel"), for: .normal)
+        backButton.addTarget(self, action: #selector(ShowCommentsViewController.didTapBackButton(_:)), for: .touchUpInside)
+        titleView.addSubview(backButton)
+
+        view.addSubview(titleView)
 
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -86,11 +107,30 @@ extension ShowCommentsViewController {
         collectionView.register(CommentCollectionViewCell.self, forCellWithReuseIdentifier: Constants.Cells.commentsCell)
         view.addSubview(collectionView)
 
+        Util.roundedCorners(ofColor: .gray, element: commentTextField)
+        commentTextField.placeholder = "add comment as \(currentUser.username)..."
+        commentView.addSubview(commentTextField)
+
+        view.addSubview(commentView)
+
         view.backgroundColor = .white
     }
 
     private func setupLayout() {
         titleLabel.snp.makeConstraints { make in
+            make.leading.equalTo(backButton.snp.trailing).offset(10)
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+
+        backButton.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(10)
+            make.centerY.equalToSuperview()
+            make.width.equalTo(50)
+            make.height.equalTo(50)
+        }
+
+        titleView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.top.equalToSuperview()
@@ -98,10 +138,21 @@ extension ShowCommentsViewController {
         }
 
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom)
+            make.top.equalTo(titleView.snp.bottom)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+
+        commentTextField.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 20, left: 10, bottom: 15, right: 10))
+        }
+
+        commentView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
+            make.top.equalTo(collectionView.snp.bottom)
+            make.height.equalTo(75)
         }
     }
 }
