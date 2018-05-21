@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class ShowCommentsViewController: UIViewController {
     private var dataSource = [Comment]()
@@ -16,7 +17,7 @@ class ShowCommentsViewController: UIViewController {
     private let backButton = UIButton()
 
     private let commentView = UIView()
-    private let commentTextField = UITextField()
+    private let commentTextField = PaddedTextField()
 
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -34,11 +35,16 @@ class ShowCommentsViewController: UIViewController {
         return refreshControl
     }()
 
+    private var keyboardHeightLayoutConstraint: Constraint!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()
         setupLayout()
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 
@@ -90,6 +96,8 @@ extension ShowCommentsViewController {
     private func setupSubviews() {
         guard let currentUser = UserService.currentUserProfile else { fatalError("User nil") }
 
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+
         titleLabel.text = "Comments"
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
@@ -109,6 +117,7 @@ extension ShowCommentsViewController {
 
         Util.roundedCorners(ofColor: .gray, element: commentTextField)
         commentTextField.placeholder = "add comment as \(currentUser.username)..."
+        commentTextField.doneAccessory = true
         commentView.addSubview(commentTextField)
 
         view.addSubview(commentView)
@@ -150,9 +159,51 @@ extension ShowCommentsViewController {
         commentView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
+            keyboardHeightLayoutConstraint = make.bottom.equalToSuperview().constraint
             make.top.equalTo(collectionView.snp.bottom)
             make.height.equalTo(75)
         }
     }
+}
+
+// MARK: Keyboard animations
+extension ShowCommentsViewController {
+    @objc func keyboardNotification(notification: NSNotification) {
+        if let userInfo = notification.userInfo {
+            let endFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+            let endFrameY = endFrame?.origin.y ?? 0
+            let duration:TimeInterval = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+            let animationCurveRawNSN = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
+            let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions.curveEaseInOut.rawValue
+            let animationCurve:UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
+            if endFrameY >= UIScreen.main.bounds.size.height {
+                commentView.snp.remakeConstraints { make in
+                    make.leading.equalToSuperview()
+                    make.trailing.equalToSuperview()
+                    make.bottom.equalToSuperview()
+                    make.top.equalTo(collectionView.snp.bottom)
+                    make.height.equalTo(75)
+                }
+            } else {
+                // TODO: Figure out how to use keyboardHeightLayoutConstraint with SnapKit
+                commentView.snp.remakeConstraints { make in
+                    make.leading.equalToSuperview()
+                    make.trailing.equalToSuperview()
+                    make.top.equalTo(collectionView.snp.bottom)
+                    make.height.equalTo(75)
+                    make.bottom.equalToSuperview().offset(-(endFrame?.size.height ?? 0.0))
+                }
+            }
+            UIView.animate(withDuration: duration,
+                           delay: TimeInterval(0),
+                           options: animationCurve,
+                           animations: { self.view.layoutIfNeeded() },
+                           completion: nil)
+        }
+    }
+}
+
+// MARK: Text field delegate
+extension ShowCommentsViewController: UITextFieldDelegate {
+
 }

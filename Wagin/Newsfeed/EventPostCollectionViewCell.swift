@@ -127,6 +127,7 @@ extension EventPostCollectionViewCell {
         captionLabel.font = UIFont.systemFont(ofSize: 20)
         captionLabel.textAlignment = .left
         captionLabel.numberOfLines = 3
+        captionLabel.isHidden = true
         containerView.addSubview(captionLabel)
 
         showCommentsButton.setTitle("Show comments", for: .normal)
@@ -207,7 +208,7 @@ extension EventPostCollectionViewCell {
             make.top.equalTo(separatorView.snp.bottom)
             make.leading.equalToSuperview().offset(12)
             make.trailing.equalToSuperview()
-            make.height.equalTo(50)
+            make.height.equalTo(30)
         }
 
         captionLabel.snp.makeConstraints { make in
@@ -257,8 +258,10 @@ extension EventPostCollectionViewCell {
             }
             print("Invalid image URL")
         }
-
-        captionLabel.text = eventPost.caption
+        if !eventPost.caption.isEmpty {
+            captionLabel.text = eventPost.caption
+            captionLabel.isHidden = false
+        }
 
         numLikes = eventPost.likeCount
 

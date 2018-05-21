@@ -28,6 +28,7 @@
 		A0AF4DE120B1E3A8001A9E09 /* ShowCommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AF4DE020B1E3A8001A9E09 /* ShowCommentsViewController.swift */; };
 		A0AF4DE320B1E3CA001A9E09 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AF4DE220B1E3CA001A9E09 /* Comment.swift */; };
 		A0AF4DE520B1E603001A9E09 /* CommentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AF4DE420B1E603001A9E09 /* CommentCollectionViewCell.swift */; };
+		A0AF4DE720B330A7001A9E09 /* PaddedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AF4DE620B330A7001A9E09 /* PaddedTextField.swift */; };
 		A0C8B6C9209A163400A98D53 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C8B6C8209A163400A98D53 /* MapViewController.swift */; };
 		A0C8B6CB209A185C00A98D53 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0C8B6CA209A185C00A98D53 /* MapKit.framework */; };
 		A0E73FF920A68D0C007E72D3 /* SearchUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E73FF820A68D0C007E72D3 /* SearchUsersViewController.swift */; };
@@ -83,6 +84,7 @@
 		A0AF4DE020B1E3A8001A9E09 /* ShowCommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowCommentsViewController.swift; sourceTree = "<group>"; };
 		A0AF4DE220B1E3CA001A9E09 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		A0AF4DE420B1E603001A9E09 /* CommentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCollectionViewCell.swift; sourceTree = "<group>"; };
+		A0AF4DE620B330A7001A9E09 /* PaddedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddedTextField.swift; sourceTree = "<group>"; };
 		A0C8B6C8209A163400A98D53 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		A0C8B6CA209A185C00A98D53 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A0E73FF820A68D0C007E72D3 /* SearchUsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersViewController.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 			children = (
 				A0AD85F92093ED9B00D5F793 /* Util.swift */,
 				A0228F78209AC4F700E71C80 /* Constants.swift */,
+				A0AF4DE620B330A7001A9E09 /* PaddedTextField.swift */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -499,6 +502,7 @@
 				A0E73FF920A68D0C007E72D3 /* SearchUsersViewController.swift in Sources */,
 				A05D5A3C20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift in Sources */,
 				A0228F80209B488500E71C80 /* UserProfile.swift in Sources */,
+				A0AF4DE720B330A7001A9E09 /* PaddedTextField.swift in Sources */,
 				A0E73FFD20A7573D007E72D3 /* UserProfileViewController.swift in Sources */,
 				A0AF4DE320B1E3CA001A9E09 /* Comment.swift in Sources */,
 				A0228F7B209ACBAC00E71C80 /* Event.swift in Sources */,
