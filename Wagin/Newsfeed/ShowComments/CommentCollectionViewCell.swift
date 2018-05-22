@@ -68,7 +68,6 @@ extension CommentCollectionViewCell {
         }
 
         containerView.snp.makeConstraints { make in
-            make.width.equalTo(contentView.snp.width)
             make.edges.equalToSuperview()
         }
     }

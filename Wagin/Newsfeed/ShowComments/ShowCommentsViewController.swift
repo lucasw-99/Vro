@@ -131,12 +131,22 @@ extension ShowCommentsViewController: UICollectionViewDelegate, UICollectionView
         let commentAndAuthor = dataSource[indexPath.section]
         cell.comment = commentAndAuthor.0
         cell.commentAuthor = commentAndAuthor.1
-        cell.layoutIfNeeded()
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 10, left: 10, bottom: 0, right: 10)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let (comment, userProfile) = dataSource[indexPath.row]
+        let sizingCell = CommentCollectionViewCell()
+        sizingCell.comment = comment
+        sizingCell.commentAuthor = userProfile
+        let zeroHeightSize = CGSize(width: collectionView.frame.width - 10 - 10, height: 0)
+        let size = sizingCell.contentView.systemLayoutSizeFitting(zeroHeightSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow)
+        print("size: \(size)")
+        return size
     }
 }
 
@@ -266,6 +276,8 @@ extension ShowCommentsViewController: UITextFieldDelegate {
             CommentService.postComment(text: commentText, eventPostID: eventPostID) { success in
                 if success {
                     print("Comment posted successfully")
+                    // update view so user can see newly posted comment
+                    self.observeEventComments()
                 } else {
                     print("Error posting comment")
                 }
