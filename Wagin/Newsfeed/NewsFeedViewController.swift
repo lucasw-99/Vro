@@ -185,7 +185,7 @@ extension NewsFeedViewController: EventPostCellDelegate {
 
     func didTapShowCommentsButton(showCommentsButton: UIButton, forEvent event: EventPost) {
         print("Presenting comments view")
-        let commentsViewController = ShowCommentsViewController()
+        let commentsViewController = ShowCommentsViewController(eventPostID: event.eventPostID)
         navigationController?.pushViewController(commentsViewController, animated: true)
     }
 }
@@ -214,6 +214,6 @@ extension NewsFeedViewController: UICollectionViewDelegate, UICollectionViewDele
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     }
 }

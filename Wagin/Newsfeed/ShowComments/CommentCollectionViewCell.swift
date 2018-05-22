@@ -9,13 +9,20 @@
 import UIKit
 
 class CommentCollectionViewCell: UICollectionViewCell {
-    private var userProfileImageView = UIImageView()
-    private var usernameLabel = UILabel()
-    private var commentLabel = UILabel()
+    private let userProfileImageView = UIImageView()
+    private let usernameLabel = UILabel()
+    private let commentLabel = UILabel()
+    private let containerView = UIView()
 
     var comment: Comment! {
         didSet {
-            updateUI()
+            updateCommentUI()
+        }
+    }
+
+    var commentAuthor: UserProfile! {
+        didSet {
+            updateUserUI()
         }
     }
 
@@ -35,29 +42,42 @@ extension CommentCollectionViewCell {
     private func setupSubviews() {
         usernameLabel.textAlignment = .natural
         usernameLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        usernameLabel.numberOfLines = 0
+        containerView.addSubview(usernameLabel)
 
         commentLabel.textAlignment = .natural
         commentLabel.font = UIFont.systemFont(ofSize: 16)
+        commentLabel.numberOfLines = 0
+        containerView.addSubview(commentLabel)
+
+        contentView.addSubview(containerView)
     }
 
     private func setupLayout() {
         usernameLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
             make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
         }
 
         commentLabel.snp.makeConstraints { make in
-            make.leading.equalTo(usernameLabel.snp.trailing).offset(10)
-            make.trailing.equalToSuperview()
-            make.top.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.width.equalToSuperview()
+            make.top.equalTo(usernameLabel.snp.bottom)
             make.bottom.equalToSuperview()
+        }
+
+        containerView.snp.makeConstraints { make in
+            make.width.equalTo(contentView.snp.width)
+            make.edges.equalToSuperview()
         }
     }
 
-    private func updateUI() {
-        usernameLabel.text = comment.authorUsername
+    private func updateCommentUI() {
+        commentLabel.text = comment.commentText
+    }
 
-        commentLabel.text = comment.comment
+    private func updateUserUI() {
+        usernameLabel.text = commentAuthor.username
     }
 }

@@ -1,6 +1,8 @@
 import UIKit
 
 class Util {
+    private static let dateFormatter = DateFormatter()
+
     static func makeOKAlert(alertTitle: String, message: String) -> UIAlertController {
         let alert = UIAlertController(title: alertTitle, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -49,13 +51,11 @@ class Util {
     }
 
     static func stringToDate(dateString: String) -> Date {
-        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = Constants.dateFormat
         return dateFormatter.date(from: dateString)!
     }
 
     static func dateToString(date: Date) -> String {
-        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = Constants.dateFormat
         return dateFormatter.string(from: date)
     }
@@ -157,37 +157,6 @@ extension UIView {
 }
 
 extension UITextView {
-    @IBInspectable var doneAccessory: Bool {
-        get {
-            return self.doneAccessory
-        }
-        set (hasDone) {
-            if hasDone {
-                addDoneButtonOnKeyboard()
-            }
-        }
-    }
-
-    func addDoneButtonOnKeyboard() {
-        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect.init(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
-        doneToolbar.barStyle = .default
-
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.doneButtonAction))
-
-        let items = [flexSpace, done]
-        doneToolbar.items = items
-        doneToolbar.sizeToFit()
-
-        self.inputAccessoryView = doneToolbar
-    }
-
-    @objc func doneButtonAction() {
-        self.resignFirstResponder()
-    }
-}
-
-extension UITextField {
     @IBInspectable var doneAccessory: Bool {
         get {
             return self.doneAccessory

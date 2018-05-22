@@ -10,7 +10,8 @@ import UIKit
 import SnapKit
 
 class ShowCommentsViewController: UIViewController {
-    private var dataSource = [Comment]()
+    private var dataSource = [(Comment, UserProfile)]()
+    private let eventPostID: String
 
     private let titleView = UIView()
     private let titleLabel = UILabel()
@@ -37,10 +38,20 @@ class ShowCommentsViewController: UIViewController {
 
     private var keyboardHeightLayoutConstraint: Constraint!
 
+    init(eventPostID: String) {
+        self.eventPostID = eventPostID
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()
         setupLayout()
+        observeEventComments()
     }
 
     deinit {
@@ -51,7 +62,43 @@ class ShowCommentsViewController: UIViewController {
 // MARK: Populate DataSource
 extension ShowCommentsViewController: UICollectionViewDataSource {
     @objc private func observeEventComments() {
+        CommentService.commentsForEvent(eventPostID) { comments in
+            CommentService.commentsForEvent(self.eventPostID) { comments in
+                print("Loading comments: \(comments)")
+                // get username for each comment
+                let userComments = self.observeUserComments(forComments: comments)
+                self.dataSource = userComments
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                    // stop refresher from spinning, but not too quickly
+                    if self.refresher.isRefreshing {
+                        let deadline = DispatchTime.now() + .milliseconds(700)
+                        DispatchQueue.main.asyncAfter(deadline: deadline) {
+                            self.refresher.endRefreshing()
+                        }
+                    }
+                }
+            }
 
+        }
+    }
+
+    private func observeUserComments(forComments comments: [Comment]) -> [(Comment, UserProfile)] {
+        var userComments = [(Comment, UserProfile)]()
+        let dispatchGroup = DispatchGroup()
+        for comment in comments {
+            let commentAuthorUID = comment.commentAuthorID
+            dispatchGroup.enter()
+            UserService.observeUserProfile(commentAuthorUID) { userProfile in
+                dispatchGroup.leave()
+                guard let userProfile = userProfile else { fatalError("userProfile read from comment is nil") }
+                userComments.append((comment, userProfile))
+            }
+        }
+        print("waiting for dispatch group")
+        dispatchGroup.wait()
+        print("dispatch group done")
+        return userComments
     }
 }
 
@@ -80,14 +127,16 @@ extension ShowCommentsViewController: UICollectionViewDelegate, UICollectionView
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventPostCell", for: indexPath) as! CommentCollectionViewCell
-        let comment = dataSource[indexPath.section]
-        cell.comment = comment
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cells.commentsCell, for: indexPath) as! CommentCollectionViewCell
+        let commentAndAuthor = dataSource[indexPath.section]
+        cell.comment = commentAndAuthor.0
+        cell.commentAuthor = commentAndAuthor.1
+        cell.layoutIfNeeded()
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        return UIEdgeInsets(top: 10, left: 10, bottom: 0, right: 10)
     }
 }
 
@@ -117,7 +166,7 @@ extension ShowCommentsViewController {
 
         Util.roundedCorners(ofColor: .gray, element: commentTextField)
         commentTextField.placeholder = "add comment as \(currentUser.username)..."
-        commentTextField.doneAccessory = true
+        commentTextField.delegate = self
         commentView.addSubview(commentTextField)
 
         view.addSubview(commentView)
@@ -205,5 +254,24 @@ extension ShowCommentsViewController {
 
 // MARK: Text field delegate
 extension ShowCommentsViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print("text field should return called")
+        textField.resignFirstResponder()
 
+        // post comment
+        let commentText = textField.text!
+        if commentText.isEmpty {
+            // TODO: Post alert about not posting empty comments maybe
+        } else {
+            CommentService.postComment(text: commentText, eventPostID: eventPostID) { success in
+                if success {
+                    print("Comment posted successfully")
+                } else {
+                    print("Error posting comment")
+                }
+            }
+        }
+        textField.text = ""
+        return false
+    }
 }

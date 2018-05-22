@@ -44,11 +44,14 @@ class Constants {
         // 1: uid, 2: EventPost ID
         static let postLikes = "likes/%@/%@"
 
-        // 1: EventPost ID
-        static let eventComments = "comments/%@"
+        // 1: comment ID
+        static let postComment = "comments/%@"
 
         // 1: EventPost ID, 2: Comment ID
-        static let eventPostComment = "comments/%@/%@"
+        static let eventPostComment = "events/%@/comments/%@"
+
+        // 1: EventPost ID
+        static let eventPostComments = "events/%@/comments"
     }
     class Storage {
         // 1: uid, 2: Randomly generated ID

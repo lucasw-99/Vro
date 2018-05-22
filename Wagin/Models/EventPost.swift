@@ -19,9 +19,7 @@ class EventPost {
     var isLiked: Bool = false
 
     var dictValue: [String: Any] {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = Constants.dateFormat
-        let eventTimeString = dateFormatter.string(from: event.eventTime)
+        let eventTimeString = Util.dateToString(date: event.eventTime)
 
         let eventPostObject = [
             "postedByUser": [
