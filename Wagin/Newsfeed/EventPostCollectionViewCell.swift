@@ -11,8 +11,8 @@ import FirebaseDatabase
 import Foundation
 
 protocol EventPostCellDelegate {
-    func didTapLikeButton(likeButton: UIButton, forCell cell: EventPostCollectionViewCell)
-    func didTapCommentButton(_ postedByUID: String, eventPostID: String)
+    func didTapLikeButton(_ likeButton: UIButton, forCell cell: EventPostCollectionViewCell)
+    func didTapCommentButton(_ commentButton: UIButton, forEvent event: EventPost)
     func didTapShareButton(_ postedByUID: String, eventPostID: String)
     func didTapShowCommentsButton(showCommentsButton: UIButton, forEvent event: EventPost)
 }
@@ -66,12 +66,12 @@ class EventPostCollectionViewCell: UICollectionViewCell {
 extension EventPostCollectionViewCell {
     @objc private func likeButtonPressed(_ sender: UIButton) {
         print("Like button pressed")
-        buttonDelegate?.didTapLikeButton(likeButton: likeButton, forCell: self)
+        buttonDelegate?.didTapLikeButton(likeButton, forCell: self)
     }
 
     @objc private func commentButtonPressed(_ sender: Any) {
         print("Comment button pressed")
-        buttonDelegate?.didTapCommentButton(eventPost.postedByUser.uid, eventPostID: eventPost.eventPostID)
+        buttonDelegate?.didTapCommentButton(commentButton, forEvent: eventPost)
     }
 
     @objc private func shareButtonPressed(_ sender: Any) {
@@ -130,7 +130,7 @@ extension EventPostCollectionViewCell {
         captionLabel.isHidden = true
         containerView.addSubview(captionLabel)
 
-        showCommentsButton.setTitle("Show comments", for: .normal)
+        showCommentsButton.setTitle("Show comments...", for: .normal)
         showCommentsButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         showCommentsButton.setTitleColor(.blue, for: .normal)
         showCommentsButton.setTitleColor(.black, for: .selected)
@@ -205,7 +205,7 @@ extension EventPostCollectionViewCell {
         }
 
         numberOfLikes.snp.makeConstraints { make in
-            make.top.equalTo(separatorView.snp.bottom)
+            make.top.equalTo(separatorView.snp.bottom).offset(5)
             make.leading.equalToSuperview().offset(12)
             make.trailing.equalToSuperview()
             make.height.equalTo(30)
@@ -215,13 +215,11 @@ extension EventPostCollectionViewCell {
             make.top.equalTo(numberOfLikes.snp.bottom)
             make.leading.equalToSuperview().offset(12)
             make.trailing.equalToSuperview()
-            make.height.equalTo(40)
         }
 
         showCommentsButton.snp.makeConstraints { make in
-            make.top.equalTo(captionLabel.snp.bottom).offset(20)
-            make.leading.equalToSuperview().offset(20)
-            make.width.equalTo(200)
+            make.top.equalTo(captionLabel.snp.bottom).offset(10)
+            make.leading.equalToSuperview().offset(12)
             make.height.equalTo(40)
         }
 

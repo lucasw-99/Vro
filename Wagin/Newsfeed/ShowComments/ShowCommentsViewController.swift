@@ -12,11 +12,16 @@ import SnapKit
 class ShowCommentsViewController: UIViewController {
     private var dataSource = [(Comment, UserProfile)]()
     private let eventPostID: String
+    private let postNewComment: Bool
 
     private let titleView = UIView()
     private let titleLabel = UILabel()
     private let backButton = UIButton()
+    private let topSeparatorView = UIView()
 
+    private let dimView = UIView()
+
+    private let bottomSeparatorView = UIView()
     private let commentView = UIView()
     private let commentTextField = PaddedTextField()
 
@@ -36,10 +41,9 @@ class ShowCommentsViewController: UIViewController {
         return refreshControl
     }()
 
-    private var keyboardHeightLayoutConstraint: Constraint!
-
-    init(eventPostID: String) {
+    init(eventPostID: String, postNewComment: Bool) {
         self.eventPostID = eventPostID
+        self.postNewComment = postNewComment
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -52,14 +56,21 @@ class ShowCommentsViewController: UIViewController {
         setupSubviews()
         setupLayout()
         observeEventComments()
+        if postNewComment {
+            selectCommentTextField()
+        }
     }
 
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
+
+    private func selectCommentTextField() {
+        commentTextField.becomeFirstResponder()
+    }
 }
 
-// MARK: Populate DataSource
+// MARK: Populate dataSource
 extension ShowCommentsViewController: UICollectionViewDataSource {
     @objc private func observeEventComments() {
         CommentService.commentsForEvent(eventPostID) { comments in
@@ -145,7 +156,6 @@ extension ShowCommentsViewController: UICollectionViewDelegate, UICollectionView
         sizingCell.commentAuthor = userProfile
         let zeroHeightSize = CGSize(width: collectionView.frame.width - 10 - 10, height: 0)
         let size = sizingCell.contentView.systemLayoutSizeFitting(zeroHeightSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow)
-        print("size: \(size)")
         return size
     }
 }
@@ -168,11 +178,26 @@ extension ShowCommentsViewController {
 
         view.addSubview(titleView)
 
+        topSeparatorView.backgroundColor = .gray
+        view.addSubview(topSeparatorView)
+
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.refreshControl = refresher
         collectionView.register(CommentCollectionViewCell.self, forCellWithReuseIdentifier: Constants.Cells.commentsCell)
         view.addSubview(collectionView)
+
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(ShowCommentsViewController.dimViewTapped(sender:)))
+        tapRecognizer.numberOfTapsRequired = 1
+        dimView.addGestureRecognizer(tapRecognizer)
+
+        dimView.backgroundColor = .gray
+        dimView.alpha = 0.2
+        dimView.isHidden = !postNewComment
+        view.addSubview(dimView)
+
+        bottomSeparatorView.backgroundColor = .gray
+        commentView.addSubview(bottomSeparatorView)
 
         Util.roundedCorners(ofColor: .gray, element: commentTextField)
         commentTextField.placeholder = "add comment as \(currentUser.username)..."
@@ -205,20 +230,44 @@ extension ShowCommentsViewController {
             make.height.equalTo(100)
         }
 
-        collectionView.snp.makeConstraints { make in
+        topSeparatorView.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(1)
             make.top.equalTo(titleView.snp.bottom)
+        }
+
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(topSeparatorView.snp.bottom)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
 
+        dimView.snp.makeConstraints { make in
+            make.top.equalTo(titleView.snp.bottom)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalTo(collectionView.snp.bottom)
+        }
+
+        bottomSeparatorView.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(1)
+            make.top.equalToSuperview()
+        }
+
         commentTextField.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 20, left: 10, bottom: 15, right: 10))
+            make.leading.equalToSuperview().offset(10)
+            make.trailing.equalToSuperview().offset(-10)
+            make.bottom.equalToSuperview().offset(-15)
+            make.top.equalTo(bottomSeparatorView.snp.bottom).offset(20)
         }
 
         commentView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            keyboardHeightLayoutConstraint = make.bottom.equalToSuperview().constraint
+            make.bottom.equalToSuperview()
             make.top.equalTo(collectionView.snp.bottom)
             make.height.equalTo(75)
         }
@@ -235,29 +284,25 @@ extension ShowCommentsViewController {
             let animationCurveRawNSN = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
             let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions.curveEaseInOut.rawValue
             let animationCurve:UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
-            if endFrameY >= UIScreen.main.bounds.size.height {
-                commentView.snp.remakeConstraints { make in
-                    make.leading.equalToSuperview()
-                    make.trailing.equalToSuperview()
+            let keyboardOffScreen: Bool = endFrameY >= UIScreen.main.bounds.size.height
+            if keyboardOffScreen {
+                commentView.snp.updateConstraints { make in
                     make.bottom.equalToSuperview()
-                    make.top.equalTo(collectionView.snp.bottom)
-                    make.height.equalTo(75)
                 }
             } else {
-                // TODO: Figure out how to use keyboardHeightLayoutConstraint with SnapKit
-                commentView.snp.remakeConstraints { make in
-                    make.leading.equalToSuperview()
-                    make.trailing.equalToSuperview()
-                    make.top.equalTo(collectionView.snp.bottom)
-                    make.height.equalTo(75)
+                commentView.snp.updateConstraints { make in
                     make.bottom.equalToSuperview().offset(-(endFrame?.size.height ?? 0.0))
                 }
             }
-            UIView.animate(withDuration: duration,
-                           delay: TimeInterval(0),
-                           options: animationCurve,
-                           animations: { self.view.layoutIfNeeded() },
-                           completion: nil)
+            let rawValue = Int(animationCurveRaw)
+            let curveValue = UIViewAnimationCurve(rawValue: rawValue)
+            // TODO: Why doesn't animating dim view out work?
+            UIViewPropertyAnimator(duration: duration, curve: curveValue!) {
+                self.dimView.isHidden = keyboardOffScreen ? true : false
+                self.dimView.alpha = self.dimView.isHidden ? 0.0 : 0.5
+                print("self.dimView.alpha: \(self.dimView.alpha)")
+                self.view.layoutIfNeeded()
+            }.startAnimation()
         }
     }
 }
@@ -285,5 +330,12 @@ extension ShowCommentsViewController: UITextFieldDelegate {
         }
         textField.text = ""
         return false
+    }
+}
+
+// MARK: Gesture recognizer for dim view
+extension ShowCommentsViewController {
+    @objc private func dimViewTapped(sender: UITapGestureRecognizer?) {
+        commentTextField.resignFirstResponder()
     }
 }

@@ -12,7 +12,7 @@ import FirebaseDatabase
 
 class NewsFeedViewController: UIViewController {
 
-    private var DataSource: [EventPost] = []
+    private var dataSource: [EventPost] = []
     private var followedUsers: Set<String>?
     private var userTimelineRef: DatabaseReference?
     // eventPostID => cell
@@ -124,7 +124,7 @@ extension NewsFeedViewController {
     }
 }
 
-// MARK: Populate DataSource
+// MARK: Populate dataSource
 extension NewsFeedViewController: UICollectionViewDataSource {
     @objc private func observeEventPosts() {
         guard let currentUID = UserService.currentUserProfile?.uid else { fatalError("Current user is nil") }
@@ -135,7 +135,7 @@ extension NewsFeedViewController: UICollectionViewDataSource {
         let ref = Database.database().reference().child(userTimelinePath)
         // TODO: Any point of refresh control? Should I just have it call reloadData?
         TimelineService.populateUserTimeline(currentUID, ref) { posts in
-            self.DataSource = posts
+            self.dataSource = posts
             // Do UI updating on main thread
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
@@ -154,10 +154,10 @@ extension NewsFeedViewController: UICollectionViewDataSource {
 
 // MARK: Button delegate for EventPostCollectionViewCell
 extension NewsFeedViewController: EventPostCellDelegate {
-    func didTapLikeButton(likeButton: UIButton, forCell cell: EventPostCollectionViewCell) {
+    func didTapLikeButton(_ likeButton: UIButton, forCell cell: EventPostCollectionViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { fatalError("Couldn't get index path") }
         likeButton.isUserInteractionEnabled = false
-        let post = DataSource[indexPath.item]
+        let post = dataSource[indexPath.item]
         let wasPreviouslyLiked = likeButton.isSelected
         LikeService.setLiked(didLikePost: !wasPreviouslyLiked, for: post) { (success) in
             defer {
@@ -175,8 +175,14 @@ extension NewsFeedViewController: EventPostCellDelegate {
         }
     }
 
-    func didTapCommentButton(_ postedByUID: String, eventPostID: String) {
-        print("unimplemented")
+    func didTapCommentButton(_ commentButton: UIButton, forEvent event: EventPost) {
+        commentButton.isUserInteractionEnabled = false
+        defer {
+            commentButton.isUserInteractionEnabled = true
+        }
+
+        let commentsViewController = ShowCommentsViewController(eventPostID: event.eventPostID, postNewComment: true)
+        navigationController?.pushViewController(commentsViewController, animated: true)
     }
 
     func didTapShareButton(_ postedByUID: String, eventPostID: String) {
@@ -185,7 +191,12 @@ extension NewsFeedViewController: EventPostCellDelegate {
 
     func didTapShowCommentsButton(showCommentsButton: UIButton, forEvent event: EventPost) {
         print("Presenting comments view")
-        let commentsViewController = ShowCommentsViewController(eventPostID: event.eventPostID)
+        showCommentsButton.isUserInteractionEnabled = false
+        defer {
+            showCommentsButton.isUserInteractionEnabled = true
+        }
+        
+        let commentsViewController = ShowCommentsViewController(eventPostID: event.eventPostID, postNewComment: false)
         navigationController?.pushViewController(commentsViewController, animated: true)
     }
 }
@@ -193,24 +204,29 @@ extension NewsFeedViewController: EventPostCellDelegate {
 // MARK: Collection view
 extension NewsFeedViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return DataSource.count
+        return dataSource.count
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // TODO: Change later to always return 1, check if it still works
-        return DataSource.isEmpty ? 0 : 1
+        return dataSource.isEmpty ? 0 : 1
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventPostCell", for: indexPath) as! EventPostCollectionViewCell
-        let eventPost = DataSource[indexPath.section]
+        let eventPost = dataSource[indexPath.section]
         cell.eventPost = eventPost
         cell.buttonDelegate = self
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 600)
+        let eventPost = dataSource[indexPath.row]
+        let sizingCell = EventPostCollectionViewCell()
+        sizingCell.eventPost = eventPost
+        let zeroHeightSize = CGSize(width: collectionView.frame.width - 10 - 10, height: 0)
+        let size = sizingCell.contentView.systemLayoutSizeFitting(zeroHeightSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow)
+        return size
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
