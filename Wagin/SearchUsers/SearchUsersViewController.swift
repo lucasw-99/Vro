@@ -72,6 +72,17 @@ extension SearchUsersViewController: UISearchBarDelegate {
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.count >= 3 {
+            // enough characters for autocomplete search
+            UserService.getPartialUsernameMatches(searchText) { matchingUsers in
+                self.dataSource = matchingUsers
+                DispatchQueue.main.async {
+                    self.userTable.reloadData()
+                }
+            }
+        } else {
+            // TODO: Ignore?
+        }
     }
 
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {

@@ -47,9 +47,7 @@ class EventPostService {
         let eventPhotoPath = String(format: Constants.Database.userEventPhotoURL, eventID)
         let eventPhotoRef = Database.database().reference().child(eventPhotoPath)
 
-        let photoDict = [photoURL: true]
-
-        eventPhotoRef.setValue(photoDict)
+        eventPhotoRef.setValue(photoURL)
     }
 
     static func getEvent(_ eventID: String, completion: @escaping ( (_ eventPost: EventPost) -> () )) {

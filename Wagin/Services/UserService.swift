@@ -85,15 +85,28 @@ class UserService {
         let userEventsPath = String(format: Constants.Database.userEvents, uid)
         let eventsRef = Database.database().reference().child(userEventsPath)
 
-        // TODO: Should this be observe?
         eventsRef.observeSingleEvent(of: .value) { snapshot in
-            var user: UserProfile?
             for child in snapshot.children {
-                // TODO: Use DispatchGroup, or OperationQueue
                 if let childSnapshot = child as? DataSnapshot{
                     completion(childSnapshot.key)
                 }
             }
+        }
+    }
+
+    static func getPartialUsernameMatches(_ searchUsername: String, completion: @escaping ( (_ userProfile: [UserProfile]) -> () )) {
+        let partialUserMatchesPath = Constants.Database.users
+        let partialUserMatchesRef = Database.database().reference().child(partialUserMatchesPath)
+        let orderedQuery = partialUserMatchesRef.queryOrdered(byChild: "profile/username").queryStarting(atValue: searchUsername).queryLimited(toFirst: 5)
+        var queryResults = [UserProfile]()
+        orderedQuery.observeSingleEvent(of: .value) { snapshot in
+            for child in snapshot.children {
+                if let childSnapshot = child as? DataSnapshot {
+                    let matchingUser = UserProfile(forSnapshot: childSnapshot)
+                    queryResults.append(matchingUser)
+                }
+            }
+            completion(queryResults)
         }
     }
 }
