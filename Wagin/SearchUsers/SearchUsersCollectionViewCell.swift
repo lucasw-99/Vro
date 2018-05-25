@@ -53,7 +53,6 @@ extension SearchUsersCollectionViewCell {
             make.leading.equalTo(userProfileImage.snp.trailing).offset(10)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.trailing.equalToSuperview()
         }
     }
 }

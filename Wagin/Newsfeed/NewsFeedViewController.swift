@@ -221,7 +221,7 @@ extension NewsFeedViewController: UICollectionViewDelegate, UICollectionViewDele
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let eventPost = dataSource[indexPath.row]
+        let eventPost = dataSource[indexPath.section]
         let sizingCell = EventPostCollectionViewCell()
         sizingCell.eventPost = eventPost
         let zeroHeightSize = CGSize(width: collectionView.frame.width - 10 - 10, height: 0)

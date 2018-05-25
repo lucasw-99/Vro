@@ -10,7 +10,16 @@ import UIKit
 
 class SearchUsersViewController: UIViewController {
     private let searchBar = UISearchBar()
-    private let userTable = UITableView()
+    private let userCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 20
+        layout.minimumInteritemSpacing = 20
+        layout.scrollDirection = .vertical
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.backgroundColor = .clear
+        return cv
+    }()
+
 
     private var dataSource = [UserProfile]()
 
@@ -30,10 +39,10 @@ extension SearchUsersViewController {
         searchBar.delegate = self
         view.addSubview(searchBar)
 
-        userTable.register(SearchUsersTableViewCell.self, forCellReuseIdentifier: Constants.Cells.searchUsersCell)
-        userTable.delegate = self
-        userTable.dataSource = self
-        view.addSubview(userTable)
+        userCollectionView.register(SearchUsersCollectionViewCell.self, forCellWithReuseIdentifier: Constants.Cells.searchUsersCell)
+        userCollectionView.delegate = self
+        userCollectionView.dataSource = self
+        view.addSubview(userCollectionView)
 
         view.backgroundColor = .white
     }
@@ -46,7 +55,7 @@ extension SearchUsersViewController {
             make.height.equalTo(56)
         }
 
-        userTable.snp.makeConstraints { make in
+        userCollectionView.snp.makeConstraints { make in
             make.top.equalTo(searchBar.snp.bottom)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
@@ -64,7 +73,7 @@ extension SearchUsersViewController: UISearchBarDelegate {
             print("userProfile: \(user)")
             if let foundUser = user {
                 self.dataSource = [foundUser]
-                self.userTable.reloadData()
+                self.userCollectionView.reloadData()
             } else {
                 // TODO: Do something when empty table view is shown
             }
@@ -72,16 +81,12 @@ extension SearchUsersViewController: UISearchBarDelegate {
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.count >= 3 {
-            // enough characters for autocomplete search
-            UserService.getPartialUsernameMatches(searchText) { matchingUsers in
-                self.dataSource = matchingUsers
-                DispatchQueue.main.async {
-                    self.userTable.reloadData()
-                }
+        // TODO: Check if enough characters for autocomplete search?
+        UserService.getPartialUsernameMatches(searchText) { matchingUsers in
+            self.dataSource = matchingUsers
+            DispatchQueue.main.async {
+                self.userCollectionView.reloadData()
             }
-        } else {
-            // TODO: Ignore?
         }
     }
 
@@ -90,24 +95,38 @@ extension SearchUsersViewController: UISearchBarDelegate {
     }
 }
 
-// MARK: Table view
-extension SearchUsersViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+// MARK: Collection view
+extension SearchUsersViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return dataSource.count
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Cells.searchUsersCell, for: indexPath) as! SearchUsersTableViewCell
-        let user = dataSource[indexPath.row]
-        cell.updateCell(username: user.username)
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        // TODO: Change later to always return 1, check if it still works
+        return dataSource.isEmpty ? 0 : 1
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = userCollectionView.dequeueReusableCell(withReuseIdentifier: Constants.Cells.searchUsersCell, for: indexPath) as! SearchUsersCollectionViewCell
+        let user = dataSource[indexPath.section]
+        cell.user = user
         return cell
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        // TODO: Empty table view here
-        let selectedUser = dataSource[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        // TODO: Empty table view here?
+        let selectedUser = dataSource[indexPath.section]
         let userProfileController = UserProfileViewController(selectedUser)
         navigationController?.pushViewController(userProfileController, animated: true)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let user = dataSource[indexPath.section]
+        let sizingCell = SearchUsersCollectionViewCell()
+        sizingCell.user = user
+        let zeroHeightSize = CGSize(width: collectionView.frame.width, height: 0)
+        let size = sizingCell.contentView.systemLayoutSizeFitting(zeroHeightSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow)
+        return size
     }
 }
