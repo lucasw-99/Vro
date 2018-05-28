@@ -12,11 +12,10 @@ class SearchUsersViewController: UIViewController {
     private let searchBar = UISearchBar()
     private let userCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 20
-        layout.minimumInteritemSpacing = 20
         layout.scrollDirection = .vertical
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .clear
+        cv.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         return cv
     }()
 
@@ -125,8 +124,17 @@ extension SearchUsersViewController: UICollectionViewDelegate, UICollectionViewD
         let user = dataSource[indexPath.section]
         let sizingCell = SearchUsersCollectionViewCell()
         sizingCell.user = user
-        let zeroHeightSize = CGSize(width: collectionView.frame.width, height: 0)
+        let zeroHeightSize = CGSize(width: collectionView.frame.width - 5 - 5, height: 0)
         let size = sizingCell.contentView.systemLayoutSizeFitting(zeroHeightSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow)
         return size
     }
 }
+
+// Collection view flow layout
+extension SearchUsersViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 5, bottom: 30, right: 5)
+    }
+}
+
+
