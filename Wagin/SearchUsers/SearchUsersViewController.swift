@@ -72,10 +72,10 @@ extension SearchUsersViewController: UISearchBarDelegate {
             print("userProfile: \(user)")
             if let foundUser = user {
                 self.dataSource = [foundUser]
-                self.userCollectionView.reloadData()
             } else {
-                // TODO: Do something when empty table view is shown
+                self.dataSource = []
             }
+            self.userCollectionView.reloadData()
         }
     }
 

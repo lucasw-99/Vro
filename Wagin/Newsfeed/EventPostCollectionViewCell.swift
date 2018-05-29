@@ -150,14 +150,14 @@ extension EventPostCollectionViewCell {
 
     private func setupLayout() {
         userImage.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(10)
+            make.leading.equalToSuperview()
             make.width.equalTo(36)
             make.height.equalTo(36)
             make.centerY.equalToSuperview()
         }
 
         usernameLabel.snp.makeConstraints { make in
-            make.leading.equalTo(userImage.snp.trailing).offset(15)
+            make.leading.equalTo(userImage.snp.trailing).offset(10)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
@@ -170,7 +170,7 @@ extension EventPostCollectionViewCell {
         }
 
         eventImageView.snp.makeConstraints { make in
-            make.top.equalTo(userHeaderView.snp.bottom).offset(10)
+            make.top.equalTo(userHeaderView.snp.bottom)
             make.height.equalTo(300)
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()

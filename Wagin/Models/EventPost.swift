@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 import FirebaseDatabase
 
 class EventPost {
@@ -32,6 +33,10 @@ class EventPost {
                 // TODO: Change this to a valid description of event
                 "description": event.description,
                 "address": event.address,
+                "coordinate": [
+                    "latitude": event.coordinate.latitude,
+                    "longitude": event.coordinate.longitude
+                ],
                 "eventImageURL": event.eventImageURL,
                 "eventTime": eventTimeString
             ],
@@ -58,6 +63,9 @@ class EventPost {
             let eventAddress = eventDict["address"] as? String,
             let eventImageURL = eventDict["eventImageURL"] as? String,
             let eventTime = eventDict["eventTime"] as? String,
+            let coordinateDict = eventDict["coordinate"] as? [String: Any],
+            let latitude = coordinateDict["latitude"] as? CLLocationDegrees,
+            let longitude = coordinateDict["longitude"] as? CLLocationDegrees,
             let eventPostCaption = eventPostDict["caption"] as? String,
             let eventPostTimestamp = eventPostDict["timestamp"] as? TimeInterval,
             let eventPostID = eventPostDict["eventPostID"] as? String,
@@ -66,7 +74,8 @@ class EventPost {
             let eventDate = Util.stringToDate(dateString: eventTime)
             let timestamp = Date(timeIntervalSince1970: eventPostTimestamp / 1000)
             let postedByUser = UserProfile(postedByUID, postedByUsername, postedByPhotoURL)
-            let event = Event(hostUID, eventImageURL, eventDescription, eventAddress, eventDate)
+            let eventCoordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+            let event = Event(hostUID, eventImageURL, eventDescription, eventAddress, eventDate, eventCoordinate)
 
             self.postedByUser = postedByUser
             self.event = event

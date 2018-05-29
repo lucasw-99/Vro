@@ -10,7 +10,7 @@ import UIKit
 import FirebaseAuth
 import FirebaseStorage
 import FirebaseDatabase
-import FirebaseStorageUI
+import FirebaseStorage
 
 class ManageProfileViewController: UIViewController {
 

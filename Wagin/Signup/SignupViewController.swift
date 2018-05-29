@@ -176,7 +176,7 @@ class SignupViewController: UIViewController {
             changeUsernameRequest?.commitChanges { error in
                 if error == nil {
                     Util.removeSpinner(spinner)
-                    self.addUserToDatabase(user.uid, username)
+                    self.addUserToDatabase(user.user.uid, username)
                     self.navigationController?.popViewController(animated: true)
                 } else {
                     let alert = Util.makeOKAlert(alertTitle: self.alertTitle, message: error!.localizedDescription)

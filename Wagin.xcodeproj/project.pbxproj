@@ -251,14 +251,6 @@
 			path = EventMap;
 			sourceTree = "<group>";
 		};
-		A0E64CD620A3F18400C77835 /* Images */ = {
-			isa = PBXGroup;
-			children = (
-				A0FF469A209176BA006FE799 /* Assets.xcassets */,
-			);
-			path = Images;
-			sourceTree = "<group>";
-		};
 		A0E73FF720A68CE6007E72D3 /* SearchUsers */ = {
 			isa = PBXGroup;
 			children = (
@@ -290,8 +282,8 @@
 		A0FF4692209176B9006FE799 /* Wagin */ = {
 			isa = PBXGroup;
 			children = (
+				A0FF469A209176BA006FE799 /* Assets.xcassets */,
 				A0E73FF720A68CE6007E72D3 /* SearchUsers */,
-				A0E64CD620A3F18400C77835 /* Images */,
 				A0228F73209A51B300E71C80 /* Models */,
 				A0228F7C209B482B00E71C80 /* Services */,
 				A0228F77209AC4E600E71C80 /* Global */,
@@ -433,16 +425,22 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Wagin/Pods-Wagin-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AlgoliaSearch-Client-Swift/AlgoliaSearch.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/InstantSearch-Core-Swift/InstantSearchCore.framework",
+				"${BUILT_PRODUCTS_DIR}/InstantSearch-iOS/InstantSearch.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlgoliaSearch.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/InstantSearchCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/InstantSearch.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",

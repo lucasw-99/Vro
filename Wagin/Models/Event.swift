@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 class Event {
     let hostUID: String
@@ -14,6 +15,7 @@ class Event {
     let eventImageURL: String
     let description: String
     let address: String
+    let coordinate: CLLocationCoordinate2D
     let eventTime: Date
     // TODO: Make address optional, and add coordinate field
 
@@ -21,11 +23,13 @@ class Event {
          _ eventImageURL: String,
          _ description: String,
          _ address: String,
-         _ eventTime: Date) {
+         _ eventTime: Date,
+         _ coordinate: CLLocationCoordinate2D) {
         self.hostUID = hostUID
         self.eventImageURL = eventImageURL
         self.description = description
         self.address = address
         self.eventTime = eventTime
+        self.coordinate = coordinate
     }
 }

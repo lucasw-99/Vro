@@ -159,7 +159,7 @@ extension UploadEventViewController: UIImagePickerControllerDelegate, UINavigati
             let spinner = Util.displaySpinner(onView: postEventButton)
             ImageService.uploadImage(pickedImage, eventImagePath) { eventImageURL in
                 if let url = eventImageURL {
-                    self.event = Event(UserService.currentUserProfile!.uid, url.absoluteString, "Not implemented yet 😒", self.pin.title!, self.date)
+                    self.event = Event(UserService.currentUserProfile!.uid, url.absoluteString, "Not implemented yet 😒", self.pin.title!, self.date, self.pin.coordinate)
                     self.eventImageView.image = pickedImage
                     Util.roundedCorners(ofColor: .black, element: self.eventImageView)
                     Util.removeSpinner(spinner)
