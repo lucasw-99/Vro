@@ -40,6 +40,11 @@ class MapViewController: UIViewController {
         InstantSearch.shared.searcher.params.aroundLatLng = LatLng(lat: location.latitude, lng: location.longitude)
         InstantSearch.shared.searcher.search()
     }
+
+    private func startSearch(_ coordinate: CLLocationCoordinate2D, _ radius: Int) {
+        mapViewWidget.setOriginAndRadius(coordinate, radius)
+        findEvents(userLocation: coordinate)
+    }
 }
 
 // MARK: User location
@@ -49,7 +54,7 @@ extension MapViewController: CLLocationManagerDelegate {
         guard let currentLocation = locations.first else { return }
         currentCoordinate = currentLocation.coordinate
         mapViewWidget.userTrackingMode = .followWithHeading
-        findEvents(userLocation: currentLocation.coordinate)
+        startSearch(currentLocation.coordinate, searchRadius)
     }
 }
 
@@ -60,7 +65,8 @@ extension MapViewController: UISearchBarDelegate {
         let query = searchBar.text
         print("query: \(query!)")
         // TODO: Change user location
-        findEvents(userLocation: currentCoordinate!)
+
+        startSearch(currentCoordinate!, searchRadius)
     }
 }
 
@@ -78,7 +84,8 @@ extension MapViewController {
             print("searching events")
             searchRadius = currentValue
             InstantSearch.shared.searcher.params.aroundRadius = Query.AroundRadius.explicit(UInt(searchRadius))
-            findEvents(userLocation: currentCoordinate!)
+
+            startSearch(currentCoordinate!, searchRadius)
         }
     }
 }
@@ -110,10 +117,19 @@ extension MapViewController {
         currentRadiusLabel.font = UIFont.systemFont(ofSize: 12)
         headerView.addSubview(currentRadiusLabel)
 
-        view.addSubview(headerView)
-
         searchBarWidget.delegate = self
-        view.addSubview(searchBarWidget)
+        searchBarWidget.barTintColor = .white
+        // TODO: Is this a clean way to set the border color?
+        for view in searchBarWidget.subviews[0].subviews {
+            if view is UITextField {
+                view.layer.borderWidth = 1
+                view.layer.borderColor = UIColor.lightGray.cgColor
+                view.layer.cornerRadius = 5
+            }
+        }
+        headerView.addSubview(searchBarWidget)
+
+        view.addSubview(headerView)
 
         view.addSubview(mapViewWidget)
 
@@ -130,7 +146,7 @@ extension MapViewController {
             make.top.equalTo(view.layoutMarginsGuide.snp.topMargin)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.height.equalTo(125)
+            make.height.equalTo(175)
         }
 
         headerLabel.snp.makeConstraints { make in
@@ -148,7 +164,7 @@ extension MapViewController {
         radiusSlider.snp.makeConstraints { make in
             make.top.equalTo(statsWidget.snp.bottom).offset(10)
             make.centerX.equalToSuperview()
-            make.width.equalTo(250)
+            make.width.equalTo(200)
         }
 
         currentRadiusLabel.snp.makeConstraints { make in
@@ -158,14 +174,14 @@ extension MapViewController {
         }
 
         searchBarWidget.snp.makeConstraints { make in
-            make.top.equalTo(headerView.snp.bottom)
+            make.top.equalTo(currentRadiusLabel.snp.bottom)
             make.trailing.equalToSuperview()
             make.leading.equalToSuperview()
-            make.height.equalTo(56)
+            make.height.equalTo(55)
         }
 
         mapViewWidget.snp.makeConstraints { make in
-            make.top.equalTo(searchBarWidget.snp.bottom)
+            make.top.equalTo(headerView.snp.bottom)
             make.trailing.equalToSuperview()
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview()

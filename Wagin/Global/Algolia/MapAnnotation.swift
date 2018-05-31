@@ -24,7 +24,6 @@ class MapAnnotation: NSObject, MKAnnotation {
     init(json: [String: Any]) {
         guard let lat = json["lat"] as? Double, let lng = json["lng"] as? Double else { fatalError("Malformatted JSON for MapAnnotation") }
 
-        print("json: \(json)")
         self.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
         self.title = json["eventPostID"] as? String
         super.init()

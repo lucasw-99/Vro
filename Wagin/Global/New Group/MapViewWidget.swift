@@ -12,11 +12,28 @@ import InstantSearch
 import InstantSearchCore
 
 class MapViewWidget: MKMapView, AlgoliaWidget, ResultingDelegate {
+    private var origin: CLLocationCoordinate2D!
+    private var radius: Int!
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.delegate = self
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func setOriginAndRadius(_ origin: CLLocationCoordinate2D, _ radius: Int) {
+        self.origin = origin
+        self.radius = radius
+    }
+
     func on(results: SearchResults?, error: Error?, userInfo: [String : Any]) {
-        print("in map view widget")
         let searchParams = userInfo["params"] as? SearchParameters
+
+        removeOverlays(overlays)
         if searchParams == nil || searchParams?.page == 0 {
-            let annotations = self.annotations
             removeAnnotations(annotations)
         }
 
@@ -29,6 +46,35 @@ class MapViewWidget: MKMapView, AlgoliaWidget, ResultingDelegate {
             self?.addAnnotation(annotation)
         }
 
-        showAnnotations(self.annotations, animated: true)
+        addRadiusCircle(origin: origin, radius: radius)
+    }
+}
+
+
+// MARK: Map view
+extension MapViewWidget: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if let mapRadius = overlay as? MapRadius {
+            let circleView = MKCircleRenderer(overlay: mapRadius)
+            circleView.strokeColor = mapRadius.color
+            return circleView
+        }
+        return MKOverlayRenderer()
+    }
+
+    private func addRadiusCircle(origin: CLLocationCoordinate2D, radius: Int) {
+        let mapRadiusCircle = MapRadius(origin: origin, radius: radius, color: .red)
+        add(mapRadiusCircle)
+
+        // increase radius by 15 kilometers so you can see whole circle on map
+        let increasedRadius = radius + 15000
+
+        // center map view on mapRadiusCircle
+        let radiusInKilos = Double(increasedRadius) / 1000.0
+        let kilosPerDegree = 111.045
+        let radiusInDegrees = radiusInKilos / kilosPerDegree
+        let span = MKCoordinateSpanMake(radiusInDegrees, radiusInDegrees)
+        let region = MKCoordinateRegionMake(origin, span)
+        setRegion(region, animated: true)
     }
 }
