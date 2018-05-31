@@ -71,8 +71,6 @@ extension MapViewController {
         statsWidget.font = UIFont.systemFont(ofSize: 14)
         headerView.addSubview(statsWidget)
 
-        sliderWidget.attribute
-
         view.addSubview(headerView)
 
         searchBarWidget.delegate = self
