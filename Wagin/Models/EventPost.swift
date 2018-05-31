@@ -33,9 +33,9 @@ class EventPost {
                 // TODO: Change this to a valid description of event
                 "description": event.description,
                 "address": event.address,
-                "coordinate": [
-                    "latitude": event.coordinate.latitude,
-                    "longitude": event.coordinate.longitude
+                "_geoloc": [
+                    "lat": event.coordinate.latitude,
+                    "lng": event.coordinate.longitude
                 ],
                 "eventImageURL": event.eventImageURL,
                 "eventTime": eventTimeString
@@ -63,9 +63,9 @@ class EventPost {
             let eventAddress = eventDict["address"] as? String,
             let eventImageURL = eventDict["eventImageURL"] as? String,
             let eventTime = eventDict["eventTime"] as? String,
-            let coordinateDict = eventDict["coordinate"] as? [String: Any],
-            let latitude = coordinateDict["latitude"] as? CLLocationDegrees,
-            let longitude = coordinateDict["longitude"] as? CLLocationDegrees,
+            let coordinateDict = eventDict["_geoloc"] as? [String: Any],
+            let latitude = coordinateDict["lat"] as? CLLocationDegrees,
+            let longitude = coordinateDict["lng"] as? CLLocationDegrees,
             let eventPostCaption = eventPostDict["caption"] as? String,
             let eventPostTimestamp = eventPostDict["timestamp"] as? TimeInterval,
             let eventPostID = eventPostDict["eventPostID"] as? String,

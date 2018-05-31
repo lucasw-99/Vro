@@ -24,6 +24,7 @@
 		A05D5A36209ECD580025E8C7 /* ChooseAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05D5A35209ECD580025E8C7 /* ChooseAddressViewController.swift */; };
 		A05D5A3C20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05D5A3B20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift */; };
 		A0648FFD20981138001417D7 /* ManageProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0648FFC20981138001417D7 /* ManageProfileViewController.swift */; };
+		A08BA18320BEFA740062C72B /* MapViewWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08BA18220BEFA740062C72B /* MapViewWidget.swift */; };
 		A0AD85FA2093ED9B00D5F793 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD85F92093ED9B00D5F793 /* Util.swift */; };
 		A0AF4DE120B1E3A8001A9E09 /* ShowCommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AF4DE020B1E3A8001A9E09 /* ShowCommentsViewController.swift */; };
 		A0AF4DE320B1E3CA001A9E09 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AF4DE220B1E3CA001A9E09 /* Comment.swift */; };
@@ -31,6 +32,8 @@
 		A0AF4DE720B330A7001A9E09 /* PaddedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AF4DE620B330A7001A9E09 /* PaddedTextField.swift */; };
 		A0C8B6C9209A163400A98D53 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C8B6C8209A163400A98D53 /* MapViewController.swift */; };
 		A0C8B6CB209A185C00A98D53 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0C8B6CA209A185C00A98D53 /* MapKit.framework */; };
+		A0CB3A6120BEFC5A00207944 /* MapAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CB3A6020BEFC5A00207944 /* MapAnnotation.swift */; };
+		A0CB3A6320BF02BB00207944 /* EventMapCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CB3A6220BF02BB00207944 /* EventMapCollectionViewCell.swift */; };
 		A0E73FF920A68D0C007E72D3 /* SearchUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E73FF820A68D0C007E72D3 /* SearchUsersViewController.swift */; };
 		A0E73FFB20A6912E007E72D3 /* SearchUsersCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E73FFA20A6912E007E72D3 /* SearchUsersCollectionViewCell.swift */; };
 		A0E73FFD20A7573D007E72D3 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E73FFC20A7573D007E72D3 /* UserProfileViewController.swift */; };
@@ -79,6 +82,7 @@
 		A05D5A35209ECD580025E8C7 /* ChooseAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseAddressViewController.swift; sourceTree = "<group>"; };
 		A05D5A3B20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteResultTableViewCell.swift; sourceTree = "<group>"; };
 		A0648FFC20981138001417D7 /* ManageProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageProfileViewController.swift; sourceTree = "<group>"; };
+		A08BA18220BEFA740062C72B /* MapViewWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MapViewWidget.swift; path = "../New Group/MapViewWidget.swift"; sourceTree = "<group>"; };
 		A0AD85F92093ED9B00D5F793 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		A0AF4DE020B1E3A8001A9E09 /* ShowCommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowCommentsViewController.swift; sourceTree = "<group>"; };
 		A0AF4DE220B1E3CA001A9E09 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
@@ -86,6 +90,8 @@
 		A0AF4DE620B330A7001A9E09 /* PaddedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddedTextField.swift; sourceTree = "<group>"; };
 		A0C8B6C8209A163400A98D53 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		A0C8B6CA209A185C00A98D53 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		A0CB3A6020BEFC5A00207944 /* MapAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapAnnotation.swift; sourceTree = "<group>"; };
+		A0CB3A6220BF02BB00207944 /* EventMapCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMapCollectionViewCell.swift; sourceTree = "<group>"; };
 		A0E73FF820A68D0C007E72D3 /* SearchUsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersViewController.swift; sourceTree = "<group>"; };
 		A0E73FFA20A6912E007E72D3 /* SearchUsersCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersCollectionViewCell.swift; sourceTree = "<group>"; };
 		A0E73FFC20A7573D007E72D3 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
@@ -154,6 +160,7 @@
 		A0228F77209AC4E600E71C80 /* Global */ = {
 			isa = PBXGroup;
 			children = (
+				A08BA18420BEFBCE0062C72B /* Algolia */,
 				A0AD85F92093ED9B00D5F793 /* Util.swift */,
 				A0228F78209AC4F700E71C80 /* Constants.swift */,
 				A0AF4DE620B330A7001A9E09 /* PaddedTextField.swift */,
@@ -198,6 +205,16 @@
 				A05D5A3B20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift */,
 			);
 			path = SearchAutocomplete;
+			sourceTree = "<group>";
+		};
+		A08BA18420BEFBCE0062C72B /* Algolia */ = {
+			isa = PBXGroup;
+			children = (
+				A08BA18220BEFA740062C72B /* MapViewWidget.swift */,
+				A0CB3A6020BEFC5A00207944 /* MapAnnotation.swift */,
+				A0CB3A6220BF02BB00207944 /* EventMapCollectionViewCell.swift */,
+			);
+			path = Algolia;
 			sourceTree = "<group>";
 		};
 		A0AF4DDF20B1E324001A9E09 /* ShowComments */ = {
@@ -474,6 +491,8 @@
 				A0C8B6C9209A163400A98D53 /* MapViewController.swift in Sources */,
 				A0FF46AA20919435006FE799 /* SignupViewController.swift in Sources */,
 				A056D80A20AD159600FA3F43 /* LikeService.swift in Sources */,
+				A08BA18320BEFA740062C72B /* MapViewWidget.swift in Sources */,
+				A0CB3A6320BF02BB00207944 /* EventMapCollectionViewCell.swift in Sources */,
 				A0F2FB2E209CA5DB0018F465 /* NewsFeedViewController.swift in Sources */,
 				A0FF4696209176B9006FE799 /* LoginViewController.swift in Sources */,
 				A056D80E20AD15C100FA3F43 /* FollowersService.swift in Sources */,
@@ -486,6 +505,7 @@
 				A0AD85FA2093ED9B00D5F793 /* Util.swift in Sources */,
 				A05D5A36209ECD580025E8C7 /* ChooseAddressViewController.swift in Sources */,
 				A0283D2220A295A100F4E700 /* UploadEventViewController.swift in Sources */,
+				A0CB3A6120BEFC5A00207944 /* MapAnnotation.swift in Sources */,
 				A0FF4694209176B9006FE799 /* AppDelegate.swift in Sources */,
 				A0E73FFB20A6912E007E72D3 /* SearchUsersCollectionViewCell.swift in Sources */,
 				A0228F7E209B483A00E71C80 /* UserService.swift in Sources */,

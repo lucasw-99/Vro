@@ -8,42 +8,82 @@
 
 import UIKit
 import MapKit
+import AlgoliaSearch
+import InstantSearch
+import InstantSearchCore
 
 class MapViewController: UIViewController {
     private let headerView = UIView()
     private let headerLabel = UILabel()
-    private let searchBar = UISearchBar()
-    private let mapView = MKMapView()
 
     private let locationManager = CLLocationManager()
     private var currentCoordinate: CLLocationCoordinate2D?
+
+    private let searchBarWidget = SearchBarWidget()
+    private let statsWidget = StatsLabelWidget()
+    private let mapViewWidget = MapViewWidget()
+    private let sliderWidget = SliderWidget()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()
         setupLayout()
+        setupInstantSearch()
+        registerWidgets()
     }
 
+    private func findEvents(userLocation location: CLLocationCoordinate2D) {
+        print("searching for stuff")
+        InstantSearch.shared.searcher.params.aroundLatLng = LatLng(lat: location.latitude, lng: location.longitude)
+        InstantSearch.shared.searcher.search()
+    }
+}
+
+extension MapViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        manager.stopUpdatingLocation()
+        guard let currentLocation = locations.first else { return }
+        currentCoordinate = currentLocation.coordinate
+        mapViewWidget.userTrackingMode = .followWithHeading
+        findEvents(userLocation: currentLocation.coordinate)
+    }
+}
+
+extension MapViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+        let query = searchBar.text
+        print("query: \(query!)")
+        findEvents(userLocation: currentCoordinate!)
+    }
+}
+
+// MARK: Setup subviews
+extension MapViewController {
     private func setupSubviews() {
         headerLabel.text = "Nearby Events"
         headerLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         headerLabel.numberOfLines = 1
         headerLabel.textAlignment = .center
         headerView.addSubview(headerLabel)
+
+        statsWidget.textAlignment = .center
+        statsWidget.font = UIFont.systemFont(ofSize: 14)
+        headerView.addSubview(statsWidget)
+
+        sliderWidget.attribute
+
         view.addSubview(headerView)
 
-        view.addSubview(searchBar)
+        searchBarWidget.delegate = self
+        view.addSubview(searchBarWidget)
 
-        view.addSubview(mapView)
+        view.addSubview(mapViewWidget)
 
         locationManager.requestWhenInUseAuthorization()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         locationManager.startUpdatingLocation()
-
-        searchBar.delegate = self
-
-        mapView.delegate = self
 
         view.backgroundColor = .white
     }
@@ -53,7 +93,7 @@ class MapViewController: UIViewController {
             make.top.equalTo(view.layoutMarginsGuide.snp.topMargin)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.height.equalTo(50)
+            make.height.equalTo(90)
         }
 
         headerLabel.snp.makeConstraints { make in
@@ -62,95 +102,35 @@ class MapViewController: UIViewController {
             make.centerY.equalToSuperview()
         }
 
-        searchBar.snp.makeConstraints { make in
+        statsWidget.snp.makeConstraints { make in
+            make.top.equalTo(headerLabel.snp.bottom).offset(10)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+
+        searchBarWidget.snp.makeConstraints { make in
             make.top.equalTo(headerView.snp.bottom)
             make.trailing.equalToSuperview()
             make.leading.equalToSuperview()
             make.height.equalTo(56)
         }
 
-        mapView.snp.makeConstraints { make in
-            make.top.equalTo(searchBar.snp.bottom)
+        mapViewWidget.snp.makeConstraints { make in
+            make.top.equalTo(searchBarWidget.snp.bottom)
             make.trailing.equalToSuperview()
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview()
         }
     }
 
-    private func getDirections(to destinationMapItem: MKMapItem) {
-        let sourcePlacemark = MKPlacemark(coordinate: currentCoordinate ?? CLLocationCoordinate2D())
-        let sourceMapItem = MKMapItem(placemark: sourcePlacemark)
-
-        let directionsRequest = MKDirectionsRequest()
-        directionsRequest.source = sourceMapItem
-        directionsRequest.destination = destinationMapItem
-        directionsRequest.transportType = .automobile
-
-        let directions = MKDirections(request: directionsRequest)
-        directions.calculate { (response, error) in
-            if error != nil {
-                print("Error: \(error?.localizedDescription)")
-            }
-            guard let response = response else { return }
-            guard let firstRoute = response.routes.first else { return }
-            let (hours, minutes, seconds) = Util.secondsToHoursMinutesSeconds(seconds: Int(firstRoute.expectedTravelTime))
-            self.headerLabel.text = "\(hours) h \(minutes) min \(seconds)s"
-            self.mapView.add(firstRoute.polyline)
-
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = destinationMapItem.placemark.coordinate
-            annotation.title = destinationMapItem.name
-
-            let destSpan = MKCoordinateSpanMake(0.15, 0.15)
-            let destRegion = MKCoordinateRegion(center: annotation.coordinate, span: destSpan)
-
-            self.mapView.setRegion(destRegion, animated: true)
-            self.mapView.addAnnotation(annotation)
-            self.mapView.selectAnnotation(annotation, animated: true)
-        }
+    private func setupInstantSearch() {
+        // TODO: Make this cleaner please, this is dirty dirty
+        InstantSearch.shared.configure(appID: "1W1CGWYI4N", apiKey: "99390aeab22b4e94b41e432939f3d424", index: "events")
+        InstantSearch.shared.searcher.params.aroundRadius = Query.AroundRadius.explicit(UInt(10000))
     }
-}
 
-extension MapViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        manager.stopUpdatingLocation()
-        guard let currentLocation = locations.first else { return }
-        currentCoordinate = currentLocation.coordinate
-        mapView.userTrackingMode = .followWithHeading
-    }
-}
-
-extension MapViewController: UISearchBarDelegate {
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.endEditing(true)
-        let localSearchRequest = MKLocalSearchRequest()
-        localSearchRequest.naturalLanguageQuery = searchBar.text
-        let region = MKCoordinateRegion(center: currentCoordinate ?? CLLocationCoordinate2D(), span: MKCoordinateSpan(latitudeDelta: 0.4, longitudeDelta: 0.4))
-        localSearchRequest.region = region
-        let localSearch = MKLocalSearch(request: localSearchRequest)
-        localSearch.start { (response, error) in
-            if error != nil {
-                print("Error: \(error?.localizedDescription)")
-            }
-            guard let response = response else { return }
-            guard let firstMapItem = response.mapItems.first else {
-                print("No results")
-                return
-            }
-            self.getDirections(to: firstMapItem)
-        }
-    }
-}
-
-extension MapViewController: MKMapViewDelegate {
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        if overlay is MKPolyline {
-            let renderer = MKPolylineRenderer(overlay: overlay)
-            renderer.strokeColor = .blue
-            renderer.lineWidth = 10
-            return renderer
-        }
-
-        return MKOverlayRenderer()
+    private func registerWidgets() {
+        // register all widgets in this view controller
+        InstantSearch.shared.registerAllWidgets(in: view)
     }
 }

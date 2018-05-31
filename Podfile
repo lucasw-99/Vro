@@ -12,4 +12,5 @@ target 'Wagin' do
   pod 'Firebase/Storage'
   pod 'FirebaseUI/Storage'
   pod 'InstantSearch-iOS'
+  pod 'AlgoliaSearch-Client-Swift'
 end

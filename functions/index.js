@@ -23,6 +23,9 @@ exports.updateEvents = functions.database.ref('/events/{eventId}').onWrite((even
     }
 
     data['objectID'] = eventId
+    // TODO: Change client side key back to coordinate
+    data['_geoloc'] = data['event']['_geoloc']
+    console.log('data:', data)
     return index.saveObject(data, (err, content) => {
         if (err) { 
             console.log('err:', err)
