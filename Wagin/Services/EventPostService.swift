@@ -8,6 +8,7 @@
 
 import FirebaseDatabase
 
+// TODO: Make this class post to "EventPost" root in firebase!
 class EventPostService {
 
     // user: UserProfile that is making the post

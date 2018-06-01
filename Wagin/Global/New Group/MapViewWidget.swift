@@ -41,8 +41,7 @@ class MapViewWidget: MKMapView, AlgoliaWidget, ResultingDelegate {
 
         // TODO: Change weak to unowned so we don't have to do that BS unwrapping
         results.hits.forEach { [weak self] hit in
-            guard let latlong = hit["_geoloc"] as? [String: Any] else { fatalError("malformatted JSON") }
-            let annotation = MapAnnotation(json: latlong)
+            let annotation = MapAnnotation(eventJson: hit)
             self?.addAnnotation(annotation)
         }
 
@@ -60,6 +59,11 @@ extension MapViewWidget: MKMapViewDelegate {
             return circleView
         }
         return MKOverlayRenderer()
+    }
+
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        guard let selectedAnnotation = view.annotation as? MapAnnotation else { fatalError("Unexpected map annotation") }
+        print("selected event: \(selectedAnnotation.event.eventId)")
     }
 
     private func addRadiusCircle(origin: CLLocationCoordinate2D, radius: Int) {

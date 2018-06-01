@@ -157,9 +157,11 @@ extension UploadEventViewController: UIImagePickerControllerDelegate, UINavigati
             let eventImagePath = String(format: Constants.Storage.eventImages, uid, Util.generateID())
             
             let spinner = Util.displaySpinner(onView: postEventButton)
+            // TODO: Delete old images uploaded here, if user uploads twice
             ImageService.uploadImage(pickedImage, eventImagePath) { eventImageURL in
                 if let url = eventImageURL {
-                    self.event = Event(UserService.currentUserProfile!.uid, url.absoluteString, "Not implemented yet 😒", self.pin.title!, self.date, self.pin.coordinate)
+                    let eventId = Util.generateID()
+                    self.event = Event(UserService.currentUserProfile!.uid, url.absoluteString, "Not implemented yet 😒", self.pin.title!, self.date, eventId, self.pin.coordinate)
                     self.eventImageView.image = pickedImage
                     Util.roundedCorners(ofColor: .black, element: self.eventImageView)
                     Util.removeSpinner(spinner)

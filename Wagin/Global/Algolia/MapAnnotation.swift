@@ -13,19 +13,15 @@ import AlgoliaSearch
 
 class MapAnnotation: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
-    var title: String?
-    var subtitle: String?
+    var event: Event
 
-    init(_ coordinate: CLLocationCoordinate2D) {
-        self.coordinate = coordinate
+    init(_ event: Event) {
+        self.event = event
+        self.coordinate = event.coordinate
         super.init()
     }
 
-    init(json: [String: Any]) {
-        guard let lat = json["lat"] as? Double, let lng = json["lng"] as? Double else { fatalError("Malformatted JSON for MapAnnotation") }
-
-        self.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
-        self.title = json["eventPostID"] as? String
-        super.init()
+    convenience init(eventJson json: [String: Any]) {
+        self.init(Event(eventJson: json))
     }
 }

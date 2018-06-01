@@ -38,7 +38,8 @@ class EventPost {
                     "lng": event.coordinate.longitude
                 ],
                 "eventImageURL": event.eventImageURL,
-                "eventTime": eventTimeString
+                "eventTime": eventTimeString,
+                "eventId": event.eventId
             ],
             "likeCount": likeCount,
             "caption": caption,
@@ -58,31 +59,21 @@ class EventPost {
             let postedByPhotoURLString = postedByUserDict["photoURL"] as? String,
             let postedByPhotoURL = URL(string: postedByPhotoURLString),
             let eventDict = eventPostDict["event"] as? [String: Any],
-            let hostUID = eventDict["hostUID"] as? String,
-            let eventDescription = eventDict["description"] as? String,
-            let eventAddress = eventDict["address"] as? String,
-            let eventImageURL = eventDict["eventImageURL"] as? String,
-            let eventTime = eventDict["eventTime"] as? String,
-            let coordinateDict = eventDict["_geoloc"] as? [String: Any],
-            let latitude = coordinateDict["lat"] as? CLLocationDegrees,
-            let longitude = coordinateDict["lng"] as? CLLocationDegrees,
             let eventPostCaption = eventPostDict["caption"] as? String,
             let eventPostTimestamp = eventPostDict["timestamp"] as? TimeInterval,
             let eventPostID = eventPostDict["eventPostID"] as? String,
             let likeCount = eventPostDict["likeCount"] as? Int else { fatalError("eventPost snapshot was incorrectly formatted") }
 
-            let eventDate = Util.stringToDate(dateString: eventTime)
-            let timestamp = Date(timeIntervalSince1970: eventPostTimestamp / 1000)
-            let postedByUser = UserProfile(postedByUID, postedByUsername, postedByPhotoURL)
-            let eventCoordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-            let event = Event(hostUID, eventImageURL, eventDescription, eventAddress, eventDate, eventCoordinate)
+        let event = Event(eventJson: eventDict)
+        let timestamp = Date(timeIntervalSince1970: eventPostTimestamp / 1000)
+        let postedByUser = UserProfile(postedByUID, postedByUsername, postedByPhotoURL)
 
-            self.postedByUser = postedByUser
-            self.event = event
-            self.caption = eventPostCaption
-            self.timestamp = timestamp
-            self.eventPostID = eventPostID
-            self.likeCount = likeCount
+        self.postedByUser = postedByUser
+        self.event = event
+        self.caption = eventPostCaption
+        self.timestamp = timestamp
+        self.eventPostID = eventPostID
+        self.likeCount = likeCount
     }
 
     // init method for just posted events

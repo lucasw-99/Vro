@@ -5,13 +5,13 @@ admin.initializeApp();
 const algoliasearch = require('algoliasearch');
 const algolia = algoliasearch(functions.config().algolia.appid, functions.config().algolia.adminkey);
 
-exports.updateEvents = functions.database.ref('/events/{eventId}').onWrite((event, context) => {
-    console.log('event:', event)
+exports.updateEvents = functions.database.ref('/events/{eventPostId}').onWrite((eventPost, context) => {
+    console.log('eventPost:', eventPost)
     console.log('params:', context)
-    const data = event.after.val()
+    const event = eventPost.after.val()["event"]
     const index = algolia.initIndex('events')
-    const eventId = context.params['eventId']
-    if (!data) {
+    const eventId = event["eventId"]
+    if (!event) {
         return index.deleteObject(eventId, (err) => {
             if (err) { 
                 console.log('err:', err)
@@ -22,16 +22,14 @@ exports.updateEvents = functions.database.ref('/events/{eventId}').onWrite((even
           })
     }
 
-    data['objectID'] = eventId
-    // TODO: Change client side key back to coordinate
-    data['_geoloc'] = data['event']['_geoloc']
-    console.log('data:', data)
-    return index.saveObject(data, (err, content) => {
+    event['objectID'] = eventId
+    console.log('event:', event)
+    return index.saveObject(event, (err, content) => {
         if (err) { 
             console.log('err:', err)
             return false
         }
-        console.log('Event Updated in Algolia Index with id:', data.objectID)
+        console.log('Event Updated in Algolia Index with id:', event.objectID)
         return true
     })    
 })
