@@ -66,15 +66,6 @@ extension MapViewWidget: MKMapViewDelegate {
         let mapRadiusCircle = MapRadius(origin: origin, radius: radius, color: .red)
         add(mapRadiusCircle)
 
-        // increase radius by 15 kilometers so you can see whole circle on map
-        let increasedRadius = radius + 15000
-
-        // center map view on mapRadiusCircle
-        let radiusInKilos = Double(increasedRadius) / 1000.0
-        let kilosPerDegree = 111.045
-        let radiusInDegrees = radiusInKilos / kilosPerDegree
-        let span = MKCoordinateSpanMake(radiusInDegrees, radiusInDegrees)
-        let region = MKCoordinateRegionMake(origin, span)
-        setRegion(region, animated: true)
+        visibleMapRect = mapRectThatFits(mapRadiusCircle.boundingMapRect, edgePadding: UIEdgeInsetsMake(60, 60, 60, 60))
     }
 }

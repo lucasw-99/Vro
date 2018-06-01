@@ -13,7 +13,7 @@ import Foundation
 protocol EventPostCellDelegate {
     func didTapLikeButton(_ likeButton: UIButton, forCell cell: EventPostCollectionViewCell)
     func didTapCommentButton(_ commentButton: UIButton, forEvent event: EventPost)
-    func didTapShareButton(_ postedByUID: String, eventPostID: String)
+    func didTapShareButton(_ shareButton: UIButton, forEvent event: Event)
     func didTapShowCommentsButton(showCommentsButton: UIButton, forEvent event: EventPost)
 }
 
@@ -65,22 +65,18 @@ class EventPostCollectionViewCell: UICollectionViewCell {
 // MARK: Button functions
 extension EventPostCollectionViewCell {
     @objc private func likeButtonPressed(_ sender: UIButton) {
-        print("Like button pressed")
         buttonDelegate?.didTapLikeButton(likeButton, forCell: self)
     }
 
     @objc private func commentButtonPressed(_ sender: Any) {
-        print("Comment button pressed")
         buttonDelegate?.didTapCommentButton(commentButton, forEvent: eventPost)
     }
 
     @objc private func shareButtonPressed(_ sender: Any) {
-        print("Share button pressed")
-        buttonDelegate?.didTapShareButton(eventPost.postedByUser.uid, eventPostID: eventPost.eventPostID)
+        buttonDelegate?.didTapShareButton(shareButton, forEvent: eventPost.event)
     }
 
     @objc private func showCommentsButtonPressed(_ sender: UIButton) {
-        print("Show comments button pressed")
         buttonDelegate?.didTapShowCommentsButton(showCommentsButton: sender, forEvent: eventPost)
     }
 }
@@ -115,6 +111,7 @@ extension EventPostCollectionViewCell {
         containerView.addSubview(commentButton)
 
         shareButton.setImage(#imageLiteral(resourceName: "contact_card"), for: .normal)
+        shareButton.addTarget(self, action: #selector(EventPostCollectionViewCell.shareButtonPressed(_:)), for: .touchUpInside)
         containerView.addSubview(shareButton)
 
         separatorView.backgroundColor = .gray

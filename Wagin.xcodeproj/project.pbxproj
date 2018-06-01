@@ -35,6 +35,7 @@
 		A0CB3A6120BEFC5A00207944 /* MapAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CB3A6020BEFC5A00207944 /* MapAnnotation.swift */; };
 		A0CB3A6320BF02BB00207944 /* EventMapCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CB3A6220BF02BB00207944 /* EventMapCollectionViewCell.swift */; };
 		A0CB3A6520C050E900207944 /* MapRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CB3A6420C050E900207944 /* MapRadius.swift */; };
+		A0CB3A6920C0C67500207944 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CB3A6820C0C67500207944 /* EventViewController.swift */; };
 		A0E73FF920A68D0C007E72D3 /* SearchUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E73FF820A68D0C007E72D3 /* SearchUsersViewController.swift */; };
 		A0E73FFB20A6912E007E72D3 /* SearchUsersCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E73FFA20A6912E007E72D3 /* SearchUsersCollectionViewCell.swift */; };
 		A0E73FFD20A7573D007E72D3 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E73FFC20A7573D007E72D3 /* UserProfileViewController.swift */; };
@@ -94,6 +95,7 @@
 		A0CB3A6020BEFC5A00207944 /* MapAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapAnnotation.swift; sourceTree = "<group>"; };
 		A0CB3A6220BF02BB00207944 /* EventMapCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMapCollectionViewCell.swift; sourceTree = "<group>"; };
 		A0CB3A6420C050E900207944 /* MapRadius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRadius.swift; sourceTree = "<group>"; };
+		A0CB3A6820C0C67500207944 /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		A0E73FF820A68D0C007E72D3 /* SearchUsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersViewController.swift; sourceTree = "<group>"; };
 		A0E73FFA20A6912E007E72D3 /* SearchUsersCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersCollectionViewCell.swift; sourceTree = "<group>"; };
 		A0E73FFC20A7573D007E72D3 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
@@ -267,6 +269,7 @@
 			children = (
 				A0C8B6C8209A163400A98D53 /* MapViewController.swift */,
 				A0CB3A6420C050E900207944 /* MapRadius.swift */,
+				A0CB3A6820C0C67500207944 /* EventViewController.swift */,
 			);
 			path = EventMap;
 			sourceTree = "<group>";
@@ -496,6 +499,7 @@
 				A056D80A20AD159600FA3F43 /* LikeService.swift in Sources */,
 				A08BA18320BEFA740062C72B /* MapViewWidget.swift in Sources */,
 				A0CB3A6320BF02BB00207944 /* EventMapCollectionViewCell.swift in Sources */,
+				A0CB3A6920C0C67500207944 /* EventViewController.swift in Sources */,
 				A0F2FB2E209CA5DB0018F465 /* NewsFeedViewController.swift in Sources */,
 				A0FF4696209176B9006FE799 /* LoginViewController.swift in Sources */,
 				A056D80E20AD15C100FA3F43 /* FollowersService.swift in Sources */,

@@ -185,8 +185,14 @@ extension NewsFeedViewController: EventPostCellDelegate {
         navigationController?.pushViewController(commentsViewController, animated: true)
     }
 
-    func didTapShareButton(_ postedByUID: String, eventPostID: String) {
-        print("unimplemented")
+    func didTapShareButton(_ shareButton: UIButton, forEvent event: Event) {
+        shareButton.isUserInteractionEnabled = false
+        defer {
+            shareButton.isUserInteractionEnabled = true
+        }
+
+        let eventViewController = EventViewController(forEvent: event)
+        navigationController?.pushViewController(eventViewController, animated: true)
     }
 
     func didTapShowCommentsButton(showCommentsButton: UIButton, forEvent event: EventPost) {
