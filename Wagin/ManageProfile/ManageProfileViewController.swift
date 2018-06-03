@@ -109,7 +109,7 @@ extension ManageProfileViewController {
     private func setupSubviews() {
         guard let currUser = UserService.currentUserProfile else { fatalError("Current user is nil") }
 
-        changeProfileButton.setImage(#imageLiteral(resourceName: "add_user_male"), for: .normal)
+        changeProfileButton.setImage(#imageLiteral(resourceName: "changeProfile"), for: .normal)
         Util.roundedCorners(ofColor: .black, element: changeProfileButton.imageView!)
         changeProfileButton.addTarget(self, action: #selector(ManageProfileViewController.changeProfilePicture(_:)), for: .touchUpInside)
         view.addSubview(changeProfileButton)
@@ -134,7 +134,7 @@ extension ManageProfileViewController {
         followerStatsLabel.textAlignment = .center
         view.addSubview(followerStatsLabel)
 
-        logoutButton.setImage(#imageLiteral(resourceName: "exit"), for: .normal)
+        logoutButton.setImage(#imageLiteral(resourceName: "logout"), for: .normal)
         logoutButton.addTarget(self, action: #selector(ManageProfileViewController.logoutUser(_:)), for: .touchUpInside)
         view.addSubview(logoutButton)
 

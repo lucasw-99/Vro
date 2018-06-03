@@ -78,7 +78,7 @@ extension ChooseAddressViewController {
         selectAddressLabel.textAlignment = .center
         selectAddressContainerView.addSubview(selectAddressLabel)
 
-        selectAddressButton.setImage(#imageLiteral(resourceName: "checked"), for: .normal)
+        selectAddressButton.setImage(#imageLiteral(resourceName: "accept"), for: .normal)
         selectAddressButton.addTarget(self, action: #selector(ChooseAddressViewController.selectAddress(_:)), for: .touchUpInside)
         selectAddressContainerView.addSubview(selectAddressButton)
 
@@ -173,6 +173,7 @@ extension ChooseAddressViewController {
     }
 }
 
+// MARK: User location
 extension ChooseAddressViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         manager.stopUpdatingLocation()
@@ -261,20 +262,36 @@ extension ChooseAddressViewController: UISearchBarDelegate {
     }
 }
 
+// MARK: Map view
 extension ChooseAddressViewController: MKMapViewDelegate {
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        if overlay is MKPolyline {
-            let renderer = MKPolylineRenderer(overlay: overlay)
-            renderer.strokeColor = .blue
-            renderer.lineWidth = 10
-            return renderer
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is MKUserLocation { return nil }
+
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "eventPin")
+
+        if annotationView == nil {
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "eventPin")
+            annotationView?.canShowCallout = true
+
+            let btn = UIButton(type: .detailDisclosure)
+            annotationView?.rightCalloutAccessoryView = btn
+            annotationView?.image = #imageLiteral(resourceName: "balloons")
+        } else {
+            annotationView?.annotation = annotation
         }
 
-        return MKOverlayRenderer()
+        return annotationView
+    }
+
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        let address = view.annotation?.title
+        let ac = UIAlertController(title: address!, message: nil, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
     }
 }
 
-// Extension for dropping a pin based on long touch press
+// MARK: Dropping a pin based on long touch press
 extension ChooseAddressViewController {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         // get the particular pin that was tapped

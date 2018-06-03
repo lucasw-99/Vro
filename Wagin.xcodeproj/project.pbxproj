@@ -32,8 +32,7 @@
 		A0AF4DE720B330A7001A9E09 /* PaddedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AF4DE620B330A7001A9E09 /* PaddedTextField.swift */; };
 		A0C8B6C9209A163400A98D53 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C8B6C8209A163400A98D53 /* MapViewController.swift */; };
 		A0C8B6CB209A185C00A98D53 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0C8B6CA209A185C00A98D53 /* MapKit.framework */; };
-		A0CB3A6120BEFC5A00207944 /* MapAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CB3A6020BEFC5A00207944 /* MapAnnotation.swift */; };
-		A0CB3A6320BF02BB00207944 /* EventMapCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CB3A6220BF02BB00207944 /* EventMapCollectionViewCell.swift */; };
+		A0CB3A6120BEFC5A00207944 /* EventAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CB3A6020BEFC5A00207944 /* EventAnnotation.swift */; };
 		A0CB3A6520C050E900207944 /* MapRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CB3A6420C050E900207944 /* MapRadius.swift */; };
 		A0CB3A6920C0C67500207944 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CB3A6820C0C67500207944 /* EventViewController.swift */; };
 		A0E73FF920A68D0C007E72D3 /* SearchUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E73FF820A68D0C007E72D3 /* SearchUsersViewController.swift */; };
@@ -92,8 +91,7 @@
 		A0AF4DE620B330A7001A9E09 /* PaddedTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddedTextField.swift; sourceTree = "<group>"; };
 		A0C8B6C8209A163400A98D53 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		A0C8B6CA209A185C00A98D53 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		A0CB3A6020BEFC5A00207944 /* MapAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapAnnotation.swift; sourceTree = "<group>"; };
-		A0CB3A6220BF02BB00207944 /* EventMapCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMapCollectionViewCell.swift; sourceTree = "<group>"; };
+		A0CB3A6020BEFC5A00207944 /* EventAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAnnotation.swift; sourceTree = "<group>"; };
 		A0CB3A6420C050E900207944 /* MapRadius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRadius.swift; sourceTree = "<group>"; };
 		A0CB3A6820C0C67500207944 /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		A0E73FF820A68D0C007E72D3 /* SearchUsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersViewController.swift; sourceTree = "<group>"; };
@@ -164,7 +162,6 @@
 		A0228F77209AC4E600E71C80 /* Global */ = {
 			isa = PBXGroup;
 			children = (
-				A08BA18420BEFBCE0062C72B /* Algolia */,
 				A0AD85F92093ED9B00D5F793 /* Util.swift */,
 				A0228F78209AC4F700E71C80 /* Constants.swift */,
 				A0AF4DE620B330A7001A9E09 /* PaddedTextField.swift */,
@@ -211,16 +208,6 @@
 			path = SearchAutocomplete;
 			sourceTree = "<group>";
 		};
-		A08BA18420BEFBCE0062C72B /* Algolia */ = {
-			isa = PBXGroup;
-			children = (
-				A08BA18220BEFA740062C72B /* MapViewWidget.swift */,
-				A0CB3A6020BEFC5A00207944 /* MapAnnotation.swift */,
-				A0CB3A6220BF02BB00207944 /* EventMapCollectionViewCell.swift */,
-			);
-			path = Algolia;
-			sourceTree = "<group>";
-		};
 		A0AF4DDF20B1E324001A9E09 /* ShowComments */ = {
 			isa = PBXGroup;
 			children = (
@@ -228,6 +215,16 @@
 				A0AF4DE420B1E603001A9E09 /* CommentCollectionViewCell.swift */,
 			);
 			path = ShowComments;
+			sourceTree = "<group>";
+		};
+		A0CB3A6A20C2347C00207944 /* MapClasses */ = {
+			isa = PBXGroup;
+			children = (
+				A0CB3A6020BEFC5A00207944 /* EventAnnotation.swift */,
+				A0CB3A6420C050E900207944 /* MapRadius.swift */,
+				A08BA18220BEFA740062C72B /* MapViewWidget.swift */,
+			);
+			path = MapClasses;
 			sourceTree = "<group>";
 		};
 		A0D1854F209A387400FC58D1 /* Login */ = {
@@ -267,8 +264,8 @@
 		A0D18553209A38CA00FC58D1 /* EventMap */ = {
 			isa = PBXGroup;
 			children = (
+				A0CB3A6A20C2347C00207944 /* MapClasses */,
 				A0C8B6C8209A163400A98D53 /* MapViewController.swift */,
-				A0CB3A6420C050E900207944 /* MapRadius.swift */,
 				A0CB3A6820C0C67500207944 /* EventViewController.swift */,
 			);
 			path = EventMap;
@@ -498,7 +495,6 @@
 				A0FF46AA20919435006FE799 /* SignupViewController.swift in Sources */,
 				A056D80A20AD159600FA3F43 /* LikeService.swift in Sources */,
 				A08BA18320BEFA740062C72B /* MapViewWidget.swift in Sources */,
-				A0CB3A6320BF02BB00207944 /* EventMapCollectionViewCell.swift in Sources */,
 				A0CB3A6920C0C67500207944 /* EventViewController.swift in Sources */,
 				A0F2FB2E209CA5DB0018F465 /* NewsFeedViewController.swift in Sources */,
 				A0FF4696209176B9006FE799 /* LoginViewController.swift in Sources */,
@@ -512,7 +508,7 @@
 				A0AD85FA2093ED9B00D5F793 /* Util.swift in Sources */,
 				A05D5A36209ECD580025E8C7 /* ChooseAddressViewController.swift in Sources */,
 				A0283D2220A295A100F4E700 /* UploadEventViewController.swift in Sources */,
-				A0CB3A6120BEFC5A00207944 /* MapAnnotation.swift in Sources */,
+				A0CB3A6120BEFC5A00207944 /* EventAnnotation.swift in Sources */,
 				A0FF4694209176B9006FE799 /* AppDelegate.swift in Sources */,
 				A0E73FFB20A6912E007E72D3 /* SearchUsersCollectionViewCell.swift in Sources */,
 				A0228F7E209B483A00E71C80 /* UserService.swift in Sources */,

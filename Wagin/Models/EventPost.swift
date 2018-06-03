@@ -66,7 +66,8 @@ class EventPost {
 
         let event = Event(eventJson: eventDict)
         let timestamp = Date(timeIntervalSince1970: eventPostTimestamp / 1000)
-        let postedByUser = UserProfile(postedByUID, postedByUsername, postedByPhotoURL)
+        let postedByUser = UserProfile(
+            postedByUID, postedByUsername, postedByPhotoURL)
 
         self.postedByUser = postedByUser
         self.event = event

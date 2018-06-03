@@ -172,7 +172,7 @@ extension ShowCommentsViewController {
         titleLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
         titleView.addSubview(titleLabel)
 
-        backButton.setImage(#imageLiteral(resourceName: "cancel"), for: .normal)
+        backButton.setImage(#imageLiteral(resourceName: "back"), for: .normal)
         backButton.addTarget(self, action: #selector(ShowCommentsViewController.didTapBackButton(_:)), for: .touchUpInside)
         titleView.addSubview(backButton)
 

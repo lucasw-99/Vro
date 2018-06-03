@@ -90,6 +90,43 @@ extension MapViewController {
     }
 }
 
+// MARK: EventAnnotation button function
+extension MapViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        guard let eventAnnotation = view.annotation as? EventAnnotation else { fatalError("Expected event annotation") }
+        let eventViewController = EventViewController(forEvent: eventAnnotation.event)
+        navigationController?.pushViewController(eventViewController, animated: true)
+    }
+
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if let mapRadius = overlay as? MapRadius {
+            let circleView = MKCircleRenderer(overlay: mapRadius)
+            circleView.strokeColor = mapRadius.color
+            return circleView
+        }
+        return MKOverlayRenderer()
+    }
+
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is MKUserLocation { return nil }
+        let identifier = "eventPin"
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+
+        if annotationView == nil {
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            annotationView?.canShowCallout = true
+            // TODO: Change to a cooler button
+            let btn = UIButton(type: .infoDark)
+            annotationView?.rightCalloutAccessoryView = btn
+            annotationView?.image = #imageLiteral(resourceName: "balloons")
+        } else {
+            annotationView?.annotation = annotation
+        }
+
+        return annotationView
+    }
+}
+
 // MARK: Setup subviews
 extension MapViewController {
     private func setupSubviews() {
@@ -131,6 +168,7 @@ extension MapViewController {
 
         view.addSubview(headerView)
 
+        mapViewWidget.delegate = self
         view.addSubview(mapViewWidget)
 
         locationManager.requestWhenInUseAuthorization()

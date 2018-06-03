@@ -84,7 +84,7 @@ extension EventPostCollectionViewCell {
 // MARK: Setup subviews
 extension EventPostCollectionViewCell {
     private func setupSubviews() {
-        userImage.image = #imageLiteral(resourceName: "user_group_man_woman")
+        userImage.image = #imageLiteral(resourceName: "user")
         userHeaderView.addSubview(userImage)
 
         usernameLabel.text = "User"
@@ -104,13 +104,13 @@ extension EventPostCollectionViewCell {
         likeButton.addTarget(self, action: #selector(EventPostCollectionViewCell.likeButtonPressed(_:)), for: .touchUpInside)
         containerView.addSubview(likeButton)
 
-        let commentImage: UIImage = #imageLiteral(resourceName: "speech_buble")
+        let commentImage: UIImage = #imageLiteral(resourceName: "comment")
         commentButton.setImage(commentImage, for: .normal)
         commentButton.setImage(commentImage.maskWithColor(color: .white), for: .selected)
         commentButton.addTarget(self, action: #selector(EventPostCollectionViewCell.commentButtonPressed(_:)), for: .touchUpInside)
         containerView.addSubview(commentButton)
 
-        shareButton.setImage(#imageLiteral(resourceName: "contact_card"), for: .normal)
+        shareButton.setImage(#imageLiteral(resourceName: "seeDetails"), for: .normal)
         shareButton.addTarget(self, action: #selector(EventPostCollectionViewCell.shareButtonPressed(_:)), for: .touchUpInside)
         containerView.addSubview(shareButton)
 

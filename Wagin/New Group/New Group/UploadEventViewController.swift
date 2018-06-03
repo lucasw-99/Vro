@@ -66,11 +66,11 @@ extension UploadEventViewController {
         Util.roundedCorners(ofColor: .lightGray, element: uploadEventImageButton)
         contentView.addSubview(uploadEventImageButton)
 
-        eventImageView.image = #imageLiteral(resourceName: "cloud")
+        eventImageView.image = #imageLiteral(resourceName: "defaultEvent")
         Util.makeImageCircular(image: eventImageView)
         contentView.addSubview(eventImageView)
 
-        uploadEventImageButton.setImage(#imageLiteral(resourceName: "upload"), for: .normal)
+        uploadEventImageButton.setImage(#imageLiteral(resourceName: "uploadImage"), for: .normal)
         uploadEventImageButton.addTarget(self, action: #selector(UploadEventViewController.uploadEventImage(_:)), for: .touchUpInside)
         Util.roundedCorners(ofColor: .lightGray, element: uploadEventImageButton)
         contentView.addSubview(uploadEventImageButton)
@@ -82,8 +82,7 @@ extension UploadEventViewController {
         Util.roundedCorners(ofColor: .lightGray, element: backButton)
         contentView.addSubview(backButton)
 
-        postEventButton.setTitle("Post", for: .normal)
-        postEventButton.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        postEventButton.setImage(#imageLiteral(resourceName: "upload"), for: .normal)
         postEventButton.addTarget(self, action: #selector(UploadEventViewController.postNewEvent(_:)), for: .touchUpInside)
         postEventButton.backgroundColor = .lightGray
         Util.roundedCorners(ofColor: .lightGray, element: postEventButton)

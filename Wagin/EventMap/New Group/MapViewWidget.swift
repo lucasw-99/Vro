@@ -17,7 +17,6 @@ class MapViewWidget: MKMapView, AlgoliaWidget, ResultingDelegate {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -39,43 +38,12 @@ class MapViewWidget: MKMapView, AlgoliaWidget, ResultingDelegate {
 
         guard let results = results else { return }
 
-        // TODO: Change weak to unowned so we don't have to do that BS unwrapping
-        results.hits.forEach { [weak self] hit in
-            let annotation = MapAnnotation(eventJson: hit)
-            self?.addAnnotation(annotation)
+        results.hits.forEach { [unowned self] hit in
+            let annotation = EventAnnotation(eventJson: hit)
+            self.addAnnotation(annotation)
         }
 
         addRadiusCircle(origin: origin, radius: radius)
-    }
-}
-
-
-// MARK: Map view
-extension MapViewWidget: MKMapViewDelegate {
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        if let mapRadius = overlay as? MapRadius {
-            let circleView = MKCircleRenderer(overlay: mapRadius)
-            circleView.strokeColor = mapRadius.color
-            return circleView
-        }
-        return MKOverlayRenderer()
-    }
-
-    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        guard let selectedAnnotation = view.annotation as? MapAnnotation else { return }
-        print("selected event: \(selectedAnnotation.event.eventId)")
-    }
-
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        if annotation is MKUserLocation {
-            return nil
-        }
-        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "pin")
-        if let annotationView = annotationView {
-            annotationView.annotation = annotation
-        } else {
-            
-        }
     }
 
     private func addRadiusCircle(origin: CLLocationCoordinate2D, radius: Int) {

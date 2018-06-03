@@ -30,19 +30,19 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
     func initializeTabViewControllers() {
         let newsFeedController = NewsFeedViewController()
         newsFeedController.title = "News Feed"
-        newsFeedController.tabBarItem = UITabBarItem(title: "News Feed", image: #imageLiteral(resourceName: "people"), tag: 0)
+        newsFeedController.tabBarItem = UITabBarItem(title: "News Feed", image: #imageLiteral(resourceName: "party"), tag: 0)
 
         let searchUsersController = SearchUsersViewController()
         searchUsersController.title = "Search Users"
-        searchUsersController.tabBarItem = UITabBarItem(title: "Search Users", image: #imageLiteral(resourceName: "search"), tag: 1)
+        searchUsersController.tabBarItem = UITabBarItem(title: "Search Users", image: #imageLiteral(resourceName: "magnifyingGlass"), tag: 1)
 
         let newEventController = NewEventDummyViewController()
         newEventController.title = "New Event"
-        newEventController.tabBarItem = UITabBarItem(title: "New Event", image: #imageLiteral(resourceName: "create_new"), tag: 2)
+        newEventController.tabBarItem = UITabBarItem(title: "New Event", image: #imageLiteral(resourceName: "plus"), tag: 2)
 
         let nearYouController = MapViewController()
         nearYouController.title = "Near You"
-        nearYouController.tabBarItem = UITabBarItem(title: "Near You", image: #imageLiteral(resourceName: "map_marker"), tag: 3)
+        nearYouController.tabBarItem = UITabBarItem(title: "Near You", image: #imageLiteral(resourceName: "earth"), tag: 3)
 
         let manageProfileController = ManageProfileViewController()
         manageProfileController.title = "Manage Profile"
