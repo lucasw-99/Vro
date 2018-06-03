@@ -47,6 +47,11 @@ class ChooseAddressViewController: UIViewController {
         let eventMetadataViewController = EventMetadataViewController(selectedPin: pin)
         navigationController?.pushViewController(eventMetadataViewController, animated: true)
     }
+
+    // used to dismiss keyboard when touch event on map
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
 }
 
 // MARK: Setup subviews
@@ -88,12 +93,13 @@ extension ChooseAddressViewController {
         selectAddressContainerView.alpha = 0.95
         view.addSubview(selectAddressContainerView)
 
-        // add table view after mapView so it can lay over it
-        view.addSubview(autocompleteResultTable)
         autocompleteResultTable.register(AutocompleteResultTableViewCell.self, forCellReuseIdentifier: Constants.Cells.autocompleteSearchResultCell)
+        autocompleteResultTable.keyboardDismissMode = .onDrag
         autocompleteResultTable.isHidden = !mapViewHidden
         autocompleteResultTable.delegate = self
         autocompleteResultTable.dataSource = self
+        // add table view after mapView so it can lay over it
+        view.addSubview(autocompleteResultTable)
 
         // show map view, hide table view
         showAndHideViews()

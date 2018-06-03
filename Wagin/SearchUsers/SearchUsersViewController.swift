@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchUsersViewController: UIViewController {
+class SearchUsersViewController: UIViewController, UIGestureRecognizerDelegate {
     private let searchBar = UISearchBar()
     private let userCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -28,6 +28,10 @@ class SearchUsersViewController: UIViewController {
         setupLayout()
     }
 
+    @objc private func dismissKeyboard(_ sender: UITapGestureRecognizer) {
+        print("tap gesture recognizer called")
+        view.endEditing(true)
+    }
 }
 
 // MARK: Setup subviews
@@ -41,6 +45,10 @@ extension SearchUsersViewController {
         userCollectionView.register(SearchUsersCollectionViewCell.self, forCellWithReuseIdentifier: Constants.Cells.searchUsersCell)
         userCollectionView.delegate = self
         userCollectionView.dataSource = self
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(SearchUsersViewController.dismissKeyboard(_:)))
+        tapRecognizer.numberOfTapsRequired = 1
+        tapRecognizer.cancelsTouchesInView = false
+        userCollectionView.addGestureRecognizer(tapRecognizer)
         view.addSubview(userCollectionView)
 
         view.backgroundColor = .white
@@ -69,7 +77,6 @@ extension SearchUsersViewController: UISearchBarDelegate {
         searchBar.endEditing(true)
         let usernameToFind = searchBar.text!
         UserService.fetchUser(usernameToFind) { user in
-            print("userProfile: \(user)")
             if let foundUser = user {
                 self.dataSource = [foundUser]
             } else {
@@ -133,7 +140,7 @@ extension SearchUsersViewController: UICollectionViewDelegate, UICollectionViewD
 // Collection view flow layout
 extension SearchUsersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 5, bottom: 30, right: 5)
+        return UIEdgeInsets(top: 0, left: 5, bottom: 10, right: 5)
     }
 }
 

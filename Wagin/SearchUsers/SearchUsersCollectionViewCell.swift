@@ -27,12 +27,16 @@ class SearchUsersCollectionViewCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    func makeProfileImageCircular() {
+        userProfileImage.layer.cornerRadius = self.userProfileImage.frame.width / 2
+    }
 }
 
 // MARK: Setup subviews
 extension SearchUsersCollectionViewCell {
     private func setupSubviews() {
-        userProfileImage.clipsToBounds = true
+        Util.makeImageCircular(image: userProfileImage, 50)
         contentView.addSubview(userProfileImage)
 
         usernameLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
@@ -45,6 +49,7 @@ extension SearchUsersCollectionViewCell {
         userProfileImage.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
             make.width.equalTo(50)
             make.height.equalTo(50)
         }
@@ -63,7 +68,6 @@ extension SearchUsersCollectionViewCell {
         usernameLabel.text = user.username
         ImageService.getImage(withURL: user.photoURL) { image in
             self.userProfileImage.image = image
-            self.userProfileImage.layer.cornerRadius = self.userProfileImage.frame.width / 2
         }
     }
 }

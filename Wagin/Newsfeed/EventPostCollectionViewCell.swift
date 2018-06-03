@@ -85,6 +85,7 @@ extension EventPostCollectionViewCell {
 extension EventPostCollectionViewCell {
     private func setupSubviews() {
         userImage.image = #imageLiteral(resourceName: "user")
+        Util.makeImageCircular(image: userImage, 36)
         userHeaderView.addSubview(userImage)
 
         usernameLabel.text = "User"
@@ -238,7 +239,6 @@ extension EventPostCollectionViewCell {
         print("photoURL: \(eventPost.postedByUser.photoURL), caption: \(eventPost.caption)")
         ImageService.getImage(withURL: eventPost.postedByUser.photoURL, completion: { image in
             self.userImage.image = image
-            Util.makeImageCircular(image: self.userImage)
         })
         userImage.layer.borderWidth = 1
         userImage.layer.borderColor = UIColor.lightGray.cgColor
