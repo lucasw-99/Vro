@@ -38,7 +38,7 @@ class LikeService {
     static func likePost(for post: EventPost, success: @escaping ( (_ success: Bool) -> Void )) {
         guard let currentUID = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
         let eventPostID = post.eventPostID
-        let likesPath = String(format: Constants.Database.userPostLikes, post.postedByUser.uid, eventPostID, currentUID)
+        let likesPath = String(format: Constants.Database.userPostLikes, post.event.host.uid, eventPostID, currentUID)
         let likesRef = Database.database().reference().child(likesPath)
 
         likesRef.setValue(true) { error, _ in
@@ -63,10 +63,10 @@ class LikeService {
         }
     }
 
-    private static func unlikePost(for post: EventPost, success: @escaping ( (_ success: Bool) -> Void )) {
+    private static func unlikePost(for eventPost: EventPost, success: @escaping ( (_ success: Bool) -> Void )) {
         guard let currentUID = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
-        let eventPostID = post.eventPostID
-        let likesPath = String(format: Constants.Database.userPostLikes, post.postedByUser.uid, eventPostID, currentUID)
+        let eventPostID = eventPost.eventPostID
+        let likesPath = String(format: Constants.Database.userPostLikes, eventPost.event.host.uid, eventPostID, currentUID)
         let likesRef = Database.database().reference().child(likesPath)
 
         likesRef.removeValue() { error, _ in

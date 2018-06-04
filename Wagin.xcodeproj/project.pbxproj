@@ -16,6 +16,7 @@
 		A04A777620C4F10800106E06 /* AutocompleteResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04A777320C4F10800106E06 /* AutocompleteResultTableViewCell.swift */; };
 		A04A777720C4F10800106E06 /* ChooseAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04A777420C4F10800106E06 /* ChooseAddressViewController.swift */; };
 		A04A777920C4F22F00106E06 /* NewEventDummyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04A777820C4F22F00106E06 /* NewEventDummyViewController.swift */; };
+		A04A777B20C4FB8300106E06 /* AttendEventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04A777A20C4FB8300106E06 /* AttendEventService.swift */; };
 		A056D7E120AB3C8F00FA3F43 /* UserFollowers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A056D7E020AB3C8F00FA3F43 /* UserFollowers.swift */; };
 		A056D80620AD156E00FA3F43 /* EventPostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A056D80520AD156E00FA3F43 /* EventPostService.swift */; };
 		A056D80820AD157D00FA3F43 /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A056D80720AD157D00FA3F43 /* CommentService.swift */; };
@@ -74,6 +75,7 @@
 		A04A777320C4F10800106E06 /* AutocompleteResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteResultTableViewCell.swift; sourceTree = "<group>"; };
 		A04A777420C4F10800106E06 /* ChooseAddressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseAddressViewController.swift; sourceTree = "<group>"; };
 		A04A777820C4F22F00106E06 /* NewEventDummyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewEventDummyViewController.swift; sourceTree = "<group>"; };
+		A04A777A20C4FB8300106E06 /* AttendEventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendEventService.swift; sourceTree = "<group>"; };
 		A056D7E020AB3C8F00FA3F43 /* UserFollowers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFollowers.swift; sourceTree = "<group>"; };
 		A056D80520AD156E00FA3F43 /* EventPostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPostService.swift; sourceTree = "<group>"; };
 		A056D80720AD157D00FA3F43 /* CommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentService.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				A056D80920AD159600FA3F43 /* LikeService.swift */,
 				A056D80B20AD15AD00FA3F43 /* TimelineService.swift */,
 				A056D80D20AD15C100FA3F43 /* FollowersService.swift */,
+				A04A777A20C4FB8300106E06 /* AttendEventService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -489,6 +492,7 @@
 				A0FF4696209176B9006FE799 /* LoginViewController.swift in Sources */,
 				A056D80E20AD15C100FA3F43 /* FollowersService.swift in Sources */,
 				A056D80820AD157D00FA3F43 /* CommentService.swift in Sources */,
+				A04A777B20C4FB8300106E06 /* AttendEventService.swift in Sources */,
 				A0648FFD20981138001417D7 /* ManageProfileViewController.swift in Sources */,
 				A0AF4DE120B1E3A8001A9E09 /* ShowCommentsViewController.swift in Sources */,
 				A05D5A34209E75470025E8C7 /* ImageService.swift in Sources */,

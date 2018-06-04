@@ -10,14 +10,34 @@ import UIKit
 import MapKit
 
 class Event {
-    let hostUID: String
+    var dictValue: [String: Any] {
+        let eventTimeString = Util.dateToString(date: eventTime)
+
+        let eventObject = [
+            "host": host.dictValue,
+            // TODO: Change this to a valid description of event
+            "description": description,
+            "address": address,
+            "_geoloc": [
+                "lat": coordinate.latitude,
+                "lng": coordinate.longitude
+            ],
+            "eventImageURL": eventImageURL,
+            "eventTime": eventTimeString,
+            "attendeeCount": attendeeCount
+        ] as [String: Any]
+
+        return eventObject
+    }
+
+    let host: UserProfile
     // TODO: Make it a URL???
     let eventImageURL: String
     let description: String
     let address: String
     let coordinate: CLLocationCoordinate2D
     let eventTime: Date
-    let eventId: String
+    var attendeeCount: Int
     // TODO: Make address optional
 
     init(eventJson json: [String: Any]) {
@@ -28,30 +48,29 @@ class Event {
             let description = json["description"] as? String,
             let eventImageUrl = json["eventImageURL"] as? String,
             let eventTime = json["eventTime"] as? String,
-            let hostUid = json["hostUID"] as? String,
-            let eventId = json["eventId"] as? String else { fatalError("Malformatted json for event") }
-        self.hostUID = hostUid
+            let hostDict = json["host"] as? [String: Any],
+            let attendeeCount = json["attendeeCount"] as? Int else { fatalError("Malformatted json for event") }
+        self.host = UserProfile(userJson: hostDict)
         self.eventImageURL = eventImageUrl
         self.description = description
         self.address = address
         self.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
         self.eventTime = Util.stringToDate(dateString: eventTime)
-        self.eventId = eventId
+        self.attendeeCount = attendeeCount
     }
 
-    init(_ hostUID: String,
+    init(_ host: UserProfile,
          _ eventImageURL: String,
          _ description: String,
          _ address: String,
          _ eventTime: Date,
-         _ eventId: String,
          _ coordinate: CLLocationCoordinate2D) {
-        self.hostUID = hostUID
+        self.host = host
         self.eventImageURL = eventImageURL
         self.description = description
         self.address = address
         self.eventTime = eventTime
         self.coordinate = coordinate
-        self.eventId = eventId
+        self.attendeeCount = 0
     }
 }

@@ -52,6 +52,15 @@ class Constants {
 
         // 1: EventPost ID
         static let eventPostComments = "events/%@/comments"
+
+        // 1: EventPostId
+        static let eventAttendeeCount = "events/%@/event/attendeeCount"
+
+        // 1: EventId, 2: uid
+        static let eventPotentialAttending = "attending/%@/potential/%@"
+
+        // 1: EventId, 2: uid
+        static let eventActualAttending = "attending/%@/actual/%@"
     }
     class Storage {
         // 1: uid, 2: Randomly generated ID

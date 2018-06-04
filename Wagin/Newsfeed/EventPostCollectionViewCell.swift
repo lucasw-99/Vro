@@ -234,10 +234,10 @@ extension EventPostCollectionViewCell {
     }
 
     private func updateUI() {
-        usernameLabel.text = eventPost.postedByUser.username
+        usernameLabel.text = eventPost.event.host.username
 
-        print("photoURL: \(eventPost.postedByUser.photoURL), caption: \(eventPost.caption)")
-        ImageService.getImage(withURL: eventPost.postedByUser.photoURL, completion: { image in
+        print("photoURL: \(eventPost.event.host.photoURL.absoluteString), caption: \(eventPost.caption)")
+        ImageService.getImage(withURL: eventPost.event.host.photoURL, completion: { image in
             self.userImage.image = image
         })
         userImage.layer.borderWidth = 1

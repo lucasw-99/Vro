@@ -11,7 +11,6 @@ import MapKit
 import FirebaseDatabase
 
 class EventPost {
-    let postedByUser: UserProfile
     let event: Event
     let caption: String
     let timestamp: Date
@@ -20,27 +19,8 @@ class EventPost {
     var isLiked: Bool = false
 
     var dictValue: [String: Any] {
-        let eventTimeString = Util.dateToString(date: event.eventTime)
-
         let eventPostObject = [
-            "postedByUser": [
-                "uid": postedByUser.uid,
-                "username": postedByUser.username,
-                "photoURL": postedByUser.photoURL.absoluteString
-            ],
-            "event": [
-                "hostUID": event.hostUID,
-                // TODO: Change this to a valid description of event
-                "description": event.description,
-                "address": event.address,
-                "_geoloc": [
-                    "lat": event.coordinate.latitude,
-                    "lng": event.coordinate.longitude
-                ],
-                "eventImageURL": event.eventImageURL,
-                "eventTime": eventTimeString,
-                "eventId": event.eventId
-            ],
+            "event": event.dictValue,
             "likeCount": likeCount,
             "caption": caption,
             // TODO: Store timestamp as negative value to sort from most recent to least recent?
@@ -53,11 +33,6 @@ class EventPost {
 
     init(forSnapshot snapshot: DataSnapshot) {
         guard let eventPostDict = snapshot.value as? [String: Any],
-            let postedByUserDict = eventPostDict["postedByUser"] as? [String: Any],
-            let postedByUID = postedByUserDict["uid"] as? String,
-            let postedByUsername = postedByUserDict["username"] as? String,
-            let postedByPhotoURLString = postedByUserDict["photoURL"] as? String,
-            let postedByPhotoURL = URL(string: postedByPhotoURLString),
             let eventDict = eventPostDict["event"] as? [String: Any],
             let eventPostCaption = eventPostDict["caption"] as? String,
             let eventPostTimestamp = eventPostDict["timestamp"] as? TimeInterval,
@@ -66,10 +41,6 @@ class EventPost {
 
         let event = Event(eventJson: eventDict)
         let timestamp = Date(timeIntervalSince1970: eventPostTimestamp / 1000)
-        let postedByUser = UserProfile(
-            postedByUID, postedByUsername, postedByPhotoURL)
-
-        self.postedByUser = postedByUser
         self.event = event
         self.caption = eventPostCaption
         self.timestamp = timestamp
@@ -82,8 +53,6 @@ class EventPost {
          _ caption: String,
          _ timestamp: Date,
          _ eventPostID: String) {
-        guard let currentUser = UserService.currentUserProfile else { fatalError("user nil") }
-        self.postedByUser = currentUser
         self.event = event
         self.caption = caption
         self.timestamp = timestamp

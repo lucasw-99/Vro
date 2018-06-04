@@ -8,12 +8,7 @@
 
 import FirebaseDatabase
 
-// TODO: Make this class post to "EventPost" root in firebase!
 class EventPostService {
-
-    // user: UserProfile that is making the post
-    // eventPostID: The id of the EventPost
-    // date: date of the event
     static func setEvent(_ eventPost: EventPost, success: @escaping ( () -> () )) {
         guard eventPost.likeCount == 0 else { fatalError("Like count not zero when posting new event") }
 
@@ -22,12 +17,12 @@ class EventPostService {
 
         eventRef.setValue(eventPost.dictValue)
 
-        let userFollowersPath = String(format: Constants.Database.userFollowerInfo, eventPost.postedByUser.uid)
+        let userFollowersPath = String(format: Constants.Database.userFollowerInfo, eventPost.event.host.uid)
         let userFollowersRef = Database.database().reference().child(userFollowersPath)
-        FollowersService.getFollowerInfo(eventPost.postedByUser.uid, userFollowersRef) { followerInfo in
+        FollowersService.getFollowerInfo(eventPost.event.host.uid, userFollowersRef) { followerInfo in
             // add this event to all followers timelines
             var followers = followerInfo.followers
-            followers.insert(eventPost.postedByUser.uid)
+            followers.insert(eventPost.event.host.uid)
             TimelineService.addPostToTimelines(followers, eventPost.eventPostID) {
                 print("Finished!")
                 success()

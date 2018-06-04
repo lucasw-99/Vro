@@ -19,6 +19,7 @@ class EventViewController: UIViewController {
     
     private let addressTextView = UITextView()
     private let descriptionLabel = UILabel()
+    private let attendEventButton = UIButton()
     private let footerView = UIView()
 
     // TODO: Add the rest of the event fields
@@ -46,8 +47,12 @@ class EventViewController: UIViewController {
 
 // MARK: Button functions
 extension EventViewController {
-    @objc private func backButtonPressed(_ sender: Any) {
+    @objc private func backButtonPressed(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
+    }
+
+    @objc private func attendEventButtonPressed(_ sender: UIButton) {
+        print("attend event button pressed")
     }
 }
 
@@ -75,6 +80,13 @@ extension EventViewController {
         descriptionLabel.font = UIFont.systemFont(ofSize: 14)
         descriptionLabel.numberOfLines = 0
         contentView.addSubview(descriptionLabel)
+
+        // TODO: Finish attend implementation
+//        attendEventButton.setTitle(String?, for: UIControlState)
+        attendEventButton.titleLabel?.textAlignment = .center
+        attendEventButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        attendEventButton.addTarget(self, action: #selector(EventViewController.attendEventButtonPressed(_:)), for: .touchUpInside)
+        contentView.addSubview(attendEventButton)
 
         footerView.backgroundColor = .black
         contentView.addSubview(footerView)
@@ -113,8 +125,15 @@ extension EventViewController {
             make.top.equalTo(addressTextView.snp.bottom).offset(20)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.bottom.lessThanOrEqualTo(footerView.snp.top)
 //            make.bottom.equalTo(footerView.snp.top).priority(999)
+        }
+
+        attendEventButton.snp.makeConstraints { make in
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(50)
+            make.width.equalTo(100)
+            make.height.equalTo(30)
+            make.centerX.equalToSuperview()
+            make.bottom.lessThanOrEqualTo(footerView.snp.top)
         }
 
         footerView.snp.makeConstraints { make in

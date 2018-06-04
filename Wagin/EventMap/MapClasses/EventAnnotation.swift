@@ -22,7 +22,7 @@ class EventAnnotation: NSObject, MKAnnotation {
         self.coordinate = event.coordinate
         self.title = "Event on \(Util.dateToString(date: event.eventTime))"
         super.init()
-        UserService.observeUserProfile(event.hostUID) { host in
+        UserService.observeUserProfile(event.host.uid) { host in
             guard let host = host else { fatalError("host was nil") }
             self.subtitle = "Hosted by \(host.username)"
         }

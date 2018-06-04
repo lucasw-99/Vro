@@ -50,10 +50,10 @@ class TimelineService {
                 dispatchGroup.enter()
                 if let childSnapshot = child as? DataSnapshot {
                     let eventID = childSnapshot.key
-                    EventPostService.getEvent(eventID) { event in
-                        LikeService.isPostLiked(event.postedByUser.uid, eventPostID: event.eventPostID, uid: currentUID) { isLiked in
-                            event.isLiked = isLiked
-                            posts.append(event)
+                    EventPostService.getEvent(eventID) { eventPost in
+                        LikeService.isPostLiked(eventPost.event.host.uid, eventPostID: eventPost.eventPostID, uid: currentUID) { isLiked in
+                            eventPost.isLiked = isLiked
+                            posts.append(eventPost)
                             print("Calling leave on dispatch queue")
                             dispatchGroup.leave()
                         }

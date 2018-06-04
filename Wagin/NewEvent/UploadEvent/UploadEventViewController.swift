@@ -68,15 +68,15 @@ extension UploadEventViewController {
     @objc private func postNewEvent(_ sender: Any) {
         // TODO: Disable button until all fields are filled in
         print("Post new event pressed")
-        guard let currentUserUid = UserService.currentUserProfile?.uid else { fatalError("Posting new event without valid userProfile") }
+        guard let currentUser = UserService.currentUserProfile else { fatalError("Posting new event without valid userProfile") }
         // TODO: Allow no image?
         guard let eventImageUrl = eventImageUrl else { fatalError("event image url is nil") }
         let eventPostID = Util.generateId()
         let description = "Not implemented yet 🤡"
-        let event = Event(currentUserUid, eventImageUrl.absoluteString, description, providedAddress, eventDate.date, Util.generateId(), selectedPin.coordinate)
+        let event = Event(currentUser, eventImageUrl.absoluteString, description, providedAddress, eventDate.date, selectedPin.coordinate)
         let eventPost = EventPost(event, captionText.text, Date(), eventPostID)
         EventPostService.setEvent(eventPost, success: dismissNewEventViewControllers)
-        EventPostService.setEventPostID(currentUserUid, eventPostID)
+        EventPostService.setEventPostID(currentUser.uid, eventPostID)
     }
 
     @objc func cancelButtonPressed(_ sender: Any) {

@@ -10,19 +10,19 @@ exports.updateEvents = functions.database.ref('/events/{eventPostId}').onWrite((
     console.log('params:', context)
     const event = eventPost.after.val()["event"]
     const index = algolia.initIndex('events')
-    const eventId = event["eventId"]
+    const eventPostId = context.params.eventPostId
     if (!event) {
-        return index.deleteObject(eventId, (err) => {
+        return index.deleteObject(eventPostId, (err) => {
             if (err) { 
                 console.log('err:', err)
                 return false
             }
-            console.log('Event Removed from Algolia Index with id:', eventId)
+            console.log('Event Removed from Algolia Index with id:', eventPostId)
             return true
           })
     }
 
-    event['objectID'] = eventId
+    event['objectID'] = eventPostId
     console.log('event:', event)
     return index.saveObject(event, (err, content) => {
         if (err) { 

@@ -13,6 +13,27 @@ class UserProfile {
     let username: String
     let photoURL: URL
 
+    var dictValue: [String: Any] {
+        let userProfileObject = [
+                "uid": uid,
+                "username": username,
+                "photoURL": photoURL.absoluteString
+        ] as [String: Any]
+
+        return userProfileObject
+    }
+
+
+    init(userJson json: [String: Any]) {
+        guard let uid = json["uid"] as? String,
+            let username = json["username"] as? String,
+            let photoUrlString = json["photoURL"] as? String,
+            let photoUrl = URL(string: photoUrlString) else { fatalError("Malformatted json for UserProfile") }
+        self.uid = uid
+        self.username = username
+        self.photoURL = photoUrl
+    }
+
     // init method meant for filtering users in search (so far)
     init(forSnapshot snapshot: DataSnapshot) {
         guard let dict = snapshot.value as? [String: Any],
