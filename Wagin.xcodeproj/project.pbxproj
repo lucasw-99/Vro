@@ -12,7 +12,10 @@
 		A0228F7B209ACBAC00E71C80 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F7A209ACBAC00E71C80 /* Event.swift */; };
 		A0228F7E209B483A00E71C80 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F7D209B483A00E71C80 /* UserService.swift */; };
 		A0228F80209B488500E71C80 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F7F209B488500E71C80 /* UserProfile.swift */; };
-		A050022C20A12B0900BBCA6D /* UploadEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A050022B20A12B0900BBCA6D /* UploadEventViewController.swift */; };
+		A04A777520C4F10800106E06 /* UploadEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04A777020C4F10800106E06 /* UploadEventViewController.swift */; };
+		A04A777620C4F10800106E06 /* AutocompleteResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04A777320C4F10800106E06 /* AutocompleteResultTableViewCell.swift */; };
+		A04A777720C4F10800106E06 /* ChooseAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04A777420C4F10800106E06 /* ChooseAddressViewController.swift */; };
+		A04A777920C4F22F00106E06 /* NewEventDummyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04A777820C4F22F00106E06 /* NewEventDummyViewController.swift */; };
 		A056D7E120AB3C8F00FA3F43 /* UserFollowers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A056D7E020AB3C8F00FA3F43 /* UserFollowers.swift */; };
 		A056D80620AD156E00FA3F43 /* EventPostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A056D80520AD156E00FA3F43 /* EventPostService.swift */; };
 		A056D80820AD157D00FA3F43 /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A056D80720AD157D00FA3F43 /* CommentService.swift */; };
@@ -20,8 +23,6 @@
 		A056D80C20AD15AD00FA3F43 /* TimelineService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A056D80B20AD15AD00FA3F43 /* TimelineService.swift */; };
 		A056D80E20AD15C100FA3F43 /* FollowersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A056D80D20AD15C100FA3F43 /* FollowersService.swift */; };
 		A05D5A34209E75470025E8C7 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05D5A33209E75460025E8C7 /* ImageService.swift */; };
-		A05D5A36209ECD580025E8C7 /* ChooseAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05D5A35209ECD580025E8C7 /* ChooseAddressViewController.swift */; };
-		A05D5A3C20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05D5A3B20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift */; };
 		A0648FFD20981138001417D7 /* ManageProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0648FFC20981138001417D7 /* ManageProfileViewController.swift */; };
 		A08BA18320BEFA740062C72B /* MapViewWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08BA18220BEFA740062C72B /* MapViewWidget.swift */; };
 		A0AD85FA2093ED9B00D5F793 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AD85F92093ED9B00D5F793 /* Util.swift */; };
@@ -38,7 +39,6 @@
 		A0E73FFB20A6912E007E72D3 /* SearchUsersCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E73FFA20A6912E007E72D3 /* SearchUsersCollectionViewCell.swift */; };
 		A0E73FFD20A7573D007E72D3 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E73FFC20A7573D007E72D3 /* UserProfileViewController.swift */; };
 		A0F2FB2A209C0CCD0018F465 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F2FB29209C0CCD0018F465 /* CustomTabBarController.swift */; };
-		A0F2FB2C209C11A80018F465 /* NewEventDummyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F2FB2B209C11A80018F465 /* NewEventDummyViewController.swift */; };
 		A0F2FB2E209CA5DB0018F465 /* NewsFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F2FB2D209CA5DB0018F465 /* NewsFeedViewController.swift */; };
 		A0F2FB30209CA9380018F465 /* EventPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F2FB2F209CA9380018F465 /* EventPost.swift */; };
 		A0F2FB32209CAC590018F465 /* EventPostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F2FB31209CAC590018F465 /* EventPostCollectionViewCell.swift */; };
@@ -70,7 +70,10 @@
 		A0228F7A209ACBAC00E71C80 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		A0228F7D209B483A00E71C80 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		A0228F7F209B488500E71C80 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
-		A050022B20A12B0900BBCA6D /* UploadEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadEventViewController.swift; sourceTree = "<group>"; };
+		A04A777020C4F10800106E06 /* UploadEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadEventViewController.swift; sourceTree = "<group>"; };
+		A04A777320C4F10800106E06 /* AutocompleteResultTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteResultTableViewCell.swift; sourceTree = "<group>"; };
+		A04A777420C4F10800106E06 /* ChooseAddressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseAddressViewController.swift; sourceTree = "<group>"; };
+		A04A777820C4F22F00106E06 /* NewEventDummyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewEventDummyViewController.swift; sourceTree = "<group>"; };
 		A056D7E020AB3C8F00FA3F43 /* UserFollowers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFollowers.swift; sourceTree = "<group>"; };
 		A056D80520AD156E00FA3F43 /* EventPostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPostService.swift; sourceTree = "<group>"; };
 		A056D80720AD157D00FA3F43 /* CommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentService.swift; sourceTree = "<group>"; };
@@ -78,8 +81,6 @@
 		A056D80B20AD15AD00FA3F43 /* TimelineService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineService.swift; sourceTree = "<group>"; };
 		A056D80D20AD15C100FA3F43 /* FollowersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersService.swift; sourceTree = "<group>"; };
 		A05D5A33209E75460025E8C7 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
-		A05D5A35209ECD580025E8C7 /* ChooseAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseAddressViewController.swift; sourceTree = "<group>"; };
-		A05D5A3B20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteResultTableViewCell.swift; sourceTree = "<group>"; };
 		A0648FFC20981138001417D7 /* ManageProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageProfileViewController.swift; sourceTree = "<group>"; };
 		A08BA18220BEFA740062C72B /* MapViewWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MapViewWidget.swift; path = "../New Group/MapViewWidget.swift"; sourceTree = "<group>"; };
 		A0AD85F92093ED9B00D5F793 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
@@ -96,7 +97,6 @@
 		A0E73FFA20A6912E007E72D3 /* SearchUsersCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersCollectionViewCell.swift; sourceTree = "<group>"; };
 		A0E73FFC20A7573D007E72D3 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		A0F2FB29209C0CCD0018F465 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
-		A0F2FB2B209C11A80018F465 /* NewEventDummyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NewEventDummyViewController.swift; path = Wagin/NewEvent/NewEventDummyViewController.swift; sourceTree = SOURCE_ROOT; };
 		A0F2FB2D209CA5DB0018F465 /* NewsFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedViewController.swift; sourceTree = "<group>"; };
 		A0F2FB2F209CA9380018F465 /* EventPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPost.swift; sourceTree = "<group>"; };
 		A0F2FB31209CAC590018F465 /* EventPostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPostCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -136,17 +136,6 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		A0228F76209AC34600E71C80 /* NewEvent */ = {
-			isa = PBXGroup;
-			children = (
-				A050022A20A12AC100BBCA6D /* UploadEvent */,
-				A05D5A3920A09F5C0025E8C7 /* ChooseAddress */,
-				A0F2FB2B209C11A80018F465 /* NewEventDummyViewController.swift */,
-			);
-			name = NewEvent;
-			path = "New Group";
-			sourceTree = "<group>";
-		};
 		A0228F77209AC4E600E71C80 /* Global */ = {
 			isa = PBXGroup;
 			children = (
@@ -171,28 +160,37 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		A050022A20A12AC100BBCA6D /* UploadEvent */ = {
+		A04A776E20C4F10800106E06 /* NewEvent */ = {
 			isa = PBXGroup;
 			children = (
-				A050022B20A12B0900BBCA6D /* UploadEventViewController.swift */,
+				A04A777820C4F22F00106E06 /* NewEventDummyViewController.swift */,
+				A04A776F20C4F10800106E06 /* UploadEvent */,
+				A04A777120C4F10800106E06 /* ChooseAddress */,
 			);
-			name = UploadEvent;
-			path = AddEventMetadata;
+			path = NewEvent;
 			sourceTree = "<group>";
 		};
-		A05D5A3920A09F5C0025E8C7 /* ChooseAddress */ = {
+		A04A776F20C4F10800106E06 /* UploadEvent */ = {
 			isa = PBXGroup;
 			children = (
-				A05D5A35209ECD580025E8C7 /* ChooseAddressViewController.swift */,
-				A05D5A3A20A09F7C0025E8C7 /* SearchAutocomplete */,
+				A04A777020C4F10800106E06 /* UploadEventViewController.swift */,
+			);
+			path = UploadEvent;
+			sourceTree = "<group>";
+		};
+		A04A777120C4F10800106E06 /* ChooseAddress */ = {
+			isa = PBXGroup;
+			children = (
+				A04A777220C4F10800106E06 /* SearchAutocomplete */,
+				A04A777420C4F10800106E06 /* ChooseAddressViewController.swift */,
 			);
 			path = ChooseAddress;
 			sourceTree = "<group>";
 		};
-		A05D5A3A20A09F7C0025E8C7 /* SearchAutocomplete */ = {
+		A04A777220C4F10800106E06 /* SearchAutocomplete */ = {
 			isa = PBXGroup;
 			children = (
-				A05D5A3B20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift */,
+				A04A777320C4F10800106E06 /* AutocompleteResultTableViewCell.swift */,
 			);
 			path = SearchAutocomplete;
 			sourceTree = "<group>";
@@ -291,12 +289,12 @@
 		A0FF4692209176B9006FE799 /* Wagin */ = {
 			isa = PBXGroup;
 			children = (
+				A04A776E20C4F10800106E06 /* NewEvent */,
 				A0FF469A209176BA006FE799 /* Assets.xcassets */,
 				A0E73FF720A68CE6007E72D3 /* SearchUsers */,
 				A0228F73209A51B300E71C80 /* Models */,
 				A0228F7C209B482B00E71C80 /* Services */,
 				A0228F77209AC4E600E71C80 /* Global */,
-				A0228F76209AC34600E71C80 /* NewEvent */,
 				A0D18553209A38CA00FC58D1 /* EventMap */,
 				A0D18552209A38B100FC58D1 /* ManageProfile */,
 				A0D18551209A38A500FC58D1 /* Newsfeed */,
@@ -485,17 +483,17 @@
 				A056D80A20AD159600FA3F43 /* LikeService.swift in Sources */,
 				A08BA18320BEFA740062C72B /* MapViewWidget.swift in Sources */,
 				A0CB3A6920C0C67500207944 /* EventViewController.swift in Sources */,
+				A04A777920C4F22F00106E06 /* NewEventDummyViewController.swift in Sources */,
 				A0F2FB2E209CA5DB0018F465 /* NewsFeedViewController.swift in Sources */,
+				A04A777620C4F10800106E06 /* AutocompleteResultTableViewCell.swift in Sources */,
 				A0FF4696209176B9006FE799 /* LoginViewController.swift in Sources */,
 				A056D80E20AD15C100FA3F43 /* FollowersService.swift in Sources */,
 				A056D80820AD157D00FA3F43 /* CommentService.swift in Sources */,
 				A0648FFD20981138001417D7 /* ManageProfileViewController.swift in Sources */,
 				A0AF4DE120B1E3A8001A9E09 /* ShowCommentsViewController.swift in Sources */,
 				A05D5A34209E75470025E8C7 /* ImageService.swift in Sources */,
-				A0F2FB2C209C11A80018F465 /* NewEventDummyViewController.swift in Sources */,
 				A0228F79209AC4F700E71C80 /* Constants.swift in Sources */,
 				A0AD85FA2093ED9B00D5F793 /* Util.swift in Sources */,
-				A05D5A36209ECD580025E8C7 /* ChooseAddressViewController.swift in Sources */,
 				A0CB3A6120BEFC5A00207944 /* EventAnnotation.swift in Sources */,
 				A0FF4694209176B9006FE799 /* AppDelegate.swift in Sources */,
 				A0E73FFB20A6912E007E72D3 /* SearchUsersCollectionViewCell.swift in Sources */,
@@ -504,16 +502,16 @@
 				A0F2FB30209CA9380018F465 /* EventPost.swift in Sources */,
 				A0AF4DE520B1E603001A9E09 /* CommentCollectionViewCell.swift in Sources */,
 				A0F2FB2A209C0CCD0018F465 /* CustomTabBarController.swift in Sources */,
+				A04A777520C4F10800106E06 /* UploadEventViewController.swift in Sources */,
 				A0CB3A6520C050E900207944 /* MapRadius.swift in Sources */,
 				A0E73FF920A68D0C007E72D3 /* SearchUsersViewController.swift in Sources */,
-				A05D5A3C20A09FB60025E8C7 /* AutocompleteResultTableViewCell.swift in Sources */,
 				A0228F80209B488500E71C80 /* UserProfile.swift in Sources */,
 				A0AF4DE720B330A7001A9E09 /* PaddedTextField.swift in Sources */,
 				A0E73FFD20A7573D007E72D3 /* UserProfileViewController.swift in Sources */,
 				A0AF4DE320B1E3CA001A9E09 /* Comment.swift in Sources */,
 				A0228F7B209ACBAC00E71C80 /* Event.swift in Sources */,
-				A050022C20A12B0900BBCA6D /* UploadEventViewController.swift in Sources */,
 				A056D80620AD156E00FA3F43 /* EventPostService.swift in Sources */,
+				A04A777720C4F10800106E06 /* ChooseAddressViewController.swift in Sources */,
 				A0F2FB32209CAC590018F465 /* EventPostCollectionViewCell.swift in Sources */,
 				A056D80C20AD15AD00FA3F43 /* TimelineService.swift in Sources */,
 			);
