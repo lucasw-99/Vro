@@ -12,8 +12,7 @@
 		A0228F7B209ACBAC00E71C80 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F7A209ACBAC00E71C80 /* Event.swift */; };
 		A0228F7E209B483A00E71C80 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F7D209B483A00E71C80 /* UserService.swift */; };
 		A0228F80209B488500E71C80 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F7F209B488500E71C80 /* UserProfile.swift */; };
-		A0283D2220A295A100F4E700 /* UploadEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0283D2120A295A100F4E700 /* UploadEventViewController.swift */; };
-		A050022C20A12B0900BBCA6D /* EventMetadataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A050022B20A12B0900BBCA6D /* EventMetadataViewController.swift */; };
+		A050022C20A12B0900BBCA6D /* UploadEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A050022B20A12B0900BBCA6D /* UploadEventViewController.swift */; };
 		A056D7E120AB3C8F00FA3F43 /* UserFollowers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A056D7E020AB3C8F00FA3F43 /* UserFollowers.swift */; };
 		A056D80620AD156E00FA3F43 /* EventPostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A056D80520AD156E00FA3F43 /* EventPostService.swift */; };
 		A056D80820AD157D00FA3F43 /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A056D80720AD157D00FA3F43 /* CommentService.swift */; };
@@ -71,8 +70,7 @@
 		A0228F7A209ACBAC00E71C80 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		A0228F7D209B483A00E71C80 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		A0228F7F209B488500E71C80 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
-		A0283D2120A295A100F4E700 /* UploadEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadEventViewController.swift; sourceTree = "<group>"; };
-		A050022B20A12B0900BBCA6D /* EventMetadataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMetadataViewController.swift; sourceTree = "<group>"; };
+		A050022B20A12B0900BBCA6D /* UploadEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadEventViewController.swift; sourceTree = "<group>"; };
 		A056D7E020AB3C8F00FA3F43 /* UserFollowers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFollowers.swift; sourceTree = "<group>"; };
 		A056D80520AD156E00FA3F43 /* EventPostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPostService.swift; sourceTree = "<group>"; };
 		A056D80720AD157D00FA3F43 /* CommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentService.swift; sourceTree = "<group>"; };
@@ -126,15 +124,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A0001A0720A509F000F0EB24 /* UploadEvent */ = {
-			isa = PBXGroup;
-			children = (
-				A0283D2120A295A100F4E700 /* UploadEventViewController.swift */,
-			);
-			name = UploadEvent;
-			path = "New Group";
-			sourceTree = "<group>";
-		};
 		A0228F73209A51B300E71C80 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -150,8 +139,7 @@
 		A0228F76209AC34600E71C80 /* NewEvent */ = {
 			isa = PBXGroup;
 			children = (
-				A0001A0720A509F000F0EB24 /* UploadEvent */,
-				A050022A20A12AC100BBCA6D /* AddEventMetadata */,
+				A050022A20A12AC100BBCA6D /* UploadEvent */,
 				A05D5A3920A09F5C0025E8C7 /* ChooseAddress */,
 				A0F2FB2B209C11A80018F465 /* NewEventDummyViewController.swift */,
 			);
@@ -183,11 +171,12 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		A050022A20A12AC100BBCA6D /* AddEventMetadata */ = {
+		A050022A20A12AC100BBCA6D /* UploadEvent */ = {
 			isa = PBXGroup;
 			children = (
-				A050022B20A12B0900BBCA6D /* EventMetadataViewController.swift */,
+				A050022B20A12B0900BBCA6D /* UploadEventViewController.swift */,
 			);
+			name = UploadEvent;
 			path = AddEventMetadata;
 			sourceTree = "<group>";
 		};
@@ -507,7 +496,6 @@
 				A0228F79209AC4F700E71C80 /* Constants.swift in Sources */,
 				A0AD85FA2093ED9B00D5F793 /* Util.swift in Sources */,
 				A05D5A36209ECD580025E8C7 /* ChooseAddressViewController.swift in Sources */,
-				A0283D2220A295A100F4E700 /* UploadEventViewController.swift in Sources */,
 				A0CB3A6120BEFC5A00207944 /* EventAnnotation.swift in Sources */,
 				A0FF4694209176B9006FE799 /* AppDelegate.swift in Sources */,
 				A0E73FFB20A6912E007E72D3 /* SearchUsersCollectionViewCell.swift in Sources */,
@@ -524,7 +512,7 @@
 				A0E73FFD20A7573D007E72D3 /* UserProfileViewController.swift in Sources */,
 				A0AF4DE320B1E3CA001A9E09 /* Comment.swift in Sources */,
 				A0228F7B209ACBAC00E71C80 /* Event.swift in Sources */,
-				A050022C20A12B0900BBCA6D /* EventMetadataViewController.swift in Sources */,
+				A050022C20A12B0900BBCA6D /* UploadEventViewController.swift in Sources */,
 				A056D80620AD156E00FA3F43 /* EventPostService.swift in Sources */,
 				A0F2FB32209CAC590018F465 /* EventPostCollectionViewCell.swift in Sources */,
 				A056D80C20AD15AD00FA3F43 /* TimelineService.swift in Sources */,

@@ -17,7 +17,7 @@ class CommentService {
     */
     static func postComment(text commentText: String, eventPostID: String, success: @escaping ( (_ success: Bool) -> Void )) {
         print("called postComment")
-        let commentID = Util.generateID()
+        let commentID = Util.generateId()
         guard let commentAuthorUID = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
 
         let newCommentPath = String(format: Constants.Database.postComment, commentID)

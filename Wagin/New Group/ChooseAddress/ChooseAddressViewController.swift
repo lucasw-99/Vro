@@ -44,7 +44,7 @@ class ChooseAddressViewController: UIViewController {
     @objc private func selectAddress(_ sender: Any) {
         print("Select address button pressed")
         guard let pin = currentPin else { fatalError() }
-        let eventMetadataViewController = EventMetadataViewController(selectedPin: pin)
+        let eventMetadataViewController = UploadEventViewController(selectedPin: pin)
         navigationController?.pushViewController(eventMetadataViewController, animated: true)
     }
 
@@ -131,10 +131,10 @@ extension ChooseAddressViewController {
         }
 
         cancelButton.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.top.equalToSuperview()
-            make.width.equalTo(50)
-            make.height.equalTo(50)
+            make.leading.equalToSuperview().offset(10)
+            make.centerY.equalToSuperview()
+            make.height.equalTo(32)
+            make.width.equalTo(32)
         }
 
         searchBar.snp.makeConstraints { make in

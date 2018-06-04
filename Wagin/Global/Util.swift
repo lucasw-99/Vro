@@ -61,7 +61,7 @@ class Util {
         return dateFormatter.string(from: date)
     }
 
-    static func generateID() -> String {
+    static func generateId() -> String {
         let generatedID = UUID().uuidString
         print("generatedID: \(generatedID)")
         return generatedID

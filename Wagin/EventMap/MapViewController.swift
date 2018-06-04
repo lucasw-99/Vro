@@ -127,6 +127,33 @@ extension MapViewController: MKMapViewDelegate {
     }
 }
 
+// MARK: Smooth circle animations
+extension MapViewController {
+//    private func rectForCircle(_ circle: MKCircle) -> CGRect {
+//        let center = MKMapPointForCoordinate(circle.coordinate)
+//        let radius = circle.radius
+//        let mapRadius = radius * MKMapPointsPerMeterAtLatitude(circle.coordinate.latitude)
+//
+//        let mapRect = MKMapRectMake(center.x - mapRadius, center.y - mapRadius, mapRadius * 2, mapRadius * 2)
+//        circle.boundingMapRect
+//        return MKOverlayRenderer.rectFor
+//    }
+//    -(CGRect)rectForCircle{
+//
+//    //the circle center
+//    MKMapPoint mpoint = MKMapPointForCoordinate([[self overlay] coordinate]);
+//
+//    //geting the radius in map point
+//    double radius = [(MKCircle*)[self overlay] radius];
+//    double mapRadius = radius * MKMapPointsPerMeterAtLatitude([[self overlay] coordinate].latitude);
+//
+//    //calculate the rect in map coordinate
+//    MKMapRect mrect = MKMapRectMake(mpoint.x - mapRadius, mpoint.y - mapRadius, mapRadius * 2, mapRadius * 2);
+//
+//    //return the pixel coordinate circle
+//    return [self rectForMapRect:mrect];
+}
+
 // MARK: Setup subviews
 extension MapViewController {
     private func setupSubviews() {

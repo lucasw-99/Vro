@@ -22,10 +22,6 @@ class AutocompleteResultTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-
     func updateCell(titleText: NSAttributedString, descriptionText: String) {
         titleLabel.attributedText = titleText
         descriptionLabel.text = descriptionText
@@ -46,13 +42,13 @@ class AutocompleteResultTableViewCell: UITableViewCell {
     private func setupLayout() {
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.leading.equalToSuperview()
+            make.leading.equalToSuperview().offset(10)
             make.trailing.equalToSuperview()
         }
 
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom)
-            make.leading.equalToSuperview()
+            make.leading.equalToSuperview().offset(10)
             make.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
         }
