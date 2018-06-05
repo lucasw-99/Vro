@@ -29,9 +29,22 @@ class AttendEventService {
             }, andCompletionBlock: { error, _, _ in
                 if let error = error {
                     assertionFailure(error.localizedDescription)
-                    success(false)
+                    return success(false)
                 } else {
-                    success(true)
+                    let userEventsAttendingPath = String(format: Constants.Database.userEventsAttending, attendeeUid, eventPostId)
+                    let userEventsAttendingRef = Database.database().reference().child(userEventsAttendingPath)
+
+                    userEventsAttendingRef.runTransactionBlock({ mutableData -> TransactionResult in
+                        mutableData.value = true
+                        return TransactionResult.success(withValue: mutableData)
+                    }, andCompletionBlock: { error, _, _ in
+                        if let error = error {
+                            assertionFailure(error.localizedDescription)
+                            return success(false)
+                        } else {
+                            return success(true)
+                        }
+                    })
                 }
             })
         }
@@ -59,7 +72,20 @@ class AttendEventService {
                     assertionFailure(error.localizedDescription)
                     success(false)
                 } else {
-                    success(true)
+                    let userEventsAttendingPath = String(format: Constants.Database.userEventsAttending, attendeeUid, eventPostId)
+                    let userEventsAttendingRef = Database.database().reference().child(userEventsAttendingPath)
+
+                    userEventsAttendingRef.runTransactionBlock({ mutableData -> TransactionResult in
+                        mutableData.value = nil
+                        return TransactionResult.success(withValue: mutableData)
+                    }, andCompletionBlock: { error, _, _ in
+                        if let error = error {
+                            assertionFailure(error.localizedDescription)
+                            return success(false)
+                        } else {
+                            return success(true)
+                        }
+                    })
                 }
             })
         }

@@ -245,7 +245,7 @@ extension EventPostCollectionViewCell {
         }
 
         numberAttending.snp.makeConstraints { make in
-            make.top.equalTo(numberOfLikes.snp.bottom)
+            make.top.equalTo(numberOfLikes.snp.bottom).offset(5)
             make.leading.equalToSuperview().offset(12)
             make.trailing.equalToSuperview()
         }
@@ -275,6 +275,8 @@ extension EventPostCollectionViewCell {
     }
 
     private func updateUI() {
+        guard let currentUid = UserService.currentUserProfile?.uid else { fatalError("current user nil") }
+
         usernameLabel.text = eventPost.event.host.username
 
         print("photoURL: \(eventPost.event.host.photoURL.absoluteString), caption: \(eventPost.caption)")
@@ -306,6 +308,7 @@ extension EventPostCollectionViewCell {
         numAttending = eventPost.event.attendeeCount
 
         attendButton.isSelected = eventPost.isAttending
+        attendButton.isHidden = currentUid == eventPost.event.host.uid
 
         daysAgo.text = Util.smallestTimeUnit(from: eventPost.timestamp)
     }

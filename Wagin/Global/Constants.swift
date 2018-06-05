@@ -61,6 +61,9 @@ class Constants {
 
         // 1: EventPostId, 2: uid
         static let eventActualAttending = "attending/%@/actual/%@"
+
+        // 1: uid, 2: EventPostId
+        static let userEventsAttending = "users/%@/attendingEvents/%@"
     }
     class Storage {
         // 1: uid, 2: Randomly generated ID

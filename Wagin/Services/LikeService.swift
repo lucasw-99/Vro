@@ -9,21 +9,6 @@
 import FirebaseDatabase
 
 class LikeService {
-
-    // likedPostUID: uid of the user who liked the post
-    // posterUID: uid of the user who posted the post
-    // eventID: ID of the event post
-    static func updateLikesForPost(_ likedPostUID: String, _ postedByUID: String, eventPostID: String, likedPost: Bool) {
-        let postLikesPath = String(format: Constants.Database.userPostLikes, postedByUID, eventPostID, likedPostUID)
-        let postLikesRef = Database.database().reference().child(postLikesPath)
-
-        if likedPost {
-            postLikesRef.setValue(true)
-        } else {
-            postLikesRef.removeValue()
-        }
-    }
-
     static func getLikesForPost(_ postedByUID: String, _ eventPostID: String, completion: @escaping ( (_ userLikes: [String: Bool], _ databaseRef: DatabaseReference) -> () )) {
         let postLikesPath = String(format: Constants.Database.postLikes, postedByUID, eventPostID)
         let postLikesRef = Database.database().reference().child(postLikesPath)
@@ -58,7 +43,7 @@ class LikeService {
                 if let error = error {
                     assertionFailure(error.localizedDescription)
                     success(false)
-                } else {
+                } else {    
                     success(true)
                 }
             })
