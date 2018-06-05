@@ -16,7 +16,9 @@ class EventPost {
     let timestamp: Date
     let eventPostID: String
     let likeCount: Int
+
     var isLiked: Bool = false
+    var isAttending: Bool = false
 
     var dictValue: [String: Any] {
         let eventPostObject = [

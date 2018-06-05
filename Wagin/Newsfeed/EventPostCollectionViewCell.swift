@@ -11,6 +11,7 @@ import FirebaseDatabase
 import Foundation
 
 protocol EventPostCellDelegate {
+    func didTapAttendButton(_ attendButton: UIButton, forCell cell: EventPostCollectionViewCell)
     func didTapLikeButton(_ likeButton: UIButton, forCell cell: EventPostCollectionViewCell)
     func didTapCommentButton(_ commentButton: UIButton, forEvent event: EventPost)
     func didTapShareButton(_ shareButton: UIButton, forEvent event: Event)
@@ -21,6 +22,7 @@ class EventPostCollectionViewCell: UICollectionViewCell {
     private let userHeaderView = UIView()
     private let userImage = UIImageView()
     private let usernameLabel = UILabel()
+    private let attendButton = UIButton()
 
     private let eventImageView = UIImageView()
 
@@ -30,6 +32,7 @@ class EventPostCollectionViewCell: UICollectionViewCell {
 
     private let separatorView = UIView()
     private let numberOfLikes = UILabel()
+    private let numberAttending = UILabel()
     private let captionLabel = UILabel()
     private let showCommentsButton = UIButton()
     private let daysAgo = UILabel()
@@ -51,6 +54,12 @@ class EventPostCollectionViewCell: UICollectionViewCell {
         }
     }
 
+    var numAttending: Int = 0 {
+        didSet {
+            setAttending(numAttending: numAttending)
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
@@ -64,15 +73,20 @@ class EventPostCollectionViewCell: UICollectionViewCell {
 
 // MARK: Button functions
 extension EventPostCollectionViewCell {
+    @objc private func attendButtonPressed(_ sender: UIButton) {
+        print("Attend button pressed")
+        buttonDelegate?.didTapAttendButton(attendButton, forCell: self)
+    }
+
     @objc private func likeButtonPressed(_ sender: UIButton) {
         buttonDelegate?.didTapLikeButton(likeButton, forCell: self)
     }
 
-    @objc private func commentButtonPressed(_ sender: Any) {
+    @objc private func commentButtonPressed(_ sender: UIButton) {
         buttonDelegate?.didTapCommentButton(commentButton, forEvent: eventPost)
     }
 
-    @objc private func shareButtonPressed(_ sender: Any) {
+    @objc private func shareButtonPressed(_ sender: UIButton) {
         buttonDelegate?.didTapShareButton(shareButton, forEvent: eventPost.event)
     }
 
@@ -93,6 +107,16 @@ extension EventPostCollectionViewCell {
         usernameLabel.textAlignment = .natural
         usernameLabel.numberOfLines = 1
         userHeaderView.addSubview(usernameLabel)
+
+        attendButton.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        attendButton.titleLabel?.textAlignment = .natural
+        attendButton.setTitle("Go", for: .normal)
+        attendButton.setTitleColor(.black, for: .normal)
+        attendButton.setTitle("Going", for: .selected)
+        attendButton.setTitleColor(.gray, for: .selected)
+        attendButton.addTarget(self, action: #selector(EventPostCollectionViewCell.attendButtonPressed(_:)), for: .touchUpInside)
+        Util.roundedCorners(ofColor: .black, element: attendButton)
+        userHeaderView.addSubview(attendButton)
 
         containerView.addSubview(userHeaderView)
 
@@ -121,6 +145,10 @@ extension EventPostCollectionViewCell {
         numberOfLikes.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         numberOfLikes.numberOfLines = 1
         containerView.addSubview(numberOfLikes)
+
+        numberAttending.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        numberAttending.numberOfLines = 1
+        containerView.addSubview(numberAttending)
 
         captionLabel.font = UIFont.systemFont(ofSize: 20)
         captionLabel.textAlignment = .left
@@ -158,6 +186,13 @@ extension EventPostCollectionViewCell {
             make.leading.equalTo(userImage.snp.trailing).offset(10)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
+        }
+
+        attendButton.snp.makeConstraints { make in
+            make.width.equalTo(70)
+            make.trailing.equalToSuperview().offset(-20)
+            make.centerY.equalToSuperview()
+            make.height.equalTo(30)
         }
 
         userHeaderView.snp.makeConstraints { make in
@@ -209,8 +244,14 @@ extension EventPostCollectionViewCell {
             make.height.equalTo(30)
         }
 
-        captionLabel.snp.makeConstraints { make in
+        numberAttending.snp.makeConstraints { make in
             make.top.equalTo(numberOfLikes.snp.bottom)
+            make.leading.equalToSuperview().offset(12)
+            make.trailing.equalToSuperview()
+        }
+
+        captionLabel.snp.makeConstraints { make in
+            make.top.equalTo(numberAttending.snp.bottom).offset(15)
             make.leading.equalToSuperview().offset(12)
             make.trailing.equalToSuperview()
         }
@@ -260,7 +301,11 @@ extension EventPostCollectionViewCell {
 
         numLikes = eventPost.likeCount
 
-        setIsLiked(isLiked: eventPost.isLiked)
+        likeButton.isSelected = eventPost.isLiked
+
+        numAttending = eventPost.event.attendeeCount
+
+        attendButton.isSelected = eventPost.isAttending
 
         daysAgo.text = Util.smallestTimeUnit(from: eventPost.timestamp)
     }
@@ -271,7 +316,9 @@ extension EventPostCollectionViewCell {
         likeButton.isUserInteractionEnabled = true
     }
 
-    private func setIsLiked(isLiked: Bool) {
-        likeButton.isSelected = isLiked
+    private func setAttending(numAttending: Int) {
+        attendButton.isUserInteractionEnabled = false
+        numberAttending.text = "💃🏽 \(numAttending) \(numAttending != 1 ? "people" : "person") going"
+        attendButton.isUserInteractionEnabled = true
     }
 }

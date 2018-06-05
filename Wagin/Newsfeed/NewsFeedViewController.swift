@@ -154,6 +154,26 @@ extension NewsFeedViewController: UICollectionViewDataSource {
 
 // MARK: Button delegate for EventPostCollectionViewCell
 extension NewsFeedViewController: EventPostCellDelegate {
+    func didTapAttendButton(_ attendButton: UIButton, forCell cell: EventPostCollectionViewCell) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { fatalError("Couldn't get index path for attending") }
+        attendButton.isUserInteractionEnabled = false
+        let eventPost = dataSource[indexPath.item]
+        let wasPreviouslyAttending = attendButton.isSelected
+        AttendEventService.setPotentiallyAttending(nowAttendingEvent: !wasPreviouslyAttending, for: eventPost.eventPostID) { success in
+            defer {
+                attendButton.isUserInteractionEnabled = true
+            }
+            guard success else {
+                print("Failure setting attending")
+                return
+            }
+            DispatchQueue.main.async {
+                cell.numAttending += !wasPreviouslyAttending ? 1 : -1
+                attendButton.isSelected = !attendButton.isSelected
+            }
+        }
+    }
+
     func didTapLikeButton(_ likeButton: UIButton, forCell cell: EventPostCollectionViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { fatalError("Couldn't get index path") }
         likeButton.isUserInteractionEnabled = false

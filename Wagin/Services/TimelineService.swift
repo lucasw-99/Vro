@@ -38,26 +38,32 @@ class TimelineService {
         completion()
     }
 
-    // uid: uid of user
+    // currentUid: uid of user
     // timelineObservable: The observable used to observe the timeline
     // Populates a users timeline with an observable
-    static func populateUserTimeline(_ currentUID: String, _ timelineObservable: DatabaseReference, completion: @escaping ( (_ posts: [EventPost]) -> () )) {
+    static func populateUserTimeline(_ currentUid: String, _ timelineObservable: DatabaseReference, completion: @escaping ( (_ posts: [EventPost]) -> () )) {
         timelineObservable.observe(.value) { snapshot in
             var posts = [EventPost]()
             let dispatchGroup = DispatchGroup()
             for child in snapshot.children {
-                print("Calling enter on dispatch queue")
+                // enter twice, once for likes other for attending
+                dispatchGroup.enter()
                 dispatchGroup.enter()
                 if let childSnapshot = child as? DataSnapshot {
                     let eventID = childSnapshot.key
                     EventPostService.getEvent(eventID) { eventPost in
-                        LikeService.isPostLiked(eventPost.event.host.uid, eventPostID: eventPost.eventPostID, uid: currentUID) { isLiked in
+                        posts.append(eventPost)
+                        LikeService.isPostLiked(eventPost.event.host.uid, eventPostID: eventPost.eventPostID, uid: currentUid) { isLiked in
                             eventPost.isLiked = isLiked
-                            posts.append(eventPost)
-                            print("Calling leave on dispatch queue")
+                            dispatchGroup.leave()
+                        }
+
+                        AttendEventService.isAttendingEvent(currentUid, eventPostID: eventPost.eventPostID) { isAttending in
+                            eventPost.isAttending = isAttending
                             dispatchGroup.leave()
                         }
                     }
+
                 } else {
                     fatalError("eventID existed in TL but it was nil?")
                 }

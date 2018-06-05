@@ -36,6 +36,7 @@ class LikeService {
     }
 
     static func likePost(for post: EventPost, success: @escaping ( (_ success: Bool) -> Void )) {
+        // TODO: Remove code duplication, pass in currentUid as param
         guard let currentUID = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
         let eventPostID = post.eventPostID
         let likesPath = String(format: Constants.Database.userPostLikes, post.event.host.uid, eventPostID, currentUID)
@@ -49,6 +50,7 @@ class LikeService {
             let likeCountPath = String(format: Constants.Database.eventLikeCount, eventPostID)
             let likeCountRef = Database.database().reference().child(likeCountPath)
             likeCountRef.runTransactionBlock({ mutableData -> TransactionResult in
+                print("like mutableData: \(mutableData)")
                 let currentLikeCount = mutableData.value as? Int ?? 0
                 mutableData.value = currentLikeCount + 1
                 return TransactionResult.success(withValue: mutableData)
