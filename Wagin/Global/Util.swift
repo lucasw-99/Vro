@@ -75,30 +75,53 @@ class Util {
         return dict
     }
 
+    // TODO: Clean up function, because only difference between positive
+    // and negative values is adding "ago"
     static func smallestTimeUnit(from date: Date) -> String {
         let todaysDate = Date()
         var n = todaysDate.years(from: date)
-        guard n >= 0 else { fatalError("Date posted is later than todays date: \(date)") }
-        if n != 0 {
+        // negative values of n in future, positive in past
+        if n > 0 {
             return "\(n) year\(n != 1 ? "s" : "") ago"
+        } else if n < 0 {
+            n = abs(n)
+            return "\(n) year\(n != 1 ? "s" : "")"
         }
         n = todaysDate.months(from: date)
-        if n != 0 {
+        if n > 0 {
             return "\(n) month\(n != 1 ? "s" : "") ago"
+        } else if n < 0 {
+            n = abs(n)
+            return "\(n) month\(n != 1 ? "s" : "")"
         }
         n = todaysDate.days(from: date)
-        if n != 0 {
+        if n > 0 {
             return "\(n) day\(n != 1 ? "s" : "") ago"
+        } else if n < 0 {
+            n = abs(n)
+            return "\(n) day\(n != 1 ? "s" : "")"
         }
         n = todaysDate.hours(from: date)
-        if n != 0 {
+        if n > 0 {
             return "\(n) hour\(n != 1 ? "s" : "") ago"
+        } else if n < 0 {
+            n = abs(n)
+            return "\(n) hour\(n != 1 ? "s" : "")"
         }
         n = todaysDate.minutes(from: date)
-        if n != 0 {
+        if n > 0 {
             return "\(n) minute\(n != 1 ? "s" : "") ago"
+        } else if n < 0 {
+            n = abs(n)
+            return "\(n) minute\(n != 1 ? "s" : "")"
         }
-        return "less than a minute ago"
+
+        // dates are nearly identical, find out which one is in future
+        if todaysDate > date {
+            return "less than a minute ago"
+        } else {
+            return "less than a minute"
+        }
     }
 }
 

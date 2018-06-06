@@ -46,10 +46,9 @@ class EventPostService {
         eventPhotoRef.setValue(photoURL)
     }
 
-    static func getEvent(_ eventID: String, completion: @escaping ( (_ eventPost: EventPost) -> () )) {
+    static func getEventForTimeline(_ eventID: String, completion: @escaping ( (_ eventPost: EventPost) -> () )) {
         let eventPath = String(format: Constants.Database.eventInfo, eventID)
         let eventRef = Database.database().reference().child(eventPath)
-
         eventRef.observeSingleEvent(of: .value) { snapshot in
             let eventPost = EventPost(forSnapshot: snapshot)
             completion(eventPost)

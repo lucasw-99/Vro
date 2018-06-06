@@ -35,6 +35,7 @@ class EventPostCollectionViewCell: UICollectionViewCell {
     private let numberAttending = UILabel()
     private let captionLabel = UILabel()
     private let showCommentsButton = UIButton()
+    private let eventTimeLabel = UILabel()
     private let daysAgo = UILabel()
 
     private let containerView = UIView()
@@ -164,6 +165,12 @@ extension EventPostCollectionViewCell {
         showCommentsButton.addTarget(self, action: #selector(EventPostCollectionViewCell.showCommentsButtonPressed(_:)), for: .touchUpInside)
         containerView.addSubview(showCommentsButton)
 
+        eventTimeLabel.font = UIFont.systemFont(ofSize: 12)
+        eventTimeLabel.textAlignment = .natural
+        eventTimeLabel.textColor = .darkGray
+        eventTimeLabel.numberOfLines = 1
+        containerView.addSubview(eventTimeLabel)
+
         daysAgo.font = UIFont.systemFont(ofSize: 12)
         daysAgo.textAlignment = .natural
         daysAgo.textColor = .darkGray
@@ -218,14 +225,14 @@ extension EventPostCollectionViewCell {
 
         commentButton.snp.makeConstraints { make in
             make.centerY.equalTo(likeButton.snp.centerY)
-            make.leading.equalTo(likeButton.snp.trailing).offset(15)
+            make.leading.equalTo(likeButton.snp.trailing).offset(20)
             make.width.equalTo(30)
             make.height.equalTo(30)
         }
 
         shareButton.snp.makeConstraints { make in
             make.centerY.equalTo(likeButton.snp.centerY)
-            make.leading.equalTo(commentButton.snp.trailing).offset(15)
+            make.leading.equalTo(commentButton.snp.trailing).offset(20)
             make.height.equalTo(30)
             make.width.equalTo(30)
         }
@@ -262,8 +269,14 @@ extension EventPostCollectionViewCell {
             make.height.equalTo(40)
         }
 
-        daysAgo.snp.makeConstraints { make in
+        eventTimeLabel.snp.makeConstraints { make in
             make.top.equalTo(showCommentsButton.snp.bottom)
+            make.leading.equalToSuperview().offset(12)
+            make.trailing.equalToSuperview()
+        }
+
+        daysAgo.snp.makeConstraints { make in
+            make.top.equalTo(eventTimeLabel.snp.bottom).offset(5)
             make.leading.equalToSuperview().offset(12)
             make.bottom.equalToSuperview()
             make.trailing.equalToSuperview()
@@ -310,7 +323,9 @@ extension EventPostCollectionViewCell {
         attendButton.isSelected = eventPost.isAttending
         attendButton.isHidden = currentUid == eventPost.event.host.uid
 
-        daysAgo.text = Util.smallestTimeUnit(from: eventPost.timestamp)
+        eventTimeLabel.text = "Event happening in \(Util.smallestTimeUnit(from: eventPost.event.eventTime))"
+
+        daysAgo.text = "Posted \(Util.smallestTimeUnit(from: eventPost.timestamp))"
     }
 
     private func setLikes(numLikes: Int) {

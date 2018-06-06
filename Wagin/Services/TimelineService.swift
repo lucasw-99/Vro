@@ -51,7 +51,7 @@ class TimelineService {
                 dispatchGroup.enter()
                 if let childSnapshot = child as? DataSnapshot {
                     let eventID = childSnapshot.key
-                    EventPostService.getEvent(eventID) { eventPost in
+                    EventPostService.getEventForTimeline(eventID) { eventPost in
                         posts.append(eventPost)
                         LikeService.isPostLiked(eventPost.event.host.uid, eventPostID: eventPost.eventPostID, uid: currentUid) { isLiked in
                             eventPost.isLiked = isLiked

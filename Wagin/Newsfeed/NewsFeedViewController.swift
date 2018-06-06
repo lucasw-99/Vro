@@ -133,7 +133,7 @@ extension NewsFeedViewController: UICollectionViewDataSource {
         }
         let userTimelinePath = String(format: Constants.Database.getTimelinePosts, currentUID)
         let ref = Database.database().reference().child(userTimelinePath)
-        // TODO: Any point of refresh control? Should I just have it call reloadData?
+        // TODO: Remove old posts from user timelines
         TimelineService.populateUserTimeline(currentUID, ref) { posts in
             self.dataSource = posts
             // Do UI updating on main thread
