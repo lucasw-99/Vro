@@ -274,16 +274,12 @@ extension UploadEventViewController {
             make.centerX.equalToSuperview()
             make.width.equalTo(90)
             make.height.equalTo(40)
-            make.bottom.lessThanOrEqualToSuperview()
-            // TODO: Figure this out!
-//            make.bottom.equalToSuperview().priority(999)
+            make.bottom.equalToSuperview()
         }
 
         contentView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
             make.width.equalTo(view.snp.width)
-            make.height.greaterThanOrEqualTo(scrollView.snp.height)
-            make.centerX.equalToSuperview()
         }
 
         scrollView.snp.makeConstraints { make in
