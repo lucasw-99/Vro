@@ -56,7 +56,7 @@ class LoginViewController: UIViewController {
         Auth.auth().signIn(withEmail: email, password: password) { user, error in
             if error == nil && user != nil {
                 Util.removeSpinner(spinner)
-                UserService.updateCurrentUser(user!.user.uid) {
+                UserService.updateCurrentUser(user!.uid) {
                     // current user is initialized, now log in
                     self.dismiss(animated: false, completion: nil)
                     self.transitionToHome()

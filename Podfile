@@ -13,4 +13,5 @@ target 'Wagin' do
   pod 'FirebaseUI/Storage'
   pod 'InstantSearch-iOS'
   pod 'AlgoliaSearch-Client-Swift'
+  pod 'SnapKit', '~> 4.0.0'
 end
