@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Segmentio
 
 class SearchUsersViewController: UIViewController, UIGestureRecognizerDelegate {
     private let searchBar = UISearchBar()

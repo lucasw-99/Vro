@@ -12,8 +12,8 @@ import InstantSearch
 import InstantSearchCore
 
 class MapViewWidget: MKMapView, AlgoliaWidget, ResultingDelegate {
-    private var origin: CLLocationCoordinate2D!
-    private var radius: Int!
+    private var origin: CLLocationCoordinate2D?
+    private var radius: Int?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -42,7 +42,8 @@ class MapViewWidget: MKMapView, AlgoliaWidget, ResultingDelegate {
             let annotation = EventAnnotation(eventJson: hit)
             self.addAnnotation(annotation)
         }
-
+        
+        guard let origin = origin, let radius = radius else { fatalError("Origin and/or radius was nil") }
         addRadiusCircle(origin: origin, radius: radius)
     }
 

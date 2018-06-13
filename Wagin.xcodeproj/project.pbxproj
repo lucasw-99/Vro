@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4C005FA9770D32F8CE39A680 /* Pods_Wagin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11E51E9EF17703E72D3A9BBC /* Pods_Wagin.framework */; };
+		71CA903120D0AA3800DBA1EE /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CA903020D0AA3800DBA1EE /* SearchViewController.swift */; };
 		A0228F79209AC4F700E71C80 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F78209AC4F700E71C80 /* Constants.swift */; };
 		A0228F7B209ACBAC00E71C80 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F7A209ACBAC00E71C80 /* Event.swift */; };
 		A0228F7E209B483A00E71C80 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F7D209B483A00E71C80 /* UserService.swift */; };
@@ -65,6 +66,7 @@
 
 /* Begin PBXFileReference section */
 		11E51E9EF17703E72D3A9BBC /* Pods_Wagin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Wagin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		71CA903020D0AA3800DBA1EE /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		7CC27F84E82DE7DA30E870D7 /* Pods-Wagin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wagin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Wagin/Pods-Wagin.release.xcconfig"; sourceTree = "<group>"; };
 		A0228F78209AC4F700E71C80 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A0228F7A209ACBAC00E71C80 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 				A0E73FF820A68D0C007E72D3 /* SearchUsersViewController.swift */,
 				A0E73FFA20A6912E007E72D3 /* SearchUsersCollectionViewCell.swift */,
 				A0E73FFC20A7573D007E72D3 /* UserProfileViewController.swift */,
+				71CA903020D0AA3800DBA1EE /* SearchViewController.swift */,
 			);
 			path = SearchUsers;
 			sourceTree = "<group>";
@@ -439,6 +442,7 @@
 				"${BUILT_PRODUCTS_DIR}/InstantSearch-Core-Swift/InstantSearchCore.framework",
 				"${BUILT_PRODUCTS_DIR}/InstantSearch-iOS/InstantSearch.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/Segmentio/Segmentio.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
@@ -451,6 +455,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/InstantSearchCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/InstantSearch.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Segmentio.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
@@ -486,6 +491,7 @@
 				A08BA18320BEFA740062C72B /* MapViewWidget.swift in Sources */,
 				A0CB3A6920C0C67500207944 /* EventViewController.swift in Sources */,
 				A04A777920C4F22F00106E06 /* NewEventDummyViewController.swift in Sources */,
+				71CA903120D0AA3800DBA1EE /* SearchViewController.swift in Sources */,
 				A0F2FB2E209CA5DB0018F465 /* NewsFeedViewController.swift in Sources */,
 				A04A777620C4F10800106E06 /* AutocompleteResultTableViewCell.swift in Sources */,
 				A0FF4696209176B9006FE799 /* LoginViewController.swift in Sources */,
