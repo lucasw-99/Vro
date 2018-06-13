@@ -202,20 +202,16 @@ extension EventViewController {
             make.trailing.equalToSuperview()
         }
 
-        // TODO: Remove ambiguous scroll view height stuff somehow!
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(eventTimeLabel.snp.bottom).offset(40)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.bottom.lessThanOrEqualToSuperview()
-//            make.bottom.equalTo(footerView.snp.top).priority(999)
+            make.bottom.equalToSuperview()
         }
 
         contentView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
             make.width.equalTo(view.snp.width)
-            make.height.greaterThanOrEqualTo(scrollView.snp.height)
-            make.centerX.equalToSuperview()
         }
 
         scrollView.snp.makeConstraints { make in
