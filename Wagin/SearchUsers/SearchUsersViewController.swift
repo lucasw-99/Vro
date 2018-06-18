@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Segmentio
 
 class SearchUsersViewController: UIViewController, UIGestureRecognizerDelegate {
     private let searchBar = UISearchBar()
@@ -22,7 +21,7 @@ class SearchUsersViewController: UIViewController, UIGestureRecognizerDelegate {
 
 
     private var dataSource = [UserProfile]()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()

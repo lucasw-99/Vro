@@ -14,5 +14,4 @@ target 'Wagin' do
   pod 'InstantSearch-iOS'
   pod 'AlgoliaSearch-Client-Swift'
   pod 'SnapKit', '~> 4.0.0'
-  pod 'Segmentio', '~> 3.0'
 end

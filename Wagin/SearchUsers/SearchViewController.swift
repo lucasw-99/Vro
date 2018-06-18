@@ -5,20 +5,47 @@
 //  Created by Lucas Wotton on 6/12/18.
 //  Copyright © 2018 Lucas Wotton. All rights reserved.
 //
+// Implementation based off of https://cocoacasts.com/managing-view-controllers-with-container-view-controllers/
 
 import UIKit
-import Segmentio
 
 class SearchViewController: UIViewController {
     
-    let tabbar: Segmentio = Segmentio()
-    let viewControllers = [SearchUsersViewController(), MapViewController()]
-    var currentView: UIView?
+    private let tabbar = UISegmentedControl()
+    private lazy var searchUsersViewController: SearchUsersViewController = {
+        let viewController = SearchUsersViewController()
+        self.add(asChildViewController: viewController)
+        return viewController
+    }()
+    private lazy var searchEventsViewController: MapViewController = {
+        let viewController = MapViewController()
+        self.add(asChildViewController: viewController)
+        return viewController
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()
         setupLayout()
+    }
+    
+    private func add(asChildViewController viewController: UIViewController) {
+        addChildViewController(viewController)
+        view.addSubview(viewController.view)
+        print("Called!")
+        viewController.view.snp.makeConstraints { make in
+            make.top.equalTo(tabbar.snp.bottom).offset(1)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        viewController.didMove(toParentViewController: self)
+    }
+    
+    private func remove(asChildViewController viewController: UIViewController) {
+        viewController.willMove(toParentViewController: nil)
+        viewController.view.removeFromSuperview()
+        viewController.removeFromParentViewController()
     }
 }
 
@@ -26,92 +53,34 @@ class SearchViewController: UIViewController {
 // MARK: Setup subviews
 extension SearchViewController {
     private func setupSubviews() {
-        var content = [SegmentioItem]()
-        let searchUsers = SegmentioItem(title: "Users", image: #imageLiteral(resourceName: "user"))
-        let searchEvents = SegmentioItem(title: "Events", image: #imageLiteral(resourceName: "defaultEvent"))
-        content.append(searchUsers)
-        content.append(searchEvents)
-        let defaultState = SegmentioState(backgroundColor: .white,
-                                   titleFont: .systemFont(ofSize: 28, weight: .semibold),
-                                   titleTextColor: .black)
-        let selectedState = SegmentioState(backgroundColor: .lightGray,
-                                           titleFont: .systemFont(ofSize: 28, weight: .semibold),
-                                           titleTextColor: .black)
-        let highlightedState = selectedState
-        
-        tabbar.setup(content: content, style: .onlyLabel, options: nil)
-//
-//        tabbar.setup(content: content, style: SegmentioStyle.onlyLabel, options: SegmentioOptions(backgroundColor: .white,
-//                                                                                                  segmentPosition: .dynamic,
-//                                                                                                  scrollEnabled: false,
-//                                                                                                  indicatorOptions: nil,
-//                                                                                                  horizontalSeparatorOptions: SegmentioHorizontalSeparatorOptions(type: .topAndBottom,
-//                                                                                                                                                                  height: 1,
-//                                                                                                                                                color: .black),
-//                                                                                                  verticalSeparatorOptions: SegmentioVerticalSeparatorOptions(ratio: 1, color: .gray),
-//                                                                                                  imageContentMode: .center,
-//                                                                                                  labelTextAlignment: .center,
-//                                                                                                  labelTextNumberOfLines: 0,
-//                                                                                                  segmentStates: SegmentioStates(
-//                                                                                                    defaultState: defaultState,
-//                                                                                                    selectedState: selectedState,
-//                                                                                                    highlightedState: highlightedState)))
-        tabbar.selectedSegmentioIndex = 0
-        tabbar.valueDidChange = { _, segmentioIndex in
-            // TODO: Clean up logic that switches VC's?
-            if segmentioIndex == 0 {
-                print("Selected users view")
-                let previousVC = self.viewControllers[1]
-                let nextVC = self.viewControllers[0]
-                self.removePreviousVC(previousVC: previousVC)
-                self.view.addSubview(nextVC.view)
-                self.currentView = nextVC.view
-                self.currentViewConstraints()
-                nextVC.didMove(toParentViewController: self)
-            } else if segmentioIndex == 1 {
-                print("Selected events view")
-                let previousVC = self.viewControllers[0]
-                let nextVC = self.viewControllers[1]
-                self.removePreviousVC(previousVC: previousVC)
-                self.view.addSubview(nextVC.view)
-                self.currentView = nextVC.view
-                self.currentViewConstraints()
-                nextVC.didMove(toParentViewController: self)
-            } else {
-                fatalError("Invalid index")
-            }
-        }
+        tabbar.removeAllSegments()
+        tabbar.insertSegment(withTitle: "Users", at: 0, animated: false)
+        tabbar.insertSegment(withTitle: "Events", at: 0, animated: false)
+        tabbar.addTarget(self, action: #selector(self.tabDidChange(_:)), for: .valueChanged)
+        tabbar.selectedSegmentIndex = 0
         view.addSubview(tabbar)
-        
-        view.addSubview(viewControllers[0].view)
-        currentView = viewControllers[0].view
-        
+        // this statement instantiates searchUsersViewController, because it's lazy
+        let _ = searchUsersViewController
         view.backgroundColor = .white
     }
     
     private func setupLayout() {
         tabbar.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.height.equalTo(60)
+            make.height.equalTo(30)
         }
-        
-        currentViewConstraints()
     }
     
-    private func removePreviousVC(previousVC: UIViewController) {
-        previousVC.willMove(toParentViewController: nil)
-        previousVC.view.removeFromSuperview()
-        previousVC.removeFromParentViewController()
-    }
-    
-    private func currentViewConstraints() {
-        currentView?.snp.remakeConstraints { make in
-            make.top.equalTo(tabbar.snp.bottom)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
+    @objc private func tabDidChange(_ sender: UISegmentedControl) {
+        print("Tab selection changed")
+        if tabbar.selectedSegmentIndex == 0 {
+            remove(asChildViewController: searchEventsViewController)
+            add(asChildViewController: searchUsersViewController)
+        } else {
+            remove(asChildViewController: searchUsersViewController)
+            add(asChildViewController: searchEventsViewController)
         }
     }
 }

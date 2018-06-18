@@ -34,7 +34,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
 
         let searchUsersController = SearchViewController()
         searchUsersController.title = "Search"
-        searchUsersController.tabBarItem = UITabBarItem(title: "Search Users", image: #imageLiteral(resourceName: "magnifyingGlass"), tag: 1)
+        searchUsersController.tabBarItem = UITabBarItem(title: "Search", image: #imageLiteral(resourceName: "magnifyingGlass"), tag: 1)
 
         let newEventController = NewEventDummyViewController()
         newEventController.title = "New Event"
