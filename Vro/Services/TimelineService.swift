@@ -54,6 +54,7 @@ class TimelineService {
                     EventPostService.getEventForTimeline(eventID) { eventPost in
                         posts.append(eventPost)
                         LikeService.isPostLiked(eventPost.event.host.uid, eventPostID: eventPost.eventPostID, uid: currentUid) { isLiked in
+                            print("isLiked: \(isLiked), caption: \(eventPost.caption), id: \(eventPost.eventPostID)\n")
                             eventPost.isLiked = isLiked
                             dispatchGroup.leave()
                         }

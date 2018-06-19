@@ -9,25 +9,25 @@
 import FirebaseDatabase
 
 class LikeService {
-    static func getLikesForPost(_ postedByUID: String, _ eventPostID: String, completion: @escaping ( (_ userLikes: [String: Bool], _ databaseRef: DatabaseReference) -> () )) {
+    static func getLikesForPost(_ postedByUID: String, _ eventPostID: String, completion: @escaping ( (_ userLikes: [String: Like], _ databaseRef: DatabaseReference) -> () )) {
         let postLikesPath = String(format: Constants.Database.postLikes, postedByUID, eventPostID)
         let postLikesRef = Database.database().reference().child(postLikesPath)
 
         postLikesRef.observe(.value) { snapshot in
             // TODO: DOES THIS WORK
-            let userLikes = (snapshot.value as? [String: Bool]) ?? [String: Bool]()
+            let userLikes = (snapshot.value as? [String: Like]) ?? [String: Like]()
+            print("userLikes: \(userLikes), snapshot: \(snapshot)\n")
             completion(userLikes, postLikesRef)
         }
     }
 
-    static func likePost(for post: EventPost, success: @escaping ( (_ success: Bool) -> Void )) {
-        // TODO: Remove code duplication, pass in currentUid as param
-        guard let currentUID = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
+    static func likePost(for post: EventPost, currentUser uid: String, success: @escaping ( (_ success: Bool) -> Void )) {
         let eventPostID = post.eventPostID
-        let likesPath = String(format: Constants.Database.userPostLikes, post.event.host.uid, eventPostID, currentUID)
+        let likesPath = String(format: Constants.Database.userPostLikes, post.event.host.uid, eventPostID, uid)
         let likesRef = Database.database().reference().child(likesPath)
+        let likeDict = Like(uid, eventPostID).dictValue
 
-        likesRef.setValue(true) { error, _ in
+        likesRef.setValue(likeDict) { error, _ in
             if let error = error {
                 assertionFailure(error.localizedDescription)
                 return success(false)
@@ -35,9 +35,9 @@ class LikeService {
             let likeCountPath = String(format: Constants.Database.eventLikeCount, eventPostID)
             let likeCountRef = Database.database().reference().child(likeCountPath)
             likeCountRef.runTransactionBlock({ mutableData -> TransactionResult in
-                print("like mutableData: \(mutableData)")
                 let currentLikeCount = mutableData.value as? Int ?? 0
                 mutableData.value = currentLikeCount + 1
+                print("setting num likes to \(currentLikeCount + 1)")
                 return TransactionResult.success(withValue: mutableData)
             }, andCompletionBlock: { error, _, _ in
                 if let error = error {
@@ -50,10 +50,9 @@ class LikeService {
         }
     }
 
-    private static func unlikePost(for eventPost: EventPost, success: @escaping ( (_ success: Bool) -> Void )) {
-        guard let currentUID = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
+    private static func unlikePost(for eventPost: EventPost, currentUser uid: String, success: @escaping ( (_ success: Bool) -> Void )) {
         let eventPostID = eventPost.eventPostID
-        let likesPath = String(format: Constants.Database.userPostLikes, eventPost.event.host.uid, eventPostID, currentUID)
+        let likesPath = String(format: Constants.Database.userPostLikes, eventPost.event.host.uid, eventPostID, uid)
         let likesRef = Database.database().reference().child(likesPath)
 
         likesRef.removeValue() { error, _ in
@@ -66,6 +65,7 @@ class LikeService {
             likeCountRef.runTransactionBlock({ mutableData -> TransactionResult in
                 let currentLikeCount = mutableData.value as? Int ?? 0
                 mutableData.value = currentLikeCount - 1
+                print("setting num likes to \(currentLikeCount - 1)")
                 return TransactionResult.success(withValue: mutableData)
             }, andCompletionBlock: { error, _, _ in
                 if let error = error {
@@ -89,18 +89,23 @@ class LikeService {
         let isPostLikedRef = Database.database().reference().child(isPostLikedPath)
         isPostLikedRef.observeSingleEvent(of: .value) { snapshot in
             if snapshot.exists() {
+                print("eventPostID \(eventPostID) like exists\n")
                 completion(true)
             } else {
+                print("eventPostID \(eventPostID) like does not exist\n")
                 completion(false)
             }
         }
     }
 
     static func setLiked(didLikePost: Bool, for post: EventPost, success: @escaping ( (_ success: Bool) -> Void )) {
+        guard let currentUid = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
         if didLikePost {
-            likePost(for: post, success: success)
+            print("Liking post: \(post.eventPostID)\n")
+            likePost(for: post, currentUser: currentUid, success: success)
         } else {
-            unlikePost(for: post, success: success)
+            print("unliking post: \(post.eventPostID)\n")
+            unlikePost(for: post, currentUser: currentUid, success: success)
         }
     }
 }

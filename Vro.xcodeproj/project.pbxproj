@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		57500A3F33F038FE398509C7 /* Pods_Vro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09CBAD40059D9F42808030E4 /* Pods_Vro.framework */; };
+		71732D0B20D98E4C00027AAE /* Like.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71732D0A20D98E4C00027AAE /* Like.swift */; };
 		71CA903120D0AA3800DBA1EE /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CA903020D0AA3800DBA1EE /* SearchViewController.swift */; };
 		A0228F79209AC4F700E71C80 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F78209AC4F700E71C80 /* Constants.swift */; };
 		A0228F7B209ACBAC00E71C80 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F7A209ACBAC00E71C80 /* Event.swift */; };
@@ -67,6 +68,7 @@
 /* Begin PBXFileReference section */
 		09CBAD40059D9F42808030E4 /* Pods_Vro.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Vro.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		11E51E9EF17703E72D3A9BBC /* Pods_Wagin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Wagin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		71732D0A20D98E4C00027AAE /* Like.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Like.swift; sourceTree = "<group>"; };
 		71CA903020D0AA3800DBA1EE /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		7CC27F84E82DE7DA30E870D7 /* Pods-Wagin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wagin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Wagin/Pods-Wagin.release.xcconfig"; sourceTree = "<group>"; };
 		7D659C5BC08F5C650579DFF4 /* Pods-Vro.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vro.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Vro/Pods-Vro.debug.xcconfig"; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				A0F2FB2F209CA9380018F465 /* EventPost.swift */,
 				A056D7E020AB3C8F00FA3F43 /* UserFollowers.swift */,
 				A0AF4DE220B1E3CA001A9E09 /* Comment.swift */,
+				71732D0A20D98E4C00027AAE /* Like.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -499,6 +502,7 @@
 				A0F2FB2E209CA5DB0018F465 /* NewsFeedViewController.swift in Sources */,
 				A04A777620C4F10800106E06 /* AutocompleteResultTableViewCell.swift in Sources */,
 				A0FF4696209176B9006FE799 /* LoginViewController.swift in Sources */,
+				71732D0B20D98E4C00027AAE /* Like.swift in Sources */,
 				A056D80E20AD15C100FA3F43 /* FollowersService.swift in Sources */,
 				A056D80820AD157D00FA3F43 /* CommentService.swift in Sources */,
 				A04A777B20C4FB8300106E06 /* AttendEventService.swift in Sources */,

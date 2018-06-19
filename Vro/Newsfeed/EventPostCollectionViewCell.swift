@@ -292,7 +292,6 @@ extension EventPostCollectionViewCell {
 
         usernameLabel.text = eventPost.event.host.username
 
-        print("photoURL: \(eventPost.event.host.photoURL.absoluteString), caption: \(eventPost.caption)")
         ImageService.getImage(withURL: eventPost.event.host.photoURL, completion: { image in
             self.userImage.image = image
         })

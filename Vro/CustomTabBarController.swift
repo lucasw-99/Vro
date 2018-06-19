@@ -48,7 +48,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         let nearYouNavController = UINavigationController(rootViewController: nearYouController)
         nearYouNavController.title = "Near You"
         nearYouNavController.isNavigationBarHidden = true
-        nearYouNavController.tabBarItem = UITabBarItem(title: "Near You", image: #imageLiteral(resourceName: "earth"), tag: 3)
+        nearYouNavController.tabBarItem = UITabBarItem(title: "Near You", image: #imageLiteral(resourceName: "bell"), tag: 3)
 
         let manageProfileController = ManageProfileViewController()
         let manageProfileNavController = UINavigationController(rootViewController: manageProfileController)

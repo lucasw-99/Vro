@@ -157,7 +157,7 @@ extension NewsFeedViewController: EventPostCellDelegate {
     func didTapAttendButton(_ attendButton: UIButton, forCell cell: EventPostCollectionViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { fatalError("Couldn't get index path for attending") }
         attendButton.isUserInteractionEnabled = false
-        let eventPost = dataSource[indexPath.item]
+        let eventPost = dataSource[indexPath.section]
         let wasPreviouslyAttending = attendButton.isSelected
         AttendEventService.setPotentiallyAttending(nowAttendingEvent: !wasPreviouslyAttending, for: eventPost.eventPostID) { success in
             defer {
@@ -177,7 +177,8 @@ extension NewsFeedViewController: EventPostCellDelegate {
     func didTapLikeButton(_ likeButton: UIButton, forCell cell: EventPostCollectionViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { fatalError("Couldn't get index path") }
         likeButton.isUserInteractionEnabled = false
-        let post = dataSource[indexPath.item]
+        let post = dataSource[indexPath.section]
+        print("tapped like button for post: \(post.caption), id: \(post.eventPostID)")
         let wasPreviouslyLiked = likeButton.isSelected
         LikeService.setLiked(didLikePost: !wasPreviouslyLiked, for: post) { (success) in
             defer {
