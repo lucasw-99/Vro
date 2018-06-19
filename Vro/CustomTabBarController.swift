@@ -29,26 +29,34 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     func initializeTabViewControllers() {
         let newsFeedController = NewsFeedViewController()
-        newsFeedController.title = "News Feed"
-        newsFeedController.tabBarItem = UITabBarItem(title: "News Feed", image: #imageLiteral(resourceName: "party"), tag: 0)
+        let newsFeedNavController = UINavigationController(rootViewController: newsFeedController)
+        newsFeedNavController.title = "News Feed"
+        newsFeedNavController.isNavigationBarHidden = true
+        newsFeedNavController.tabBarItem = UITabBarItem(title: "News Feed", image: #imageLiteral(resourceName: "party"), tag: 0)
 
         let searchUsersController = SearchViewController()
-        searchUsersController.title = "Search"
-        searchUsersController.tabBarItem = UITabBarItem(title: "Search", image: #imageLiteral(resourceName: "magnifyingGlass"), tag: 1)
+        let searchUsersNavController = UINavigationController(rootViewController: searchUsersController)
+        searchUsersNavController.title = "Search"
+        searchUsersNavController.isNavigationBarHidden = true
+        searchUsersNavController.tabBarItem = UITabBarItem(title: "Search", image: #imageLiteral(resourceName: "magnifyingGlass"), tag: 1)
 
         let newEventController = NewEventDummyViewController()
         newEventController.title = "New Event"
         newEventController.tabBarItem = UITabBarItem(title: "New Event", image: #imageLiteral(resourceName: "plus"), tag: 2)
 
         let nearYouController = MapViewController()
-        nearYouController.title = "Near You"
-        nearYouController.tabBarItem = UITabBarItem(title: "Near You", image: #imageLiteral(resourceName: "earth"), tag: 3)
+        let nearYouNavController = UINavigationController(rootViewController: nearYouController)
+        nearYouNavController.title = "Near You"
+        nearYouNavController.isNavigationBarHidden = true
+        nearYouNavController.tabBarItem = UITabBarItem(title: "Near You", image: #imageLiteral(resourceName: "earth"), tag: 3)
 
         let manageProfileController = ManageProfileViewController()
-        manageProfileController.title = "Manage Profile"
-        manageProfileController.tabBarItem = UITabBarItem(title: "Manage Profile", image: #imageLiteral(resourceName: "settings"), tag: 4)
+        let manageProfileNavController = UINavigationController(rootViewController: manageProfileController)
+        manageProfileNavController.title = "Manage Profile"
+        manageProfileNavController.isNavigationBarHidden = true
+        manageProfileNavController.tabBarItem = UITabBarItem(title: "Manage Profile", image: #imageLiteral(resourceName: "settings"), tag: 4)
 
-        let tabBarItems = [newsFeedController, searchUsersController, newEventController, nearYouController, manageProfileController]
+        let tabBarItems = [newsFeedNavController, searchUsersNavController, newEventController, nearYouNavController, manageProfileNavController]
 
         self.viewControllers = tabBarItems
     }
