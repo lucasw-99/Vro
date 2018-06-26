@@ -22,7 +22,8 @@ class EventPostService {
         FollowersService.getFollowerInfo(eventPost.event.host.uid, userFollowersRef) { followerInfo in
             // add this event to all followers timelines
             var followers = followerInfo.followers
-            followers.insert(eventPost.event.host.uid)
+            let currentUser = Follower(eventPost.event.host.uid)
+            followers.insert(currentUser)
             TimelineService.addPostToTimelines(followers, eventPost.eventPostID) {
                 print("Finished!")
                 success()

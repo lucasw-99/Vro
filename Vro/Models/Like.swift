@@ -24,7 +24,6 @@ class Like {
         return likeObject
     }
     
-    // this constructor is used for reading comments
     init(forSnapshot snapshot: DataSnapshot) {
         guard let likeDict = snapshot.value as? [String: Any],
             let likeAuthorId = likeDict["likeAuthorId"] as? String,

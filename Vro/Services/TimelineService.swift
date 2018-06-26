@@ -14,8 +14,9 @@ class TimelineService {
     // users: List of uid's, where each uid is a user following the user
     // who was the author of the post with eventPostID
     // eventPostID: Id of the post
-    static func addPostToTimelines(_ users: Set<String>, _ eventPostID: String, completion: @escaping ( () -> () )) {
-        for uid in users {
+    static func addPostToTimelines(_ users: Set<Follower>, _ eventPostID: String, completion: @escaping ( () -> () )) {
+        for user in users {
+            let uid = user.followerId
             let addToTimelinePath = String(format: Constants.Database.addToTimeline, uid, eventPostID)
             let timelineRef = Database.database().reference().child(addToTimelinePath)
             // set to true, so bottom level of firebase database is dictionary of [String: Bool]

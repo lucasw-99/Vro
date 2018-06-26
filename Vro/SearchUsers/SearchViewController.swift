@@ -54,7 +54,7 @@ extension SearchViewController {
     private func setupSubviews() {
         tabbar.removeAllSegments()
         tabbar.insertSegment(withTitle: "Users", at: 0, animated: false)
-        tabbar.insertSegment(withTitle: "Events", at: 0, animated: false)
+        tabbar.insertSegment(withTitle: "Events", at: 1, animated: false)
         tabbar.addTarget(self, action: #selector(self.tabDidChange(_:)), for: .valueChanged)
         tabbar.selectedSegmentIndex = 0
         view.addSubview(tabbar)

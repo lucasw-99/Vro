@@ -165,7 +165,8 @@ extension UserProfileViewController {
             followButton.isSelected = currFollowing.contains(selectedUser.uid)
         } else if let selectedFollowers = selectedUserFollowers?.followers {
             guard let currUID = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
-            followButton.isSelected = selectedFollowers.contains(currUID)
+            let currUser = Follower(currUID)
+            followButton.isSelected = selectedFollowers.contains(currUser)
         } else {
             followButton.isSelected = false
         }
@@ -189,33 +190,22 @@ extension UserProfileViewController {
         followButton.isSelected = !followButton.isSelected
         guard let currentUser = currentUserFollowers else { fatalError("follow button pressed before currentUserFollowers was initialized") }
         guard let followedUser = selectedUserFollowers else { fatalError("follow button pressed before selectedUserFollowers was initialized") }
+        let currentUserFollower = Follower(currentUser.uid)
+        let followedUserFollower = Follower(followedUser.uid)
         if wasSelected {
-            guard followedUser.followers.contains(currentUser.uid) else { fatalError("Says that user was following other user, but they weren't in the other users followers list") }
-            followedUser.followers.remove(currentUser.uid)
+            guard followedUser.followers.contains(currentUserFollower) else { fatalError("Says that user was following other user, but they weren't in the other users followers list") }
+            followedUser.followers.remove(currentUserFollower)
 
-            guard currentUser.following.contains(followedUser.uid) else { fatalError("Issue with follower counts") }
-            currentUser.following.remove(followedUser.uid)
+            guard currentUser.following.contains(followedUserFollower.followerId) else { fatalError("Issue with follower counts") }
+            currentUser.following.remove(followedUserFollower.followerId)
 
         } else {
-            currentUser.following.insert(followedUser.uid)
-            followedUser.followers.insert(currentUser.uid)
+            currentUser.following.insert(followedUserFollower.followerId)
+            followedUser.followers.insert(currentUserFollower)
         }
         // TODO: Check for adding vs removing followers, use wasSelected
         FollowersService.updateFollowers(uid: currentUser.uid, followedUid: followedUser.uid, addFollower: !wasSelected) {
             Util.toggleButton(button: self.followButton, isEnabled: true)
         }
-    }
-
-    private func updateFollowSets(currentUser: UserFollowers, followedUser: UserFollowers) {
-        // edit the selectedUser's followers list, and the currentUser's following list
-        let followersPath = String(format: Constants.Database.userFollowers, followedUser.uid)
-        let followingPath = String(format: Constants.Database.userFollowing, currentUser.uid)
-
-        let followersRef = Database.database().reference().child(followersPath)
-        followersRef.setValue(Util.setToDictionary(followedUser.followers))
-
-        let followingRef = Database.database().reference().child(followingPath)
-        followingRef.setValue(Util.setToDictionary(currentUser.following))
-        print("Updated database!")
     }
 }
