@@ -205,6 +205,7 @@ extension ShowCommentsViewController {
         commentView.addSubview(commentTextField)
 
         view.addSubview(commentView)
+        edgesForExtendedLayout = []
 
         view.backgroundColor = .white
     }
@@ -267,9 +268,7 @@ extension ShowCommentsViewController {
         commentView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            // TODO: Fix!
-            // https://stackoverflow.com/questions/20884381/tableview-showing-behind-tab-bar
-            make.bottom.equalToSuperview().offset(-(tabBarController?.tabBar.frame.height ?? 0))
+            make.bottom.equalToSuperview()
             make.top.equalTo(collectionView.snp.bottom)
             make.height.equalTo(75)
         }

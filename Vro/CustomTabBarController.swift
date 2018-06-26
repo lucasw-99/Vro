@@ -12,6 +12,9 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     override func viewDidLoad() {
         self.delegate = self
+        tabBar.isTranslucent = false
+        tabBar.alpha = 0.95
+        tabBar.backgroundColor = UIColor.white
     }
 
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
