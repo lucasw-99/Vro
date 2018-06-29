@@ -1,5 +1,5 @@
 //
-//  UserTableViewCell.swift
+//  SearchUsersCollectionViewCell.swift
 //  Vro
 //
 //  Created by Lucas Wotton on 5/11/18.

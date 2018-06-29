@@ -277,6 +277,7 @@
 		A0E73FF720A68CE6007E72D3 /* SearchUsers */ = {
 			isa = PBXGroup;
 			children = (
+				A0D18553209A38CA00FC58D1 /* EventMap */,
 				A0E73FF820A68D0C007E72D3 /* SearchUsersViewController.swift */,
 				A0E73FFA20A6912E007E72D3 /* SearchUsersCollectionViewCell.swift */,
 				A0E73FFC20A7573D007E72D3 /* UserProfileViewController.swift */,
@@ -312,7 +313,6 @@
 				A0228F73209A51B300E71C80 /* Models */,
 				A0228F7C209B482B00E71C80 /* Services */,
 				A0228F77209AC4E600E71C80 /* Global */,
-				A0D18553209A38CA00FC58D1 /* EventMap */,
 				A0D18552209A38B100FC58D1 /* ManageProfile */,
 				A0D18551209A38A500FC58D1 /* Newsfeed */,
 				A0D18550209A389400FC58D1 /* Signup */,
