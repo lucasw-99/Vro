@@ -11,6 +11,7 @@
 		71732D0B20D98E4C00027AAE /* Like.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71732D0A20D98E4C00027AAE /* Like.swift */; };
 		71732D0D20D9BB9D00027AAE /* Attendee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71732D0C20D9BB9D00027AAE /* Attendee.swift */; };
 		71732D0F20D9BEDD00027AAE /* Follower.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71732D0E20D9BEDD00027AAE /* Follower.swift */; };
+		71732D1620E5D38100027AAE /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71732D1520E5D38100027AAE /* NotificationsViewController.swift */; };
 		71CA903120D0AA3800DBA1EE /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71CA903020D0AA3800DBA1EE /* SearchViewController.swift */; };
 		A0228F79209AC4F700E71C80 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F78209AC4F700E71C80 /* Constants.swift */; };
 		A0228F7B209ACBAC00E71C80 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0228F7A209ACBAC00E71C80 /* Event.swift */; };
@@ -73,6 +74,7 @@
 		71732D0A20D98E4C00027AAE /* Like.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Like.swift; sourceTree = "<group>"; };
 		71732D0C20D9BB9D00027AAE /* Attendee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attendee.swift; sourceTree = "<group>"; };
 		71732D0E20D9BEDD00027AAE /* Follower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Follower.swift; sourceTree = "<group>"; };
+		71732D1520E5D38100027AAE /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		71CA903020D0AA3800DBA1EE /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		7CC27F84E82DE7DA30E870D7 /* Pods-Wagin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wagin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Wagin/Pods-Wagin.release.xcconfig"; sourceTree = "<group>"; };
 		7D659C5BC08F5C650579DFF4 /* Pods-Vro.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vro.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Vro/Pods-Vro.debug.xcconfig"; sourceTree = "<group>"; };
@@ -136,6 +138,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		71732D1220E5D0E700027AAE /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				71732D1520E5D38100027AAE /* NotificationsViewController.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
 		A0228F73209A51B300E71C80 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -307,6 +317,7 @@
 		A0FF4692209176B9006FE799 /* Vro */ = {
 			isa = PBXGroup;
 			children = (
+				71732D1220E5D0E700027AAE /* Notifications */,
 				A04A776E20C4F10800106E06 /* NewEvent */,
 				A0FF469A209176BA006FE799 /* Assets.xcassets */,
 				A0E73FF720A68CE6007E72D3 /* SearchUsers */,
@@ -531,6 +542,7 @@
 				A0228F80209B488500E71C80 /* UserProfile.swift in Sources */,
 				A0AF4DE720B330A7001A9E09 /* PaddedTextField.swift in Sources */,
 				A0E73FFD20A7573D007E72D3 /* UserProfileViewController.swift in Sources */,
+				71732D1620E5D38100027AAE /* NotificationsViewController.swift in Sources */,
 				A0AF4DE320B1E3CA001A9E09 /* Comment.swift in Sources */,
 				A0228F7B209ACBAC00E71C80 /* Event.swift in Sources */,
 				71732D0D20D9BB9D00027AAE /* Attendee.swift in Sources */,

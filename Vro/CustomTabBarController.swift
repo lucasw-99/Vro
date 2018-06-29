@@ -47,11 +47,11 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         newEventController.title = "New Event"
         newEventController.tabBarItem = UITabBarItem(title: "New Event", image: #imageLiteral(resourceName: "plus"), tag: 2)
 
-        let nearYouController = MapViewController()
-        let nearYouNavController = UINavigationController(rootViewController: nearYouController)
-        nearYouNavController.title = "Near You"
+        let notificationsController = NotificationsViewController()
+        let nearYouNavController = UINavigationController(rootViewController: notificationsController)
+        nearYouNavController.title = "Notifications"
         nearYouNavController.isNavigationBarHidden = true
-        nearYouNavController.tabBarItem = UITabBarItem(title: "Near You", image: #imageLiteral(resourceName: "bell"), tag: 3)
+        nearYouNavController.tabBarItem = UITabBarItem(title: "Notifications", image: #imageLiteral(resourceName: "bell"), tag: 3)
 
         let manageProfileController = ManageProfileViewController()
         let manageProfileNavController = UINavigationController(rootViewController: manageProfileController)

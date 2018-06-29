@@ -17,8 +17,6 @@ class NewsFeedViewController: UIViewController {
     private var userTimelineRef: DatabaseReference?
     // eventPostID => cell
     private var eventPostCells = [String: EventPostCollectionViewCell]()
-    // eventPostID => userLikes, likesReference
-    private var eventPostLikesObserver = [String: (Set<String>, DatabaseReference)]()
 
     private let vroLabel = UILabel()
     private let separatorView = UIView()
@@ -57,15 +55,6 @@ class NewsFeedViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-    }
-
-    // remove all observers when view disappears
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        for values in eventPostLikesObserver.values {
-            let observer = values.1
-            observer.removeAllObservers()
-        }
     }
 }
 
