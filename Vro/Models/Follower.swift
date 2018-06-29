@@ -11,7 +11,7 @@ import FirebaseDatabase
 
 class Follower: Hashable {
     let followerId: String
-    var timestamp: Date?
+    let timestamp: Date?
     
     var hashValue: Int {
         return followerId.hashValue
@@ -42,5 +42,6 @@ class Follower: Hashable {
     // this constructor is used for posting comments
     init(_ followerId: String) {
         self.followerId = followerId
+        self.timestamp = nil
     }
 }

@@ -12,8 +12,8 @@ class AttendEventService {
     private static func potentiallyAttendEvent(_ eventPostId: String, _ attendeeUid: String, success: @escaping ( (_ success: Bool) -> () )) {
         let potentialEventAttendeePath = String(format: Constants.Database.eventPotentialAttending, eventPostId, attendeeUid)
         let potentialEventAttendeeRef = Database.database().reference().child(potentialEventAttendeePath)
-
-        potentialEventAttendeeRef.setValue(true) { error, _ in
+        let attendee = Attendee(attendeeUid, eventPostId, true, false)
+        potentialEventAttendeeRef.setValue(attendee.dictValue) { error, _ in
             if let error = error {
                 assertionFailure(error.localizedDescription)
                 return success(false)

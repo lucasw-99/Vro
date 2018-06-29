@@ -12,7 +12,7 @@ import FirebaseDatabase
 class Like {
     let likeAuthorId: String
     let eventPostId: String
-    let timestamp: Date
+    let timestamp: Date?
     
     var dictValue: [String: Any] {
         let likeObject = [
@@ -35,11 +35,9 @@ class Like {
         self.timestamp = Date(timeIntervalSince1970: timestamp / 1000)
     }
     
-    // this constructor is used for posting comments
     init(_ likeAuthorId: String, _ eventPostId: String) {
         self.likeAuthorId = likeAuthorId
         self.eventPostId = eventPostId
-        // TODO: Placeholder, because timestamp dynamically generated when posting
-        self.timestamp = Date()
+        self.timestamp = nil
     }
 }

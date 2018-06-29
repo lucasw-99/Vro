@@ -14,7 +14,7 @@ class Attendee {
     let eventPostId: String
     let potentialAttending: Bool
     let actualAttending: Bool
-    let timestamp: Date
+    let timestamp: Date?
     
     var dictValue: [String: Any] {
         let attendeeObject = [
@@ -43,7 +43,6 @@ class Attendee {
         self.timestamp = Date(timeIntervalSince1970: timestamp / 1000)
     }
     
-    // this constructor is used for posting comments
     init(_ attendeeId: String,
          _ eventPostId: String,
          _ potentialAttending: Bool,
@@ -52,7 +51,6 @@ class Attendee {
         self.eventPostId = eventPostId
         self.potentialAttending = potentialAttending
         self.actualAttending = actualAttending
-        // TODO: Placeholder, because timestamp dynamically generated when posting
-        self.timestamp = Date()
+        self.timestamp = nil
     }
 }
