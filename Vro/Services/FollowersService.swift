@@ -29,12 +29,14 @@ class FollowersService {
         let followersRef = Database.database().reference().child(followersPath)
         let followingRef = Database.database().reference().child(followingPath)
 
+        // TODO: Put this in a transaction block
         if addFollower {
             let follower = Follower(uid)
             followersRef.child(uid).updateChildValues(follower.dictValue)
             followingRef.updateChildValues([followedUid: true])
             // add followedUid posts to uid's timeline
             TimelineService.updateUserTimeline(followedUid, uid, addToTimeline: true) {
+                NotificationService.postNotification(forNotification: FollowerNotification(followedUserUid: followedUid, followerUid: followedUid, seen: false), notificationId: uid)
                 completion()
             }
         } else {
@@ -42,6 +44,7 @@ class FollowersService {
             followingRef.child(followedUid).removeValue()
             // remove followedUid posts from uid's timeline
             TimelineService.updateUserTimeline(followedUid, uid, addToTimeline: false) {
+                NotificationService.removeNotification(forUser: followedUid, notificationId: uid)
                 completion()
             }
         }

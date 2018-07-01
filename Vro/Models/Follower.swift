@@ -36,7 +36,7 @@ class Follower: Hashable {
             let timestamp = followerDict["timestamp"] as? TimeInterval else { fatalError("follower dict was incorrectly formatted") }
         
         self.followerId = followerId
-        self.timestamp = Date(timeIntervalSince1970: timestamp / 1000)
+        self.timestamp = Date(milliseconds: timestamp)
     }
     
     // this constructor is used for posting comments

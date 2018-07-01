@@ -11,7 +11,7 @@ import SnapKit
 
 class ShowCommentsViewController: UIViewController {
     private var dataSource = [(Comment, UserProfile)]()
-    private let eventPostID: String
+    private let eventPost: EventPost
     private let postNewComment: Bool
 
     private let titleView = UIView()
@@ -41,8 +41,8 @@ class ShowCommentsViewController: UIViewController {
         return refreshControl
     }()
 
-    init(eventPostID: String, postNewComment: Bool) {
-        self.eventPostID = eventPostID
+    init(eventPost: EventPost, postNewComment: Bool) {
+        self.eventPost = eventPost
         self.postNewComment = postNewComment
         super.init(nibName: nil, bundle: nil)
     }
@@ -73,8 +73,8 @@ class ShowCommentsViewController: UIViewController {
 // MARK: Populate dataSource
 extension ShowCommentsViewController: UICollectionViewDataSource {
     @objc private func observeEventComments() {
-        CommentService.commentsForEvent(eventPostID) { comments in
-            CommentService.commentsForEvent(self.eventPostID) { comments in
+        CommentService.commentsForEvent(eventPost) { comments in
+            CommentService.commentsForEvent(self.eventPost) { comments in
                 print("Loading comments: \(comments)")
                 // get username for each comment
                 let userComments = self.observeUserComments(forComments: comments)
@@ -98,7 +98,7 @@ extension ShowCommentsViewController: UICollectionViewDataSource {
         var userComments = [(Comment, UserProfile)]()
         let dispatchGroup = DispatchGroup()
         for comment in comments {
-            let commentAuthorUID = comment.commentAuthorID
+            let commentAuthorUID = comment.commentAuthorId
             dispatchGroup.enter()
             UserService.observeUserProfile(commentAuthorUID) { userProfile in
                 dispatchGroup.leave()
@@ -319,7 +319,7 @@ extension ShowCommentsViewController: UITextFieldDelegate {
         if commentText.isEmpty {
             // TODO: Post alert about not posting empty comments maybe
         } else {
-            CommentService.postComment(text: commentText, eventPostID: eventPostID) { success in
+            CommentService.postComment(text: commentText, eventPost: eventPost) { success in
                 if success {
                     print("Comment posted successfully")
                     // update view so user can see newly posted comment

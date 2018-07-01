@@ -42,7 +42,7 @@ class EventPost {
             let likeCount = eventPostDict["likeCount"] as? Int else { fatalError("eventPost snapshot was incorrectly formatted") }
 
         let event = Event(eventJson: eventDict)
-        let timestamp = Date(timeIntervalSince1970: eventPostTimestamp / 1000)
+        let timestamp = Date(milliseconds: eventPostTimestamp)
         self.event = event
         self.caption = eventPostCaption
         self.timestamp = timestamp

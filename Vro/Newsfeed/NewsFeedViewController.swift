@@ -148,7 +148,7 @@ extension NewsFeedViewController: EventPostCellDelegate {
         attendButton.isUserInteractionEnabled = false
         let eventPost = dataSource[indexPath.section]
         let wasPreviouslyAttending = attendButton.isSelected
-        AttendEventService.setPotentiallyAttending(nowAttendingEvent: !wasPreviouslyAttending, for: eventPost.eventPostID) { success in
+        AttendEventService.setPotentiallyAttending(nowAttendingEvent: !wasPreviouslyAttending, for: eventPost) { success in
             defer {
                 attendButton.isUserInteractionEnabled = true
             }
@@ -191,7 +191,7 @@ extension NewsFeedViewController: EventPostCellDelegate {
             commentButton.isUserInteractionEnabled = true
         }
 
-        let commentsViewController = ShowCommentsViewController(eventPostID: event.eventPostID, postNewComment: true)
+        let commentsViewController = ShowCommentsViewController(eventPost: event, postNewComment: true)
         navigationController?.pushViewController(commentsViewController, animated: true)
     }
 
@@ -212,7 +212,7 @@ extension NewsFeedViewController: EventPostCellDelegate {
             showCommentsButton.isUserInteractionEnabled = true
         }
         
-        let commentsViewController = ShowCommentsViewController(eventPostID: event.eventPostID, postNewComment: false)
+        let commentsViewController = ShowCommentsViewController(eventPost: event, postNewComment: false)
         navigationController?.pushViewController(commentsViewController, animated: true)
     }
 }

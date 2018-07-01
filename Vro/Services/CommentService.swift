@@ -15,15 +15,18 @@ class CommentService {
      eventPostID: The Event Post ID the comment was posted to
      success: A function called with param of true if both writes succeed
     */
-    static func postComment(text commentText: String, eventPostID: String, success: @escaping ( (_ success: Bool) -> Void )) {
+    static func postComment(text commentText: String, eventPost: EventPost, success: @escaping ( (_ success: Bool) -> Void )) {
         print("called postComment")
+        let eventPostId = eventPost.eventPostID
         let commentID = Util.generateId()
-        guard let commentAuthorUID = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
-
+        guard let commentAuthor = UserService.currentUserProfile else { fatalError("Current user nil") }
+        let commentAuthorUid = commentAuthor.uid
+        
         let newCommentPath = String(format: Constants.Database.postComment, commentID)
         let newCommentRef = Database.database().reference().child(newCommentPath)
-        let comment = Comment(commentID, commentText, commentAuthorUID, eventPostID)
+        let comment = Comment(commentID, commentText, commentAuthorUid, eventPostId)
 
+        // TODO: Nest this and run a transaction block
         newCommentRef.setValue(comment.dictValue) { error, _ in
             if let error = error {
                 assertionFailure(error.localizedDescription)
@@ -32,7 +35,7 @@ class CommentService {
             }
         }
 
-        let newPostCommentPath = String(format: Constants.Database.eventPostComment, comment.eventPostID, comment.commentID)
+        let newPostCommentPath = String(format: Constants.Database.eventPostComment, comment.eventPostId, comment.commentId)
         let newPostCommentRef = Database.database().reference().child(newPostCommentPath)
 
         newPostCommentRef.setValue(true) { error, _ in
@@ -40,6 +43,7 @@ class CommentService {
                 assertionFailure(error.localizedDescription)
                 success(false)
             } else {
+                NotificationService.postNotification(forNotification: CommentNotification(commentedPost: eventPost, user: commentAuthor, seen: false), notificationId: comment.commentId)
                 success(true)
             }
         }
@@ -62,8 +66,10 @@ class CommentService {
      eventPostID: event ID
      completion: Function that receives all comments associated with eventPostID as a parameter
     */
-    static func commentsForEvent(_ eventPostID: String, completion: @escaping ( (_ comments: [Comment]) -> Void )) {
-        let eventCommentsPath = String(format: Constants.Database.eventPostComments, eventPostID)
+    static func commentsForEvent(_ eventPost: EventPost, completion: @escaping ( (_ comments: [Comment]) -> Void )) {
+        let eventPostId = eventPost.eventPostID
+        
+        let eventCommentsPath = String(format: Constants.Database.eventPostComments, eventPostId)
         let eventCommentsRef = Database.database().reference().child(eventCommentsPath)
         let dispatchGroup = DispatchGroup()
         eventCommentsRef.observeSingleEvent(of: .value) { snapshot in
@@ -81,7 +87,8 @@ class CommentService {
             }
             dispatchGroup.notify(queue: DispatchQueue.global()) {
                 comments.sort { c1, c2 -> Bool in
-                    c1.timestamp.compare(c2.timestamp) == .orderedAscending
+                    guard let d1 = c1.timestamp, let d2 = c2.timestamp else { fatalError("Dates nil when they shouldn't be") }
+                    return d1.compare(d2) == .orderedAscending
                 }
                 completion(comments)
             }

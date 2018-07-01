@@ -14,7 +14,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var loginButtonText: UIButton!
 
-    private let backgroundImage: UIImageView = UIImageView(image: #imageLiteral(resourceName: "waginLoginScreensaver"))
+    private let backgroundImage: UIImageView = UIImageView(image: #imageLiteral(resourceName: "allMyVrosPng"))
     private let emailInput: UITextField = UITextField()
     private let passwordInput: UITextField = UITextField()
     private let emailLabel: UILabel = UILabel()

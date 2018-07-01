@@ -21,11 +21,14 @@ class LikeService {
         }
     }
 
-    static func likePost(for post: EventPost, currentUser uid: String, success: @escaping ( (_ success: Bool) -> Void )) {
+    static func likePost(for post: EventPost, currentUser user: UserProfile, success: @escaping ( (_ success: Bool) -> Void )) {
         let eventPostID = post.eventPostID
+        let uid = user.uid
+        
         let likesPath = String(format: Constants.Database.userPostLikes, post.event.host.uid, eventPostID, uid)
         let likesRef = Database.database().reference().child(likesPath)
-        let likeDict = Like(uid, eventPostID).dictValue
+        let like = Like(uid, eventPostID)
+        let likeDict = like.dictValue
 
         likesRef.setValue(likeDict) { error, _ in
             if let error = error {
@@ -43,38 +46,47 @@ class LikeService {
                 if let error = error {
                     assertionFailure(error.localizedDescription)
                     success(false)
-                } else {    
+                } else {
+                    // TODO: Transaction block
+                    NotificationService.postNotification(forNotification: LikeNotification(likedPost: post, user: user, seen: false), notificationId: like.identifier)
                     success(true)
                 }
             })
         }
     }
 
-    private static func unlikePost(for eventPost: EventPost, currentUser uid: String, success: @escaping ( (_ success: Bool) -> Void )) {
+    private static func unlikePost(for eventPost: EventPost, currentUser user: UserProfile, success: @escaping ( (_ success: Bool) -> Void )) {
         let eventPostID = eventPost.eventPostID
+        let uid = user.uid
+        
         let likesPath = String(format: Constants.Database.userPostLikes, eventPost.event.host.uid, eventPostID, uid)
         let likesRef = Database.database().reference().child(likesPath)
 
-        likesRef.removeValue() { error, _ in
-            if let error = error {
-                assertionFailure(error.localizedDescription)
-                return success(false)
-            }
-            let likeCountPath = String(format: Constants.Database.eventLikeCount, eventPostID)
-            let likeCountRef = Database.database().reference().child(likeCountPath)
-            likeCountRef.runTransactionBlock({ mutableData -> TransactionResult in
-                let currentLikeCount = mutableData.value as? Int ?? 0
-                mutableData.value = currentLikeCount - 1
-                print("setting num likes to \(currentLikeCount - 1)")
-                return TransactionResult.success(withValue: mutableData)
-            }, andCompletionBlock: { error, _, _ in
+        likesRef.observeSingleEvent(of: .value) { snapshot in
+            guard let likeDict = snapshot.value as? [String: Any],
+                let identifier = likeDict["identifier"] as? String else { fatalError("Like JSON malformatted") }
+            likesRef.removeValue() { error, _ in
                 if let error = error {
                     assertionFailure(error.localizedDescription)
-                    success(false)
-                } else {
-                    success(true)
+                    return success(false)
                 }
-            })
+                let likeCountPath = String(format: Constants.Database.eventLikeCount, eventPostID)
+                let likeCountRef = Database.database().reference().child(likeCountPath)
+                likeCountRef.runTransactionBlock({ mutableData -> TransactionResult in
+                    let currentLikeCount = mutableData.value as? Int ?? 0
+                    mutableData.value = currentLikeCount - 1
+                    print("setting num likes to \(currentLikeCount - 1)")
+                    return TransactionResult.success(withValue: mutableData)
+                }, andCompletionBlock: { error, _, _ in
+                    if let error = error {
+                        assertionFailure(error.localizedDescription)
+                        success(false)
+                    } else {
+                        NotificationService.removeNotification(forUser: eventPost.event.host.uid, notificationId: identifier)
+                        success(true)
+                    }
+                })
+            }
         }
     }
 
@@ -99,13 +111,13 @@ class LikeService {
     }
 
     static func setLiked(didLikePost: Bool, for post: EventPost, success: @escaping ( (_ success: Bool) -> Void )) {
-        guard let currentUid = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
+        guard let currentUser = UserService.currentUserProfile else { fatalError("Current user nil") }
         if didLikePost {
             print("Liking post: \(post.eventPostID)\n")
-            likePost(for: post, currentUser: currentUid, success: success)
+            likePost(for: post, currentUser: currentUser, success: success)
         } else {
             print("unliking post: \(post.eventPostID)\n")
-            unlikePost(for: post, currentUser: currentUid, success: success)
+            unlikePost(for: post, currentUser: currentUser, success: success)
         }
     }
 }
