@@ -13,45 +13,36 @@ class AttendEventService {
         let eventPostId = eventPost.eventPostID
         let attendeeUid = attendee.uid
         
-        let potentialEventAttendeePath = String(format: Constants.Database.eventPotentialAttending, eventPostId, attendeeUid)
-        let potentialEventAttendeeRef = Database.database().reference().child(potentialEventAttendeePath)
         let newAttendee = Attendee(attendeeUid, eventPostId, true, false)
-        potentialEventAttendeeRef.setValue(newAttendee.dictValue) { error, _ in
-            if let error = error {
-                assertionFailure(error.localizedDescription)
-                return success(false)
-            }
+        let potentialEventAttendeePath = String(format: Constants.Database.eventPotentialAttending, eventPostId, attendeeUid)
+        let userEventsAttendingPath = String(format: Constants.Database.userEventsAttending, attendeeUid, eventPostId)
 
-            let attendeeCountPath = String(format: Constants.Database.eventAttendeeCount, eventPostId)
-            let attendeeCountRef = Database.database().reference().child(attendeeCountPath)
-            attendeeCountRef.runTransactionBlock({ mutableData -> TransactionResult in
-                print("attendee mutableData: \(mutableData)")
-                let currentAttendeeCount = mutableData.value as? Int ?? 0
-                mutableData.value = currentAttendeeCount + 1
-                return TransactionResult.success(withValue: mutableData)
-            }, andCompletionBlock: { error, _, _ in
-                if let error = error {
-                    assertionFailure(error.localizedDescription)
+        var updates = [String: Any?]()
+        updates[potentialEventAttendeePath] = newAttendee.dictValue
+        updates[userEventsAttendingPath] = true
+        NotificationService.postNotification(forNotification: AttendeeNotification(event: eventPost.event, attendee: attendee, seen: false), notificationId: newAttendee.identifier, withUpdates: updates) { finalUpdates in
+            let updateRef = Database.database().reference()
+            updateRef.updateChildValues(finalUpdates) { error, _ in
+                if error != nil {
+                    print("Error with potentially attending event: \(error!.localizedDescription)")
                     return success(false)
-                } else {
-                    let userEventsAttendingPath = String(format: Constants.Database.userEventsAttending, attendeeUid, eventPostId)
-                    let userEventsAttendingRef = Database.database().reference().child(userEventsAttendingPath)
-
-                    userEventsAttendingRef.runTransactionBlock({ mutableData -> TransactionResult in
-                        mutableData.value = true
-                        return TransactionResult.success(withValue: mutableData)
-                    }, andCompletionBlock: { error, _, _ in
-                        if let error = error {
-                            assertionFailure(error.localizedDescription)
-                            return success(false)
-                        } else {
-                            // TODO: Run transaction block
-                            NotificationService.postNotification(forNotification: AttendeeNotification(event: eventPost.event, attendee: attendee, seen: false), notificationId: newAttendee.identifier)
-                            return success(true)
-                        }
-                    })
                 }
-            })
+                let attendeeCountPath = String(format: Constants.Database.eventAttendeeCount, eventPostId)
+                let attendeeCountRef = Database.database().reference().child(attendeeCountPath)
+                attendeeCountRef.runTransactionBlock({ mutableData -> TransactionResult in
+                    print("attendee mutableData: \(mutableData)")
+                    let currentAttendeeCount = mutableData.value as? Int ?? 0
+                    mutableData.value = currentAttendeeCount + 1
+                    return TransactionResult.success(withValue: mutableData)
+                }, andCompletionBlock: { error, _, _ in
+                    if let error = error {
+                        assertionFailure(error.localizedDescription)
+                        success(false)
+                    } else {
+                        success(true)
+                    }
+                })
+            }
         }
     }
 

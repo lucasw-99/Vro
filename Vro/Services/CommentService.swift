@@ -18,33 +18,23 @@ class CommentService {
     static func postComment(text commentText: String, eventPost: EventPost, success: @escaping ( (_ success: Bool) -> Void )) {
         print("called postComment")
         let eventPostId = eventPost.eventPostID
-        let commentID = Util.generateId()
+        let commentId = Util.generateId()
         guard let commentAuthor = UserService.currentUserProfile else { fatalError("Current user nil") }
         let commentAuthorUid = commentAuthor.uid
         
-        let newCommentPath = String(format: Constants.Database.postComment, commentID)
-        let newCommentRef = Database.database().reference().child(newCommentPath)
-        let comment = Comment(commentID, commentText, commentAuthorUid, eventPostId)
-
-        // TODO: Nest this and run a transaction block
-        newCommentRef.setValue(comment.dictValue) { error, _ in
-            if let error = error {
-                assertionFailure(error.localizedDescription)
-                success(false)
-                return
-            }
-        }
-
-        let newPostCommentPath = String(format: Constants.Database.eventPostComment, comment.eventPostId, comment.commentId)
-        let newPostCommentRef = Database.database().reference().child(newPostCommentPath)
-
-        newPostCommentRef.setValue(true) { error, _ in
-            if let error = error {
-                assertionFailure(error.localizedDescription)
-                success(false)
-            } else {
-                NotificationService.postNotification(forNotification: CommentNotification(commentedPost: eventPost, user: commentAuthor, seen: false), notificationId: comment.commentId)
-                success(true)
+        let comment = Comment(commentId, commentText, commentAuthorUid, eventPostId)
+        let newCommentPath = String(format: Constants.Database.postComment, commentId)
+        let newPostCommentPath = String(format: Constants.Database.eventPostComment, eventPostId, commentId)
+        
+        var updates = [String: Any?]()
+        updates[newCommentPath] = comment.dictValue
+        updates[newPostCommentPath] = true
+        NotificationService.postNotification(forNotification: CommentNotification(commentedPost: eventPost, user: commentAuthor, seen: false), notificationId: comment.commentId, withUpdates: updates) { finalUpdates in
+            let updateRef = Database.database().reference()
+            updateRef.updateChildValues(finalUpdates) { error, _ in
+                if error != nil {
+                    print("failed to post comment")
+                }
             }
         }
     }

@@ -26,32 +26,34 @@ class LikeService {
         let uid = user.uid
         
         let likesPath = String(format: Constants.Database.userPostLikes, post.event.host.uid, eventPostID, uid)
-        let likesRef = Database.database().reference().child(likesPath)
         let like = Like(uid, eventPostID)
         let likeDict = like.dictValue
-
-        likesRef.setValue(likeDict) { error, _ in
-            if let error = error {
-                assertionFailure(error.localizedDescription)
-                return success(false)
-            }
-            let likeCountPath = String(format: Constants.Database.eventLikeCount, eventPostID)
-            let likeCountRef = Database.database().reference().child(likeCountPath)
-            likeCountRef.runTransactionBlock({ mutableData -> TransactionResult in
-                let currentLikeCount = mutableData.value as? Int ?? 0
-                mutableData.value = currentLikeCount + 1
-                print("setting num likes to \(currentLikeCount + 1)")
-                return TransactionResult.success(withValue: mutableData)
-            }, andCompletionBlock: { error, _, _ in
-                if let error = error {
-                    assertionFailure(error.localizedDescription)
-                    success(false)
-                } else {
-                    // TODO: Transaction block
-                    NotificationService.postNotification(forNotification: LikeNotification(likedPost: post, user: user, seen: false), notificationId: like.identifier)
-                    success(true)
+        
+        var updates = [String: Any?]()
+        updates[likesPath] = likeDict
+        NotificationService.postNotification(forNotification: LikeNotification(likedPost: post, user: user, seen: false), notificationId: like.identifier, withUpdates: updates) { finalUpdates in
+            let updateRef = Database.database().reference()
+            updateRef.updateChildValues(finalUpdates) { error, _ in
+                if error != nil {
+                    print("error with liking post: \(error!.localizedDescription)")
+                    return success(false)
                 }
-            })
+                let likeCountPath = String(format: Constants.Database.eventLikeCount, eventPostID)
+                let likeCountRef = Database.database().reference().child(likeCountPath)
+                likeCountRef.runTransactionBlock({ mutableData -> TransactionResult in
+                    let currentLikeCount = mutableData.value as? Int ?? 0
+                    mutableData.value = currentLikeCount + 1
+                    print("setting num likes to \(currentLikeCount + 1)")
+                    return TransactionResult.success(withValue: mutableData)
+                }, andCompletionBlock: { error, _, _ in
+                    if let error = error {
+                        assertionFailure(error.localizedDescription)
+                        success(false)
+                    } else {
+                        success(true)
+                    }
+                })
+            }
         }
     }
 

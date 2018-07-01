@@ -9,9 +9,10 @@
 import FirebaseDatabase
 
 class NotificationService {
-    static func postNotification(forNotification notification: Notification, notificationId: String) {
+    static func postNotification(forNotification notification: Notification, notificationId: String, withUpdates updateDict: [String: Any?], completion: @escaping ( (_ newUpdates: [String: Any?]) -> () )) {
         print("got notification: \(notification.type.rawValue)")
         let offsetRef = Database.database().reference().child(".info/serverTimeOffset")
+        var newUpdates = updateDict
         offsetRef.observeSingleEvent(of: .value) { snapshot in
             guard let offset = snapshot.value as? Double else { fatalError("offset wrong") }
             let negativeTimestamp = (Date().millisecondsSince1970 + Int64(offset)) * -1
@@ -19,10 +20,8 @@ class NotificationService {
             var notificationDict = notification.dictValue
             notificationDict["negativeTimestamp"] = negativeTimestamp
             let notificationPath = String(format: Constants.Database.specificNotification, notification.forUserUid, notificationId)
-            let notificationRef = Database.database().reference().child(notificationPath)
-            
-            // TODO: Retry on failure? Or wrap in a transaction? Wrap in a transaction definitely
-            notificationRef.setValue(notificationDict)
+            newUpdates[notificationPath] = notificationDict
+            completion(newUpdates)
         }
     }
     

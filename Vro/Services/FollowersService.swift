@@ -35,10 +35,10 @@ class FollowersService {
             // add followedUid posts to uid's timeline
             print("updates: \(updates)")
             TimelineService.updateUserTimeline(followedUid, uid, addToTimeline: true, updates: updates) { newUpdates in
-                updateRef.updateChildValues(newUpdates)
-                // TODO: Change postNotification
-                NotificationService.postNotification(forNotification: FollowerNotification(followedUserUid: followedUid, followerUid: followedUid, seen: false), notificationId: uid)
-                completion()
+                NotificationService.postNotification(forNotification: FollowerNotification(followedUserUid: followedUid, followerUid: followedUid, seen: false), notificationId: uid, withUpdates: newUpdates) { finalUpdates in
+                    updateRef.updateChildValues(finalUpdates)
+                    completion()
+                }
             }
         } else {
             updates[followersPath] = [uid: nil]

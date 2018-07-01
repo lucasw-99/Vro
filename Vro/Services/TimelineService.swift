@@ -49,24 +49,20 @@ class TimelineService {
                 // enter twice, once for likes other for attending
                 dispatchGroup.enter()
                 dispatchGroup.enter()
-                if let childSnapshot = child as? DataSnapshot {
-                    let eventID = childSnapshot.key
-                    EventPostService.getEventForTimeline(eventID) { eventPost in
-                        posts.append(eventPost)
-                        LikeService.isPostLiked(eventPost.event.host.uid, eventPostID: eventPost.eventPostID, uid: currentUid) { isLiked in
-                            print("isLiked: \(isLiked), caption: \(eventPost.caption), id: \(eventPost.eventPostID)\n")
-                            eventPost.isLiked = isLiked
-                            dispatchGroup.leave()
-                        }
-
-                        AttendEventService.isAttendingEvent(currentUid, eventPostID: eventPost.eventPostID) { isAttending in
-                            eventPost.isAttending = isAttending
-                            dispatchGroup.leave()
-                        }
+                guard let childSnapshot = child as? DataSnapshot else { fatalError("eventId existed in TL but it was nil?") }
+                let eventID = childSnapshot.key
+                EventPostService.getEventForTimeline(eventID) { eventPost in
+                    posts.append(eventPost)
+                    LikeService.isPostLiked(eventPost.event.host.uid, eventPostID: eventPost.eventPostID, uid: currentUid) { isLiked in
+                        print("isLiked: \(isLiked), caption: \(eventPost.caption), id: \(eventPost.eventPostID)\n")
+                        eventPost.isLiked = isLiked
+                        dispatchGroup.leave()
                     }
 
-                } else {
-                    fatalError("eventID existed in TL but it was nil?")
+                    AttendEventService.isAttendingEvent(currentUid, eventPostID: eventPost.eventPostID) { isAttending in
+                        eventPost.isAttending = isAttending
+                        dispatchGroup.leave()
+                    }
                 }
             }
             dispatchGroup.notify(queue: DispatchQueue.global()) {
