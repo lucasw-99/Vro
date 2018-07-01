@@ -47,7 +47,7 @@ class CustomTabBarController: UITabBarController, UITabBarControllerDelegate {
         newEventController.title = "New Event"
         newEventController.tabBarItem = UITabBarItem(title: "New Event", image: #imageLiteral(resourceName: "plus"), tag: 2)
 
-        let notificationsController = NotificationsViewController()
+        let notificationsController = NotificationsViewController(nibName: nil, bundle: nil)
         let nearYouNavController = UINavigationController(rootViewController: notificationsController)
         nearYouNavController.title = "Notifications"
         nearYouNavController.isNavigationBarHidden = true

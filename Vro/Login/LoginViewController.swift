@@ -11,15 +11,12 @@ import FirebaseAuth
 import SnapKit
 
 class LoginViewController: UIViewController {
-    @IBOutlet weak var password: UITextField!
-    @IBOutlet weak var loginButtonText: UIButton!
-
     private let backgroundImage: UIImageView = UIImageView(image: #imageLiteral(resourceName: "allMyVrosPng"))
     private let emailInput: UITextField = UITextField()
     private let passwordInput: UITextField = UITextField()
     private let emailLabel: UILabel = UILabel()
     private let passwordLabel: UILabel = UILabel()
-    private let loginButton: UIButton = UIButton(type: UIButtonType.system)
+    private let loginButton: UIButton = UIButton(type: .system)
     private let signupButton: UIButton = UIButton(type: .system)
 
     override func viewDidLoad() {

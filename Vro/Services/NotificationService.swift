@@ -26,10 +26,11 @@ class NotificationService {
         }
     }
     
-    static func removeNotification(forUser uid: String, notificationId: String) {
+    static func removeNotification(forUser uid: String, notificationId: String, withUpdates updateDict: [String: Any?]) -> [String: Any?] {
         let removeNotificationPath = String(format: Constants.Database.specificNotification, uid, notificationId)
-        let removeNotificationRef = Database.database().reference().child(removeNotificationPath)
-        
-        removeNotificationRef.removeValue()
+        var newUpdate = updateDict
+        let val: Any? = nil
+        newUpdate[removeNotificationPath] = val
+        return newUpdate
     }
 }

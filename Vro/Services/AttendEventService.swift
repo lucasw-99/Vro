@@ -61,45 +61,39 @@ class AttendEventService {
         
         let potentialEventAttendeePath = String(format: Constants.Database.eventPotentialAttending, eventPostId, attendeeUid)
         let potentialEventAttendeeRef = Database.database().reference().child(potentialEventAttendeePath)
+        let updateRef = Database.database().reference()
+        
         potentialEventAttendeeRef.observeSingleEvent(of: .value) { snapshot in
             guard let previousAttendeeDict = snapshot.value as? [String: Any],
                 let identifier = previousAttendeeDict["identifier"] as? String else { fatalError("Malformatted JSON for attendee") }
-            potentialEventAttendeeRef.removeValue() { error, _ in
-                if let error = error {
-                    assertionFailure(error.localizedDescription)
+            var updateDict = [String: Any?]()
+            let userEventsAttendingPath = String(format: Constants.Database.userEventsAttending, attendeeUid, eventPostId)
+            let val: Any? = nil
+            updateDict[potentialEventAttendeePath] = val
+            updateDict[userEventsAttendingPath] = val
+            let finalUpdates = NotificationService.removeNotification(forUser: eventPost.event.host.uid, notificationId: identifier, withUpdates: updateDict)
+            
+            updateRef.updateChildValues(finalUpdates) { error, _ in
+                if error != nil {
+                    print("error with unattending event: \(error.debugDescription)")
                     return success(false)
+                } else {
+                    let attendeeCountPath = String(format: Constants.Database.eventAttendeeCount, eventPostId)
+                    let attendeeCountRef = Database.database().reference().child(attendeeCountPath)
+                    attendeeCountRef.runTransactionBlock({ mutableData -> TransactionResult in
+                        print("attendee mutableData: \(mutableData)")
+                        let currentAttendeeCount = mutableData.value as? Int ?? 0
+                        mutableData.value = currentAttendeeCount - 1
+                        return TransactionResult.success(withValue: mutableData)
+                    }, andCompletionBlock: { error, _, _ in
+                        if let error = error {
+                            assertionFailure(error.localizedDescription)
+                            success(false)
+                        } else {
+                            success(true)
+                        }
+                    })
                 }
-
-                let attendeeCountPath = String(format: Constants.Database.eventAttendeeCount, eventPostId)
-                let attendeeCountRef = Database.database().reference().child(attendeeCountPath)
-                attendeeCountRef.runTransactionBlock({ mutableData -> TransactionResult in
-                    print("attendee mutableData: \(mutableData)")
-                    let currentAttendeeCount = mutableData.value as? Int ?? 0
-                    mutableData.value = currentAttendeeCount - 1
-                    return TransactionResult.success(withValue: mutableData)
-                }, andCompletionBlock: { error, _, _ in
-                    if let error = error {
-                        assertionFailure(error.localizedDescription)
-                        success(false)
-                    } else {
-                        let userEventsAttendingPath = String(format: Constants.Database.userEventsAttending, attendeeUid, eventPostId)
-                        let userEventsAttendingRef = Database.database().reference().child(userEventsAttendingPath)
-
-                        userEventsAttendingRef.runTransactionBlock({ mutableData -> TransactionResult in
-                            mutableData.value = nil
-                            return TransactionResult.success(withValue: mutableData)
-                        }, andCompletionBlock: { error, _, _ in
-                            if let error = error {
-                                assertionFailure(error.localizedDescription)
-                                return success(false)
-                            } else {
-                                // TODO: Transaction block
-                                NotificationService.removeNotification(forUser: eventPost.event.host.uid, notificationId: identifier)
-                                return success(true)
-                            }
-                        })
-                    }
-                })
             }
         }
     }

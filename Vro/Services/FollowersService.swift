@@ -25,26 +25,29 @@ class FollowersService {
         // edit the selectedUser's followers list, and the currentUser's following list
         let followersPath = String(format: Constants.Database.userFollowers, followedUid)
         let followingPath = String(format: Constants.Database.userFollowing, uid)
+        let updateRef = Database.database().reference()
 
-        let followersRef = Database.database().reference().child(followersPath)
-        let followingRef = Database.database().reference().child(followingPath)
-
-        // TODO: Put this in a transaction block
+        var updates = [String: Any?]()
         if addFollower {
             let follower = Follower(uid)
-            followersRef.child(uid).updateChildValues(follower.dictValue)
-            followingRef.updateChildValues([followedUid: true])
+            updates[followersPath] = [uid: follower.dictValue]
+            updates[followingPath] = [followedUid: true]
             // add followedUid posts to uid's timeline
-            TimelineService.updateUserTimeline(followedUid, uid, addToTimeline: true) {
+            print("updates: \(updates)")
+            TimelineService.updateUserTimeline(followedUid, uid, addToTimeline: true, updates: updates) { newUpdates in
+                updateRef.updateChildValues(newUpdates)
+                // TODO: Change postNotification
                 NotificationService.postNotification(forNotification: FollowerNotification(followedUserUid: followedUid, followerUid: followedUid, seen: false), notificationId: uid)
                 completion()
             }
         } else {
-            followersRef.child(uid).removeValue()
-            followingRef.child(followedUid).removeValue()
+            updates[followersPath] = [uid: nil]
+            updates[followingPath] = [followedUid: nil]
+            print("updates after follower: \(updates)")
             // remove followedUid posts from uid's timeline
-            TimelineService.updateUserTimeline(followedUid, uid, addToTimeline: false) {
-                NotificationService.removeNotification(forUser: followedUid, notificationId: uid)
+            TimelineService.updateUserTimeline(followedUid, uid, addToTimeline: false, updates: updates) { newUpdates in
+                let finalUpdates = NotificationService.removeNotification(forUser: followedUid, notificationId: uid, withUpdates: newUpdates)
+                updateRef.updateChildValues(finalUpdates)
                 completion()
             }
         }

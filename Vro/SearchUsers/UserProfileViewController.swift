@@ -204,6 +204,7 @@ extension UserProfileViewController {
             followedUser.followers.insert(currentUserFollower)
         }
         // TODO: Check for adding vs removing followers, use wasSelected
+        print("updating followers")
         FollowersService.updateFollowers(uid: currentUser.uid, followedUid: followedUser.uid, addFollower: !wasSelected) {
             Util.toggleButton(button: self.followButton, isEnabled: true)
         }

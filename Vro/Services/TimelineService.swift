@@ -25,18 +25,17 @@ class TimelineService {
         completion()
     }
 
-    static func updateUserTimeline(_ uidToAdd: String, _ uid: String, addToTimeline: Bool, completion: @escaping ( () -> () )) {
-        let userTimelinePath = String(format: Constants.Database.getTimelinePosts, uid)
-        let userTimelineRef = Database.database().reference().child(userTimelinePath)
-        UserService.getUserEvents(uidToAdd) { eventID in
-            guard let eventID = eventID else { fatalError("eventID nil") }
-            if addToTimeline {
-                userTimelineRef.updateChildValues([eventID: true])
-            } else {
-                userTimelineRef.child(eventID).removeValue()
+    static func updateUserTimeline(_ uidToAdd: String, _ uid: String, addToTimeline: Bool, updates: [String: Any?], completion: @escaping ( (_ newUpdates: [String: Any?]) -> () )) {
+        var newUpdates = updates
+        UserService.getUserEvents(uidToAdd) { eventIds in
+            for eventId in eventIds {
+                // TODO: Make this more efficient
+                let userTimelinePath = String(format: Constants.Database.addToTimeline, uid, eventId)
+                let val: Any? = nil
+                newUpdates[userTimelinePath] = addToTimeline ? true : val
             }
+            completion(newUpdates)
         }
-        completion()
     }
 
     // currentUid: uid of user

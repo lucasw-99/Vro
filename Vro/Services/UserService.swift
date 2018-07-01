@@ -81,16 +81,18 @@ class UserService {
     }
 
     // uid: uid of user
-    static func getUserEvents(_ uid: String, completion: @escaping ( (String?) -> () )) {
+    static func getUserEvents(_ uid: String, completion: @escaping ( (_ eventIds: [String]) -> () )) {
         let userEventsPath = String(format: Constants.Database.userEvents, uid)
         let eventsRef = Database.database().reference().child(userEventsPath)
-
+        var eventIds = [String]()
         eventsRef.observeSingleEvent(of: .value) { snapshot in
             for child in snapshot.children {
                 if let childSnapshot = child as? DataSnapshot{
-                    completion(childSnapshot.key)
+                    let eventId = childSnapshot.key
+                    eventIds.append(eventId)
                 }
             }
+            completion(eventIds)
         }
     }
 

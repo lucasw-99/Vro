@@ -7,12 +7,20 @@
 //
 
 import UIKit
+import FirebaseDatabase
 
 class NotificationsViewController: UIViewController {
     private let notificationsLabel = UILabel()
     private let headerView = UIView()
     private let separatorView = UIView()
+    private let dataSource = [Notification]()
     
+    private let newNotificationsRef: DatabaseReference = {
+        guard let currentUid = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
+        let newNotificationsPath = String(format: Constants.Database.notifications, currentUid)
+        return Database.database().reference().child(newNotificationsPath)
+    }()
+
     private let notificationsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -28,12 +36,26 @@ class NotificationsViewController: UIViewController {
         refreshControl.addTarget(self, action: #selector(NotificationsViewController.observeNotifications), for: .valueChanged)
         return refreshControl
     }()
-
-
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        showNewNotifications()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()
         setupLayout()
+    }
+    
+    deinit {
+        print("notificationsViewController deinit called")
+        // remove new notification observer
+        newNotificationsRef.removeAllObservers()
     }
 }
 
@@ -96,6 +118,16 @@ extension NotificationsViewController: UICollectionViewDelegate {
 
 // MARK: Data source
 extension NotificationsViewController: UICollectionViewDataSource {
+    private func showNewNotifications() {
+        newNotificationsRef.observe(.childAdded) { snapshot in
+            print("new snapshots: \(snapshot)")
+        }
+        
+        newNotificationsRef.observe(.childRemoved) { snapshot in
+            print("snapshot from child removed: \(snapshot)")
+        }
+    }
+    
     @objc private func observeNotifications() {
         // Do UI updating on main thread
         DispatchQueue.main.async {

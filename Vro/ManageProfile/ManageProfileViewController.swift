@@ -97,9 +97,11 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
     // newPhotoURL: New Profile Photo URL of this user
     // Updates all event profile photo URL's to the new user profile photo
     private func updateEventProfilePhotos(_ uid: String, _ newPhotoURL: String) {
-        UserService.getUserEvents(uid) { eventPostID in
-            guard let eventPostID = eventPostID else { fatalError("Received nil eventPostID") }
-            EventPostService.updateEventPhotoURL(eventPostID, newPhotoURL)
+        UserService.getUserEvents(uid) { eventPostIds in
+            for eventPostId in eventPostIds {
+                // TODO: Make this more efficient
+                EventPostService.updateEventPhotoURL(eventPostId, newPhotoURL)
+            }
         }
     }
 }

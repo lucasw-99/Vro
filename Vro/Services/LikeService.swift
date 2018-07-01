@@ -61,11 +61,19 @@ class LikeService {
         
         let likesPath = String(format: Constants.Database.userPostLikes, eventPost.event.host.uid, eventPostID, uid)
         let likesRef = Database.database().reference().child(likesPath)
+        let updateRef = Database.database().reference()
+        
+        var updates = [String: Any?]()
 
         likesRef.observeSingleEvent(of: .value) { snapshot in
             guard let likeDict = snapshot.value as? [String: Any],
                 let identifier = likeDict["identifier"] as? String else { fatalError("Like JSON malformatted") }
-            likesRef.removeValue() { error, _ in
+            
+            let val: Any? = nil
+            updates[likesPath] = val
+            print("updates: \(updates)")
+            let finalUpdates = NotificationService.removeNotification(forUser: eventPost.event.host.uid, notificationId: identifier, withUpdates: updates)
+            updateRef.updateChildValues(finalUpdates) { error, _ in
                 if let error = error {
                     assertionFailure(error.localizedDescription)
                     return success(false)
@@ -82,7 +90,6 @@ class LikeService {
                         assertionFailure(error.localizedDescription)
                         success(false)
                     } else {
-                        NotificationService.removeNotification(forUser: eventPost.event.host.uid, notificationId: identifier)
                         success(true)
                     }
                 })
