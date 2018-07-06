@@ -13,7 +13,7 @@ class NotificationsViewController: UIViewController {
     private let notificationsLabel = UILabel()
     private let headerView = UIView()
     private let separatorView = UIView()
-    private let dataSource = [Notification]()
+    private var dataSource = [Notification]()
     
     private let newNotificationsRef: DatabaseReference = {
         guard let currentUid = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
@@ -119,8 +119,28 @@ extension NotificationsViewController: UICollectionViewDelegate {
 // MARK: Data source
 extension NotificationsViewController: UICollectionViewDataSource {
     private func showNewNotifications() {
-        newNotificationsRef.observe(.childAdded) { snapshot in
-            print("new snapshots: \(snapshot)")
+        newNotificationsRef.queryOrdered(byChild: "negativeTimestamp").observe(.childAdded) { snapshot in
+            print("old snapshots: \(snapshot)")
+            guard let notificationDict = snapshot.value as? [String: Any],
+                let notificationType = notificationDict["type"] as? String
+                else { fatalError("malformed Notification data in firebase") }
+            guard let type = NotificationType(rawValue: notificationType) else { fatalError("unknown notification type: \(notificationType)") }
+            var notification: Notification? = nil
+            switch type {
+            case .Like:
+                notification = LikeNotification(forSnapshot: snapshot)
+            case .Comment:
+                notification = CommentNotification(forSnapshot: snapshot)
+            case .Attendee:
+                notification = AttendeeNotification(forSnapshot: snapshot)
+            case .Follower:
+                notification = FollowerNotification(forSnapshot: snapshot)
+            }
+            
+            guard let unwrappedNotification = notification else { fatalError("huge issues") }
+            print("old notification: \(unwrappedNotification)")
+            self.dataSource.append(unwrappedNotification)
+            print("dataSource: \(self.dataSource)")
         }
         
         newNotificationsRef.observe(.childRemoved) { snapshot in

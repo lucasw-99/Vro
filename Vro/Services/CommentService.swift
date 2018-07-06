@@ -29,7 +29,7 @@ class CommentService {
         var updates = [String: Any?]()
         updates[newCommentPath] = comment.dictValue
         updates[newPostCommentPath] = true
-        NotificationService.postNotification(forNotification: CommentNotification(commentedPost: eventPost, user: commentAuthor, seen: false), notificationId: comment.commentId, withUpdates: updates) { finalUpdates in
+        NotificationService.postNotification(forNotification: CommentNotification(commentedPostId: eventPost.eventPostID, userUid: commentAuthor.uid, seen: false, forUserUid: eventPost.event.host.uid, notificationId: comment.commentId), withUpdates: updates) { finalUpdates in
             let updateRef = Database.database().reference()
             updateRef.updateChildValues(finalUpdates) { error, _ in
                 if error != nil {

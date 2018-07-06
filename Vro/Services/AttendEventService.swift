@@ -20,7 +20,7 @@ class AttendEventService {
         var updates = [String: Any?]()
         updates[potentialEventAttendeePath] = newAttendee.dictValue
         updates[userEventsAttendingPath] = true
-        NotificationService.postNotification(forNotification: AttendeeNotification(event: eventPost.event, attendee: attendee, seen: false), notificationId: newAttendee.identifier, withUpdates: updates) { finalUpdates in
+        NotificationService.postNotification(forNotification: AttendeeNotification(eventAddress: eventPost.event.address, eventTime: eventPost.event.eventTime, attendeeUid: attendee.uid, seen: false, forUserUid: eventPost.event.host.uid, notificationId: newAttendee.identifier), withUpdates: updates) { finalUpdates in
             let updateRef = Database.database().reference()
             updateRef.updateChildValues(finalUpdates) { error, _ in
                 if error != nil {
@@ -63,7 +63,6 @@ class AttendEventService {
             updateDict[potentialEventAttendeePath] = val
             updateDict[userEventsAttendingPath] = val
             let finalUpdates = NotificationService.removeNotification(forUser: eventPost.event.host.uid, notificationId: identifier, withUpdates: updateDict)
-            
             updateRef.updateChildValues(finalUpdates) { error, _ in
                 if error != nil {
                     print("error with unattending event: \(error.debugDescription)")

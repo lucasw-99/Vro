@@ -70,6 +70,9 @@ class Constants {
         
         // 1: uid, 2: notificationId
         static let specificNotification = "notifications/%@/%@"
+        
+        // 1: notificationId
+        static let notificationIdsToTimestamps = "idsToTimestamps/%@"
     }
     class Storage {
         // 1: uid, 2: Randomly generated ID

@@ -53,7 +53,6 @@
 		A0FF4694209176B9006FE799 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FF4693209176B9006FE799 /* AppDelegate.swift */; };
 		A0FF4696209176B9006FE799 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FF4695209176B9006FE799 /* LoginViewController.swift */; };
 		A0FF469B209176BA006FE799 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0FF469A209176BA006FE799 /* Assets.xcassets */; };
-		A0FF469E209176BA006FE799 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0FF469C209176BA006FE799 /* LaunchScreen.storyboard */; };
 		A0FF46A820918B66006FE799 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A0FF46A720918B65006FE799 /* GoogleService-Info.plist */; };
 		A0FF46AA20919435006FE799 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FF46A920919435006FE799 /* SignupViewController.swift */; };
 /* End PBXBuildFile section */
@@ -434,7 +433,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A0FF469E209176BA006FE799 /* LaunchScreen.storyboard in Resources */,
 				A0FF46A820918B66006FE799 /* GoogleService-Info.plist in Resources */,
 				A0FF469B209176BA006FE799 /* Assets.xcassets in Resources */,
 			);
@@ -506,7 +504,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+			shellScript = "";
 		};
 /* End PBXShellScriptBuildPhase section */
 

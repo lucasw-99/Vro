@@ -35,7 +35,7 @@ class FollowersService {
             // add followedUid posts to uid's timeline
             print("updates: \(updates)")
             TimelineService.updateUserTimeline(followedUid, uid, addToTimeline: true, updates: updates) { newUpdates in
-                NotificationService.postNotification(forNotification: FollowerNotification(followedUserUid: followedUid, followerUid: followedUid, seen: false), notificationId: uid, withUpdates: newUpdates) { finalUpdates in
+                NotificationService.postNotification(forNotification: FollowerNotification(followedUserUid: followedUid, followerUid: followedUid, seen: false, notificationId: uid), withUpdates: newUpdates) { finalUpdates in
                     updateRef.updateChildValues(finalUpdates)
                     completion()
                 }
@@ -43,7 +43,6 @@ class FollowersService {
         } else {
             updates[followersPath] = [uid: nil]
             updates[followingPath] = [followedUid: nil]
-            print("updates after follower: \(updates)")
             // remove followedUid posts from uid's timeline
             TimelineService.updateUserTimeline(followedUid, uid, addToTimeline: false, updates: updates) { newUpdates in
                 let finalUpdates = NotificationService.removeNotification(forUser: followedUid, notificationId: uid, withUpdates: newUpdates)

@@ -31,7 +31,7 @@ class LikeService {
         
         var updates = [String: Any?]()
         updates[likesPath] = likeDict
-        NotificationService.postNotification(forNotification: LikeNotification(likedPost: post, user: user, seen: false), notificationId: like.identifier, withUpdates: updates) { finalUpdates in
+        NotificationService.postNotification(forNotification: LikeNotification(likedPostId: post.eventPostID, userUid: user.uid, seen: false, forUserUid: post.event.host.uid, notificationId: like.identifier), withUpdates: updates) { finalUpdates in
             let updateRef = Database.database().reference()
             updateRef.updateChildValues(finalUpdates) { error, _ in
                 if error != nil {
