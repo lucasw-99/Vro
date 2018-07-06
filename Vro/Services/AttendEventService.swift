@@ -22,7 +22,8 @@ class AttendEventService {
         updates[userEventsAttendingPath] = true
         NotificationService.postNotification(forNotification: AttendeeNotification(eventAddress: eventPost.event.address, eventTime: eventPost.event.eventTime, attendeeUid: attendee.uid, seen: false, forUserUid: eventPost.event.host.uid, notificationId: newAttendee.identifier), withUpdates: updates) { finalUpdates in
             let updateRef = Database.database().reference()
-            updateRef.updateChildValues(finalUpdates) { error, _ in
+            // mapValues removes implicit coercion from Any? to Any warning
+            updateRef.updateChildValues(finalUpdates.mapValues { $0 as Any }) { error, _ in
                 if error != nil {
                     print("Error with potentially attending event: \(error!.localizedDescription)")
                     return success(false)
@@ -62,7 +63,7 @@ class AttendEventService {
             let val: Any? = nil
             updateDict[potentialEventAttendeePath] = val
             updateDict[userEventsAttendingPath] = val
-            let finalUpdates = NotificationService.removeNotification(forUser: eventPost.event.host.uid, notificationId: identifier, withUpdates: updateDict)
+            let finalUpdates = NotificationService.removeNotification(forUser: eventPost.event.host.uid, notificationId: identifier, withUpdates: updateDict).mapValues { $0 as Any }
             updateRef.updateChildValues(finalUpdates) { error, _ in
                 if error != nil {
                     print("error with unattending event: \(error.debugDescription)")

@@ -33,7 +33,8 @@ class LikeService {
         updates[likesPath] = likeDict
         NotificationService.postNotification(forNotification: LikeNotification(likedPostId: post.eventPostID, userUid: user.uid, seen: false, forUserUid: post.event.host.uid, notificationId: like.identifier), withUpdates: updates) { finalUpdates in
             let updateRef = Database.database().reference()
-            updateRef.updateChildValues(finalUpdates) { error, _ in
+            // mapValues removes implicit coercion from Any? to Any warning
+            updateRef.updateChildValues(finalUpdates.mapValues { $0 as Any }) { error, _ in
                 if error != nil {
                     print("error with liking post: \(error!.localizedDescription)")
                     return success(false)
@@ -74,7 +75,7 @@ class LikeService {
             let val: Any? = nil
             updates[likesPath] = val
             print("updates: \(updates)")
-            let finalUpdates = NotificationService.removeNotification(forUser: eventPost.event.host.uid, notificationId: identifier, withUpdates: updates)
+            let finalUpdates = NotificationService.removeNotification(forUser: eventPost.event.host.uid, notificationId: identifier, withUpdates: updates).mapValues { $0 as Any }
             updateRef.updateChildValues(finalUpdates) { error, _ in
                 if let error = error {
                     assertionFailure(error.localizedDescription)
