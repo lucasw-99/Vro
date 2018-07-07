@@ -166,9 +166,16 @@ extension NotificationsViewController: UICollectionViewDataSource {
             self.notificationsCollectionView.reloadData()
         }
         
-        // TODO: Implement deletion
         newNotificationsRef.observe(.childRemoved) { snapshot in
-            print("snapshot from child removed: \(snapshot)")
+            guard let notificationDict = snapshot.value as? [String: Any],
+                let notificationId = notificationDict["notificationId"] as? String
+                else { fatalError("Deleting notification error") }
+            let sectionIndex = self.dataSource.index { return $0.notificationId == notificationId }
+            if let sectionIndex = sectionIndex {
+                print("Deleting item at index: \(sectionIndex)")
+                self.dataSource.remove(at: sectionIndex)
+                self.notificationsCollectionView.reloadData()
+            }
         }
     }
     
