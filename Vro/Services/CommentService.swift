@@ -31,7 +31,8 @@ class CommentService {
         updates[newPostCommentPath] = true
         NotificationService.postNotification(forNotification: CommentNotification(commentedPostId: eventPost.eventPostID, userUid: commentAuthor.uid, seen: false, forUserUid: eventPost.event.host.uid, notificationId: comment.commentId), withUpdates: updates) { finalUpdates in
             let updateRef = Database.database().reference()
-            updateRef.updateChildValues(finalUpdates) { error, _ in
+            // mapValues removes implicit coercion from Any? to Any warning
+            updateRef.updateChildValues(finalUpdates.mapValues { $0 as Any }) { error, _ in
                 if error != nil {
                     print("failed to post comment")
                 }

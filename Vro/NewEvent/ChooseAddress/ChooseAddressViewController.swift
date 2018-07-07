@@ -338,7 +338,7 @@ extension ChooseAddressViewController {
                 self.searchBar.text = name
                 pin.title = name
                 pin.coordinate = firstPlacemark.location!.coordinate
-                print("Set searchBar text to \(self.searchBar.text)")
+                print("Set searchBar text to \(self.searchBar.text!)")
             } else {
                 print("Error: \(error!.localizedDescription)")
             }
