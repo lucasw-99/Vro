@@ -139,10 +139,20 @@ extension NotificationsViewController: UICollectionViewDataSource {
             
             guard let unwrappedNotification = notification else { fatalError("huge issues") }
             print("old notification: \(unwrappedNotification)")
-            self.dataSource.append(unwrappedNotification)
-            print("dataSource: \(self.dataSource)")
+            // TODO: Animate insertion
+            if let firstNotification = self.dataSource.first,
+                let firstTimestamp = firstNotification.timestamp,
+                let secondTimestamp = unwrappedNotification.timestamp,
+                firstTimestamp.compare(secondTimestamp) == .orderedAscending {
+                // this is a new notification, insert in front
+                self.dataSource.insert(unwrappedNotification, at: 0)
+            } else {
+                self.dataSource.append(unwrappedNotification)
+            }
+            self.notificationsCollectionView.reloadData()
         }
         
+        // TODO: Implement deletion
         newNotificationsRef.observe(.childRemoved) { snapshot in
             print("snapshot from child removed: \(snapshot)")
         }
