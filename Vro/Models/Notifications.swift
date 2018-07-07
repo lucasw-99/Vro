@@ -49,8 +49,8 @@ class LikeNotification: Notification {
     var type: NotificationType = .Like
     var forUserUid: String
     var notificationId: String
-    private let likedPostId: String
-    private let userUid: String
+    let likedPostId: String
+    let userUid: String
     
     var notificationDictValue: [String : Any] {
         let likeObject = [
@@ -96,8 +96,8 @@ class CommentNotification: Notification {
     var type: NotificationType = .Comment
     var forUserUid: String
     var notificationId: String
-    private let commentedPostId: String
-    private let userUid: String
+    let commentedPostId: String
+    let userUid: String
     
     var notificationDictValue: [String : Any] {
         let commentObject = [
@@ -142,9 +142,9 @@ class AttendeeNotification: Notification {
     var type: NotificationType = .Attendee
     var forUserUid: String
     var notificationId: String
-    private let eventAddress: String
-    private let eventTime: Date
-    private let userUid: String
+    let eventAddress: String
+    let eventTime: Date
+    let userUid: String
     
     var notificationDictValue: [String : Any] {
         let attendeeObject = [
@@ -193,8 +193,8 @@ class FollowerNotification: Notification {
     var type: NotificationType = .Follower
     var forUserUid: String
     var notificationId: String
-    private let followedUserUid: String
-    private let followerUid: String
+    let followedUserUid: String
+    let followerUid: String
     
     var notificationDictValue: [String : Any] {
         let attendeeObject = [

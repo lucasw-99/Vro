@@ -35,7 +35,7 @@ class FollowersService {
             // add followedUid posts to uid's timeline
             print("updates: \(updates)")
             TimelineService.updateUserTimeline(followedUid, uid, addToTimeline: true, updates: updates) { newUpdates in
-                NotificationService.postNotification(forNotification: FollowerNotification(followedUserUid: followedUid, followerUid: followedUid, seen: false, notificationId: uid), withUpdates: newUpdates) { finalUpdates in
+                NotificationService.postNotification(forNotification: FollowerNotification(followedUserUid: followedUid, followerUid: uid, seen: false, notificationId: uid), withUpdates: newUpdates) { finalUpdates in
                     // map values removes implicit coercion from Any? to Any warning
                     updateRef.updateChildValues(finalUpdates.mapValues { $0 as Any })
                     completion()

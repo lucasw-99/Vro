@@ -15,8 +15,6 @@ class NewsFeedViewController: UIViewController {
     private var dataSource: [EventPost] = []
     private var followedUsers: Set<String>?
     private var userTimelineRef: DatabaseReference?
-    // eventPostID => cell
-    private var eventPostCells = [String: EventPostCollectionViewCell]()
 
     private let vroLabel = UILabel()
     private let separatorView = UIView()

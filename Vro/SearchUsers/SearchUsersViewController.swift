@@ -137,7 +137,7 @@ extension SearchUsersViewController: UICollectionViewDelegate, UICollectionViewD
     }
 }
 
-// Collection view flow layout
+// MARK: Collection view flow layout
 extension SearchUsersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 5, bottom: 10, right: 5)

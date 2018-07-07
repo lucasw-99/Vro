@@ -76,6 +76,7 @@ extension NotificationsViewController {
         notificationsCollectionView.delegate = self
         notificationsCollectionView.dataSource = self
         notificationsCollectionView.refreshControl = refresher
+        notificationsCollectionView.register(NotificationCollectionViewCell.self, forCellWithReuseIdentifier: "NotificationCell")
         view.addSubview(notificationsCollectionView)
         
         view.backgroundColor = .white
@@ -113,7 +114,20 @@ extension NotificationsViewController {
 
 // MARK: Collection view
 extension NotificationsViewController: UICollectionViewDelegate {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return dataSource.count
+    }
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = notificationsCollectionView.dequeueReusableCell(withReuseIdentifier: "NotificationCell", for: indexPath) as! NotificationCollectionViewCell
+        let notification = dataSource[indexPath.section]
+        cell.notification = notification
+        return cell
+    }
 }
 
 // MARK: Data source
@@ -171,12 +185,11 @@ extension NotificationsViewController: UICollectionViewDataSource {
             }
         }
     }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return UICollectionViewCell.init()
+}
+
+// MARK: Collection view flow layout
+extension NotificationsViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 5, bottom: 10, right: 5)
     }
 }
