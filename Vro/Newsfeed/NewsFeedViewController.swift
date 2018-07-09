@@ -213,6 +213,17 @@ extension NewsFeedViewController: EventPostCellDelegate {
         let commentsViewController = ShowCommentsViewController(eventPost: event, postNewComment: false)
         navigationController?.pushViewController(commentsViewController, animated: true)
     }
+    
+    func didTapNumLikesButton(numLikesButton: UIButton, forEvent event: EventPost) {
+        print("Called num likes button in superview?? lolll")
+        numLikesButton.isUserInteractionEnabled = false
+        defer {
+            numLikesButton.isUserInteractionEnabled = true
+        }
+        
+        let listLikesViewController = ListLikesViewController(postedByUid: event.event.host.uid, eventPostId: event.eventPostID)
+        navigationController?.pushViewController(listLikesViewController, animated: true)
+    }
 }
 
 // MARK: Collection view

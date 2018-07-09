@@ -16,6 +16,7 @@ protocol EventPostCellDelegate {
     func didTapCommentButton(_ commentButton: UIButton, forEvent event: EventPost)
     func didTapShareButton(_ shareButton: UIButton, forEvent event: Event)
     func didTapShowCommentsButton(showCommentsButton: UIButton, forEvent event: EventPost)
+    func didTapNumLikesButton(numLikesButton: UIButton, forEvent event: EventPost)
 }
 
 class EventPostCollectionViewCell: UICollectionViewCell {
@@ -31,7 +32,7 @@ class EventPostCollectionViewCell: UICollectionViewCell {
     private let shareButton = UIButton()
 
     private let separatorView = UIView()
-    private let numberOfLikes = UILabel()
+    private let numberOfLikes = UIButton()
     private let numberAttending = UILabel()
     private let captionLabel = UILabel()
     private let showCommentsButton = UIButton()
@@ -75,7 +76,6 @@ class EventPostCollectionViewCell: UICollectionViewCell {
 // MARK: Button functions
 extension EventPostCollectionViewCell {
     @objc private func attendButtonPressed(_ sender: UIButton) {
-        print("Attend button pressed")
         buttonDelegate?.didTapAttendButton(attendButton, forCell: self)
     }
 
@@ -93,6 +93,11 @@ extension EventPostCollectionViewCell {
 
     @objc private func showCommentsButtonPressed(_ sender: UIButton) {
         buttonDelegate?.didTapShowCommentsButton(showCommentsButton: sender, forEvent: eventPost)
+    }
+    
+    @objc private func showNumLikes(_ sender: UIButton) {
+        print("showNumLikes tapped")
+        buttonDelegate?.didTapNumLikesButton(numLikesButton: sender, forEvent: eventPost)
     }
 }
 
@@ -143,8 +148,10 @@ extension EventPostCollectionViewCell {
         separatorView.backgroundColor = .gray
         containerView.addSubview(separatorView)
 
-        numberOfLikes.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
-        numberOfLikes.numberOfLines = 1
+        numberOfLikes.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        numberOfLikes.titleLabel?.numberOfLines = 1
+        numberOfLikes.setTitleColor(.black, for: .normal)
+        numberOfLikes.addTarget(self, action: #selector(EventPostCollectionViewCell.showNumLikes(_:)), for: .touchUpInside)
         containerView.addSubview(numberOfLikes)
 
         numberAttending.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
@@ -247,7 +254,6 @@ extension EventPostCollectionViewCell {
         numberOfLikes.snp.makeConstraints { make in
             make.top.equalTo(separatorView.snp.bottom).offset(5)
             make.leading.equalToSuperview().offset(12)
-            make.trailing.equalToSuperview()
             make.height.equalTo(30)
         }
 
@@ -329,7 +335,8 @@ extension EventPostCollectionViewCell {
 
     private func setLikes(numLikes: Int) {
         likeButton.isUserInteractionEnabled = false
-        numberOfLikes.text = "💗 \(numLikes) like\(numLikes != 1 ? "s" : "")"
+        let numLikesText = "💗 \(numLikes) like\(numLikes != 1 ? "s" : "")"
+        numberOfLikes.setTitle(numLikesText, for: .normal)
         likeButton.isUserInteractionEnabled = true
     }
 
