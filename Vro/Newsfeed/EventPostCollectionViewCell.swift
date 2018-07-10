@@ -17,6 +17,7 @@ protocol EventPostCellDelegate {
     func didTapShareButton(_ shareButton: UIButton, forEvent event: Event)
     func didTapShowCommentsButton(showCommentsButton: UIButton, forEvent event: EventPost)
     func didTapNumLikesButton(numLikesButton: UIButton, forEvent event: EventPost)
+    func didTapNumGuestsButton(numGuestsButton: UIButton, forEvent event: EventPost)
 }
 
 class EventPostCollectionViewCell: UICollectionViewCell {
@@ -32,8 +33,8 @@ class EventPostCollectionViewCell: UICollectionViewCell {
     private let shareButton = UIButton()
 
     private let separatorView = UIView()
-    private let numberOfLikes = UIButton()
-    private let numberAttending = UILabel()
+    private let numberOfLikesButton = UIButton()
+    private let numberOfGuestsButton = UIButton()
     private let captionLabel = UILabel()
     private let showCommentsButton = UIButton()
     private let eventTimeLabel = UILabel()
@@ -96,8 +97,12 @@ extension EventPostCollectionViewCell {
     }
     
     @objc private func showNumLikes(_ sender: UIButton) {
-        print("showNumLikes tapped")
         buttonDelegate?.didTapNumLikesButton(numLikesButton: sender, forEvent: eventPost)
+    }
+    
+    @objc private func showNumGuests(_ sender: UIButton) {
+        print("Show num guests called")
+        buttonDelegate?.didTapNumGuestsButton(numGuestsButton: sender, forEvent: eventPost)
     }
 }
 
@@ -148,15 +153,17 @@ extension EventPostCollectionViewCell {
         separatorView.backgroundColor = .gray
         containerView.addSubview(separatorView)
 
-        numberOfLikes.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
-        numberOfLikes.titleLabel?.numberOfLines = 1
-        numberOfLikes.setTitleColor(.black, for: .normal)
-        numberOfLikes.addTarget(self, action: #selector(EventPostCollectionViewCell.showNumLikes(_:)), for: .touchUpInside)
-        containerView.addSubview(numberOfLikes)
+        numberOfLikesButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        numberOfLikesButton.titleLabel?.numberOfLines = 1
+        numberOfLikesButton.setTitleColor(.black, for: .normal)
+        numberOfLikesButton.addTarget(self, action: #selector(EventPostCollectionViewCell.showNumLikes(_:)), for: .touchUpInside)
+        containerView.addSubview(numberOfLikesButton)
 
-        numberAttending.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
-        numberAttending.numberOfLines = 1
-        containerView.addSubview(numberAttending)
+        numberOfGuestsButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        numberOfGuestsButton.titleLabel?.numberOfLines = 1
+        numberOfGuestsButton.setTitleColor(.black, for: .normal)
+        numberOfGuestsButton.addTarget(self, action: #selector(EventPostCollectionViewCell.showNumGuests(_:)), for: .touchUpInside)
+        containerView.addSubview(numberOfGuestsButton)
 
         captionLabel.font = UIFont.systemFont(ofSize: 20)
         captionLabel.textAlignment = .left
@@ -251,20 +258,20 @@ extension EventPostCollectionViewCell {
             make.height.equalTo(1)
         }
 
-        numberOfLikes.snp.makeConstraints { make in
+        numberOfLikesButton.snp.makeConstraints { make in
             make.top.equalTo(separatorView.snp.bottom).offset(5)
             make.leading.equalToSuperview().offset(12)
             make.height.equalTo(30)
         }
 
-        numberAttending.snp.makeConstraints { make in
-            make.top.equalTo(numberOfLikes.snp.bottom).offset(5)
+        numberOfGuestsButton.snp.makeConstraints { make in
+            make.top.equalTo(numberOfLikesButton.snp.bottom)
             make.leading.equalToSuperview().offset(12)
-            make.trailing.equalToSuperview()
+            make.height.equalTo(30)
         }
 
         captionLabel.snp.makeConstraints { make in
-            make.top.equalTo(numberAttending.snp.bottom).offset(15)
+            make.top.equalTo(numberOfGuestsButton.snp.bottom).offset(15)
             make.leading.equalToSuperview().offset(12)
             make.trailing.equalToSuperview()
         }
@@ -336,13 +343,14 @@ extension EventPostCollectionViewCell {
     private func setLikes(numLikes: Int) {
         likeButton.isUserInteractionEnabled = false
         let numLikesText = "💗 \(numLikes) like\(numLikes != 1 ? "s" : "")"
-        numberOfLikes.setTitle(numLikesText, for: .normal)
+        numberOfLikesButton.setTitle(numLikesText, for: .normal)
         likeButton.isUserInteractionEnabled = true
     }
 
     private func setAttending(numAttending: Int) {
         attendButton.isUserInteractionEnabled = false
-        numberAttending.text = "💃🏽 \(numAttending) \(numAttending != 1 ? "people" : "person") going"
+        let numGuestsText = "💃🏽 \(numAttending) \(numAttending != 1 ? "people" : "person") going"
+        numberOfGuestsButton.setTitle(numGuestsText, for: .normal)
         attendButton.isUserInteractionEnabled = true
     }
 }

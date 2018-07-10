@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		57500A3F33F038FE398509C7 /* Pods_Vro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09CBAD40059D9F42808030E4 /* Pods_Vro.framework */; };
 		7100EA6720F3BAEA002ADDFC /* LikeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7100EA6620F3BAEA002ADDFC /* LikeCollectionViewCell.swift */; };
+		7100EA6A20F46AA7002ADDFC /* GuestCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7100EA6920F46AA7002ADDFC /* GuestCollectionViewCell.swift */; };
+		7100EA6C20F46ACC002ADDFC /* ListGuestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7100EA6B20F46ACC002ADDFC /* ListGuestsViewController.swift */; };
 		71732D0B20D98E4C00027AAE /* Like.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71732D0A20D98E4C00027AAE /* Like.swift */; };
 		71732D0D20D9BB9D00027AAE /* Attendee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71732D0C20D9BB9D00027AAE /* Attendee.swift */; };
 		71732D0F20D9BEDD00027AAE /* Follower.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71732D0E20D9BEDD00027AAE /* Follower.swift */; };
@@ -76,6 +78,8 @@
 		09CBAD40059D9F42808030E4 /* Pods_Vro.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Vro.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		11E51E9EF17703E72D3A9BBC /* Pods_Wagin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Wagin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7100EA6620F3BAEA002ADDFC /* LikeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeCollectionViewCell.swift; sourceTree = "<group>"; };
+		7100EA6920F46AA7002ADDFC /* GuestCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestCollectionViewCell.swift; sourceTree = "<group>"; };
+		7100EA6B20F46ACC002ADDFC /* ListGuestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListGuestsViewController.swift; sourceTree = "<group>"; };
 		71732D0A20D98E4C00027AAE /* Like.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Like.swift; sourceTree = "<group>"; };
 		71732D0C20D9BB9D00027AAE /* Attendee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attendee.swift; sourceTree = "<group>"; };
 		71732D0E20D9BEDD00027AAE /* Follower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Follower.swift; sourceTree = "<group>"; };
@@ -156,6 +160,15 @@
 			path = ListLikes;
 			sourceTree = "<group>";
 		};
+		7100EA6820F469BB002ADDFC /* ListGuests */ = {
+			isa = PBXGroup;
+			children = (
+				7100EA6920F46AA7002ADDFC /* GuestCollectionViewCell.swift */,
+				7100EA6B20F46ACC002ADDFC /* ListGuestsViewController.swift */,
+			);
+			path = ListGuests;
+			sourceTree = "<group>";
+		};
 		71732D1220E5D0E700027AAE /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -184,6 +197,7 @@
 		A0228F77209AC4E600E71C80 /* Global */ = {
 			isa = PBXGroup;
 			children = (
+				7100EA6820F469BB002ADDFC /* ListGuests */,
 				7100EA6520F3BAC2002ADDFC /* ListLikes */,
 				A0AD85F92093ED9B00D5F793 /* Util.swift */,
 				A0228F78209AC4F700E71C80 /* Constants.swift */,
@@ -538,10 +552,12 @@
 				719357DC20F1629400510BD3 /* ListLikesViewController.swift in Sources */,
 				A08BA18320BEFA740062C72B /* MapViewWidget.swift in Sources */,
 				A0CB3A6920C0C67500207944 /* EventViewController.swift in Sources */,
+				7100EA6A20F46AA7002ADDFC /* GuestCollectionViewCell.swift in Sources */,
 				A04A777920C4F22F00106E06 /* NewEventDummyViewController.swift in Sources */,
 				71CA903120D0AA3800DBA1EE /* SearchViewController.swift in Sources */,
 				A0F2FB2E209CA5DB0018F465 /* NewsFeedViewController.swift in Sources */,
 				71732D1A20E732B600027AAE /* Notifications.swift in Sources */,
+				7100EA6C20F46ACC002ADDFC /* ListGuestsViewController.swift in Sources */,
 				A04A777620C4F10800106E06 /* AutocompleteResultTableViewCell.swift in Sources */,
 				A0FF4696209176B9006FE799 /* LoginViewController.swift in Sources */,
 				71732D0B20D98E4C00027AAE /* Like.swift in Sources */,

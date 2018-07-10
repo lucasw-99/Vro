@@ -165,7 +165,6 @@ extension NewsFeedViewController: EventPostCellDelegate {
         guard let indexPath = collectionView.indexPath(for: cell) else { fatalError("Couldn't get index path") }
         likeButton.isUserInteractionEnabled = false
         let post = dataSource[indexPath.section]
-        print("tapped like button for post: \(post.caption), id: \(post.eventPostID)")
         let wasPreviouslyLiked = likeButton.isSelected
         LikeService.setLiked(didLikePost: !wasPreviouslyLiked, for: post) { (success) in
             defer {
@@ -204,7 +203,6 @@ extension NewsFeedViewController: EventPostCellDelegate {
     }
 
     func didTapShowCommentsButton(showCommentsButton: UIButton, forEvent event: EventPost) {
-        print("Presenting comments view")
         showCommentsButton.isUserInteractionEnabled = false
         defer {
             showCommentsButton.isUserInteractionEnabled = true
@@ -215,7 +213,6 @@ extension NewsFeedViewController: EventPostCellDelegate {
     }
     
     func didTapNumLikesButton(numLikesButton: UIButton, forEvent event: EventPost) {
-        print("Called num likes button in superview?? lolll")
         numLikesButton.isUserInteractionEnabled = false
         defer {
             numLikesButton.isUserInteractionEnabled = true
@@ -223,6 +220,16 @@ extension NewsFeedViewController: EventPostCellDelegate {
         
         let listLikesViewController = ListLikesViewController(postedByUid: event.event.host.uid, eventPostId: event.eventPostID)
         navigationController?.pushViewController(listLikesViewController, animated: true)
+    }
+    
+    func didTapNumGuestsButton(numGuestsButton: UIButton, forEvent event: EventPost) {
+        numGuestsButton.isUserInteractionEnabled = false
+        defer {
+            numGuestsButton.isUserInteractionEnabled = true
+        }
+        
+        let listGuestsViewController = ListGuestsViewController(eventPostId: event.eventPostID)
+        navigationController?.pushViewController(listGuestsViewController, animated: true)
     }
 }
 
