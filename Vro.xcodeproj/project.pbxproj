@@ -169,6 +169,14 @@
 			path = ListGuests;
 			sourceTree = "<group>";
 		};
+		7100EA6D20F52CC2002ADDFC /* UserProfile */ = {
+			isa = PBXGroup;
+			children = (
+				A0E73FFC20A7573D007E72D3 /* UserProfileViewController.swift */,
+			);
+			path = UserProfile;
+			sourceTree = "<group>";
+		};
 		71732D1220E5D0E700027AAE /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -197,6 +205,7 @@
 		A0228F77209AC4E600E71C80 /* Global */ = {
 			isa = PBXGroup;
 			children = (
+				7100EA6D20F52CC2002ADDFC /* UserProfile */,
 				7100EA6820F469BB002ADDFC /* ListGuests */,
 				7100EA6520F3BAC2002ADDFC /* ListLikes */,
 				A0AD85F92093ED9B00D5F793 /* Util.swift */,
@@ -326,7 +335,6 @@
 				A0D18553209A38CA00FC58D1 /* EventMap */,
 				A0E73FF820A68D0C007E72D3 /* SearchUsersViewController.swift */,
 				A0E73FFA20A6912E007E72D3 /* SearchUsersCollectionViewCell.swift */,
-				A0E73FFC20A7573D007E72D3 /* UserProfileViewController.swift */,
 				71CA903020D0AA3800DBA1EE /* SearchViewController.swift */,
 			);
 			path = SearchUsers;
