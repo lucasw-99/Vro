@@ -14,25 +14,23 @@ class TimelineService {
     // users: List of uid's, where each uid is a user following the user
     // who was the author of the post with eventPostID
     // eventPostID: Id of the post
-    static func addPostToTimelines(_ users: Set<Follower>, _ eventPostID: String, completion: @escaping ( () -> () )) {
+    static func addPostToTimelines(_ users: Set<Follower>, _ eventPostId: String, _ hostUid: String, withUpdates updates: [String: Any?], completion: @escaping ( (_ updates: [String: Any?]) -> () )) {
+        var newUpdates = updates
         for user in users {
             let uid = user.followerId
-            let addToTimelinePath = String(format: Constants.Database.addToTimeline, uid, eventPostID)
-            let timelineRef = Database.database().reference().child(addToTimelinePath)
-            // set to true, so bottom level of firebase database is dictionary of [String: Bool]
-            timelineRef.setValue(true)
+            let addToTimelinePath = String(format: Constants.Database.addToTimeline, uid, eventPostId)
+            newUpdates[addToTimelinePath] = hostUid
         }
-        completion()
+        completion(newUpdates)
     }
 
-    static func updateUserTimeline(_ uidToAdd: String, _ uid: String, addToTimeline: Bool, updates: [String: Any?], completion: @escaping ( (_ newUpdates: [String: Any?]) -> () )) {
+    static func updateUserTimeline(_ followedUid: String, _ uid: String, addToTimeline: Bool, withUpdates updates: [String: Any?], completion: @escaping ( (_ newUpdates: [String: Any?]) -> () )) {
         var newUpdates = updates
-        UserService.getUserEvents(uidToAdd) { eventIds in
+        UserService.getUserEvents(followedUid) { eventIds in
             for eventId in eventIds {
-                // TODO: Make this more efficient
                 let userTimelinePath = String(format: Constants.Database.addToTimeline, uid, eventId)
                 let val: Any? = nil
-                newUpdates[userTimelinePath] = addToTimeline ? true : val
+                newUpdates[userTimelinePath] = addToTimeline ? followedUid : val
             }
             completion(newUpdates)
         }
@@ -49,9 +47,10 @@ class TimelineService {
                 // enter twice, once for likes other for attending
                 dispatchGroup.enter()
                 dispatchGroup.enter()
-                guard let childSnapshot = child as? DataSnapshot else { fatalError("eventId existed in TL but it was nil?") }
-                let eventID = childSnapshot.key
-                EventPostService.getEventForTimeline(eventID) { eventPost in
+                guard let childSnapshot = child as? DataSnapshot,
+                    let eventHostUid = childSnapshot.value as? String else { fatalError("Malformatted event post") }
+                let eventId = childSnapshot.key
+                EventPostService.getEventForTimeline(eventHostUid, eventId) { eventPost in
                     posts.append(eventPost)
                     LikeService.isPostLiked(eventPost.event.host.uid, eventPostID: eventPost.eventPostID, uid: currentUid) { isLiked in
                         print("isLiked: \(isLiked), caption: \(eventPost.caption), id: \(eventPost.eventPostID)\n")
@@ -65,6 +64,7 @@ class TimelineService {
                     }
                 }
             }
+            // TODO: Use negative timestamps to sort
             dispatchGroup.notify(queue: DispatchQueue.global()) {
                 posts.sort { e1, e2 -> Bool in
                     e1.timestamp.compare(e2.timestamp) == .orderedDescending

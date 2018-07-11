@@ -34,7 +34,7 @@ class FollowersService {
             updates[followingPath] = [followedUid: true]
             // add followedUid posts to uid's timeline
             print("updates: \(updates)")
-            TimelineService.updateUserTimeline(followedUid, uid, addToTimeline: true, updates: updates) { newUpdates in
+            TimelineService.updateUserTimeline(followedUid, uid, addToTimeline: true, withUpdates: updates) { newUpdates in
                 NotificationService.postNotification(forNotification: FollowerNotification(followedUserUid: followedUid, followerUid: uid, seen: false, notificationId: uid), withUpdates: newUpdates) { finalUpdates in
                     // map values removes implicit coercion from Any? to Any warning
                     updateRef.updateChildValues(finalUpdates.mapValues { $0 as Any })
@@ -45,7 +45,7 @@ class FollowersService {
             updates[followersPath] = [uid: nil]
             updates[followingPath] = [followedUid: nil]
             // remove followedUid posts from uid's timeline
-            TimelineService.updateUserTimeline(followedUid, uid, addToTimeline: false, updates: updates) { newUpdates in
+            TimelineService.updateUserTimeline(followedUid, uid, addToTimeline: false, withUpdates: updates) { newUpdates in
                 let finalUpdates = NotificationService.removeNotification(forUser: followedUid, notificationId: uid, withUpdates: newUpdates).mapValues { $0 as Any }
                 updateRef.updateChildValues(finalUpdates)
                 completion()

@@ -99,8 +99,8 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
     private func updateEventProfilePhotos(_ uid: String, _ newPhotoURL: String) {
         UserService.getUserEvents(uid) { eventPostIds in
             for eventPostId in eventPostIds {
-                // TODO: Make this more efficient
-                EventPostService.updateEventPhotoURL(eventPostId, newPhotoURL)
+                // TODO: Make this more efficient with updateChildValues!!!!
+                EventPostService.updateEventPhotoURL(uid, eventPostId, newPhotoURL)
             }
         }
     }

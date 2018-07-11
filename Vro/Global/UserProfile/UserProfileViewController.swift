@@ -14,6 +14,7 @@ class UserProfileViewController: UIViewController {
     private let selectedUser: UserProfile
     private var selectedUserFollowers: UserFollowers!
     private let selectedUserFollowersRef: DatabaseReference
+    private let currentUserUid: String
 
     private let headerView = UIView()
     private let backButton = UIButton()
@@ -22,9 +23,9 @@ class UserProfileViewController: UIViewController {
     private let profilePhotoView = UIImageView()
     private let followerStatsLabel = UILabel()
     private let followButton = UIButton()
+    private let separatorView2 = UIView()
     
-    private let userProfileLabel = UILabel()
-    private let likesCollectionView: UICollectionView = {
+    private let eventsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -40,7 +41,9 @@ class UserProfileViewController: UIViewController {
 
     init(_ userProfile: UserProfile) {
         selectedUser = userProfile
-        guard let currentUserUID = UserService.currentUserProfile?.uid else { fatalError("current user nil") }
+        
+        guard let uid = UserService.currentUserProfile?.uid else { fatalError("current user nil") }
+        currentUserUid = uid
         let selectedUserFollowersPath = String(format: Constants.Database.userFollowerInfo, selectedUser.uid)
         selectedUserFollowersRef = Database.database().reference().child(selectedUserFollowersPath)
         
@@ -54,7 +57,7 @@ class UserProfileViewController: UIViewController {
             print("UserProfileViewController selectedUser observable")
             self.selectedUserFollowers = selectedUserFollowerInfo
             self.setupFollowingLabelText()
-            let currentUser = Follower(currentUserUID)
+            let currentUser = Follower(self.currentUserUid)
             self.followButton.isSelected = selectedUserFollowerInfo.followers.contains(currentUser)
             self.followButton.isUserInteractionEnabled = true
         }
@@ -79,7 +82,7 @@ extension UserProfileViewController {
         headerView.addSubview(backButton)
         
         usernameLabel.text = selectedUser.username
-        usernameLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        usernameLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         usernameLabel.numberOfLines = 0
         usernameLabel.textAlignment = .center
         headerView.addSubview(usernameLabel)
@@ -103,13 +106,16 @@ extension UserProfileViewController {
 
         followButton.setTitle("Follow", for: .normal)
         followButton.setTitle("Following", for: .selected)
-        followButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+        followButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         followButton.setTitleColor(.black, for: .normal)
         followButton.addTarget(self, action: #selector(UserProfileViewController.followButtonPressed(_:)), for: .touchUpInside)
         // don't show follow button if you're looking up your own profile
         followButton.isHidden = UserService.currentUserProfile!.uid == selectedUser.uid ? true : false
         Util.roundedCorners(ofColor: .black, element: followButton)
         view.addSubview(followButton)
+        
+        separatorView2.backgroundColor = .gray
+        view.addSubview(separatorView2)
 
         view.backgroundColor = .white
     }
@@ -145,21 +151,36 @@ extension UserProfileViewController {
         profilePhotoView.snp.makeConstraints { make in
             make.width.equalTo(100)
             make.height.equalTo(100)
-            make.top.equalTo(separatorView.snp.bottom).offset(30)
+            make.top.equalTo(separatorView.snp.bottom).offset(20)
             make.centerX.equalToSuperview()
         }
 
         followerStatsLabel.snp.makeConstraints { make in
-            make.top.equalTo(profilePhotoView.snp.bottom).offset(40)
+            make.top.equalTo(profilePhotoView.snp.bottom).offset(20)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
 
         followButton.snp.makeConstraints { make in
-            make.top.equalTo(followerStatsLabel.snp.bottom).offset(50)
+            make.top.equalTo(followerStatsLabel.snp.bottom).offset(30)
             make.width.equalTo(100)
             make.height.equalTo(40)
             make.centerX.equalToSuperview()
+        }
+        
+        separatorView2.snp.makeConstraints { make in
+            let isCurrentUser = currentUserUid == selectedUser.uid
+            make.top.equalTo(isCurrentUser ? followerStatsLabel.snp.bottom : followButton.snp.bottom).offset(20)
+            make.leading.equalToSuperview().offset(10)
+            make.trailing.equalToSuperview().offset(-10)
+            make.height.equalTo(1)
+        }
+        
+        eventsCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(separatorView2.snp.bottom)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
     }
 
@@ -192,3 +213,29 @@ extension UserProfileViewController {
         }
     }
 }
+
+// MARK: Collection view
+extension UserProfileViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return dataSource.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = eventsCollectionView.dequeueReusableCell(withReuseIdentifier: "EventCell", for: indexPath) as! LikeCollectionViewCell
+        let event = dataSource[indexPath.section]
+//        cell.event = event
+        return cell
+    }
+}
+
+// MARK: Collection view flow layout
+extension UserProfileViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 5, bottom: 10, right: 5)
+    }
+}
+

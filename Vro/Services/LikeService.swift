@@ -39,7 +39,7 @@ class LikeService {
                     print("error with liking post: \(error!.localizedDescription)")
                     return success(false)
                 }
-                let likeCountPath = String(format: Constants.Database.eventLikeCount, eventPostID)
+                let likeCountPath = String(format: Constants.Database.eventLikeCount, post.event.host.uid, eventPostID)
                 let likeCountRef = Database.database().reference().child(likeCountPath)
                 likeCountRef.runTransactionBlock({ mutableData -> TransactionResult in
                     let currentLikeCount = mutableData.value as? Int ?? 0
@@ -81,7 +81,7 @@ class LikeService {
                     assertionFailure(error.localizedDescription)
                     return success(false)
                 }
-                let likeCountPath = String(format: Constants.Database.eventLikeCount, eventPostID)
+                let likeCountPath = String(format: Constants.Database.eventLikeCount, eventPost.event.host.uid, eventPostID)
                 let likeCountRef = Database.database().reference().child(likeCountPath)
                 likeCountRef.runTransactionBlock({ mutableData -> TransactionResult in
                     let currentLikeCount = mutableData.value as? Int ?? 0

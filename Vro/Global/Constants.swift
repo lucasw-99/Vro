@@ -8,17 +8,15 @@
 
 class Constants {
     class Database {
-        // 1: uid, 2: event ID
-        static let userEventPostIDs = "users/%@/events/%@"
-        // 1: uid
-        static let userEvents = "users/%@/events"
-        // 1: event ID
-        static let eventInfo = "events/%@"
-
-        // 1: event ID
-        static let eventLikeCount = "events/%@/likeCount"
-        // 1: event ID
-        static let userEventPhotoURL = "events/%@/postedByUser/photoURL"
+        // 1: hostUid
+        static let userEvents = "events/%@"
+        // 1: hostUid, 2: eventId
+        static let eventInfo = "events/%@/%@"
+        // 1: hostUid, eventPostUid
+        static let eventLikeCount = "events/%@/%@/likeCount"
+        // 1: hostUid, eventPostUid
+        static let userEventPhotoURL = "events/%@/%@/postedByUser/photoURL"
+        
         // 1: uid
         static let userProfile = "users/%@/profile"
         // 1: uid
@@ -33,7 +31,7 @@ class Constants {
         static let users = "users"
         // 1: uid
         static let getUserProfile = "%@/profile/"
-        // 1: uid, 2: EventPost ID
+        // 1: uid, 2: EventPostId
         static let addToTimeline = "timeline/%@/%@"
         // 1: uid
         static let getTimelinePosts = "timeline/%@"

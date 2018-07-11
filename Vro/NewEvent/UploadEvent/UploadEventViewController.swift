@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import FirebaseDatabase
 
 class UploadEventViewController: UIViewController {
     private let headerView = UIView()
@@ -65,9 +66,13 @@ class UploadEventViewController: UIViewController {
 
 // MARK: Button functions
 extension UploadEventViewController {
-    @objc private func postNewEvent(_ sender: Any) {
+    @objc private func postNewEvent(_ sender: UIButton) {
         // TODO: Disable button until all fields are filled in
         print("Post new event pressed")
+        postEventButton.isUserInteractionEnabled = false
+        defer {
+            postEventButton.isUserInteractionEnabled = true
+        }
         guard let currentUser = UserService.currentUserProfile else { fatalError("Posting new event without valid userProfile") }
         // TODO: Allow no image?
         guard let eventImageUrl = eventImageUrl else { fatalError("event image url is nil") }
@@ -75,8 +80,14 @@ extension UploadEventViewController {
         let description = "Not implemented yet 🤡"
         let event = Event(currentUser, eventImageUrl.absoluteString, description, providedAddress, eventDate.date, selectedPin.coordinate)
         let eventPost = EventPost(event, captionText.text, Date(), eventPostID)
-        EventPostService.setEvent(eventPost, success: dismissNewEventViewControllers)
-        EventPostService.setEventPostID(currentUser.uid, eventPostID)
+        let updates = [String: Any?]()
+        EventPostService.setEvent(eventPost, withUpdates: updates) { finalUpdates in
+            let updateRef = Database.database().reference()
+            updateRef.updateChildValues(finalUpdates.mapValues { $0 as Any }) { error, _ in
+                print("Successfully posted new event with eventPostId \(eventPostID)")
+                self.dismissNewEventViewControllers()
+            }
+        }
     }
 
     @objc func cancelButtonPressed(_ sender: Any) {
@@ -122,7 +133,7 @@ extension UploadEventViewController: UIImagePickerControllerDelegate, UINavigati
     }
 }
 
-// MARK: Subview setup
+// MARK: Setup subviews
 extension UploadEventViewController {
     private func setupSubviews() {
         backButton.setImage(#imageLiteral(resourceName: "back"), for: .normal)

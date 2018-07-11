@@ -87,9 +87,11 @@ class UserService {
         var eventIds = [String]()
         eventsRef.observeSingleEvent(of: .value) { snapshot in
             for child in snapshot.children {
-                if let childSnapshot = child as? DataSnapshot{
+                if let childSnapshot = child as? DataSnapshot {
                     let eventId = childSnapshot.key
                     eventIds.append(eventId)
+                } else {
+                    print("Malformatted eventId, investigate?????")
                 }
             }
             completion(eventIds)
