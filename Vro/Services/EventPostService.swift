@@ -45,4 +45,19 @@ class EventPostService {
             completion(eventPost)
         }
     }
+    
+    static func getUserEvents(_ uid: String, completion: @escaping ( (_ eventPosts: [EventPost]) -> () )) {
+        let userEventsPath = String(format: Constants.Database.userEvents, uid)
+        let userEventsRef = Database.database().reference().child(userEventsPath)
+        
+        var eventPosts = [EventPost]()
+        userEventsRef.observeSingleEvent(of: .value) { snapshot in
+            for child in snapshot.children {
+                guard let childSnapshot = child as? DataSnapshot else { fatalError("Malformatted snapshot") }
+                let eventPost = EventPost(forSnapshot: childSnapshot)
+                eventPosts.append(eventPost)
+            }
+            completion(eventPosts)
+        }
+    }
 }
