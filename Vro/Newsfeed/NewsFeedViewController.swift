@@ -142,7 +142,6 @@ extension NewsFeedViewController: UICollectionViewDataSource {
 // MARK: Button delegate for EventPostCollectionViewCell
 extension NewsFeedViewController: EventPostCellDelegate {
     func didTapUsernameButton(_ usernameButton: UIButton, forUser user: UserProfile) {
-        print("gang")
         usernameButton.isUserInteractionEnabled = false
         defer {
             usernameButton.isUserInteractionEnabled = true

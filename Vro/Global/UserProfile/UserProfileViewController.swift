@@ -19,10 +19,6 @@ class UserProfileViewController: UIViewController {
     private let backButton = UIButton()
     private let usernameLabel = UILabel()
     private let separatorView = UIView()
-    private let profilePhotoView = UIImageView()
-    private let followerStatsLabel = UILabel()
-    private let followButton = UIButton()
-    private let separatorView2 = UIView()
     
     private let eventsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -130,8 +126,8 @@ extension UserProfileViewController {
 extension UserProfileViewController: UICollectionViewDataSource {
     @objc private func observeEventPosts() {
         EventPostService.getUserEvents(selectedUser.uid) { eventPosts in
-            self.dataSource = eventPosts
-            print("dataSource for userProfile: \(eventPosts)")
+            // TODO: Store and sort by negative timestamps, akin to how you did notifications
+            self.dataSource = eventPosts.reversed()
             // Do UI updating on main thread
             DispatchQueue.main.async {
                 self.eventsCollectionView.reloadData()
@@ -151,15 +147,20 @@ extension UserProfileViewController: UICollectionViewDataSource {
 extension UserProfileViewController {
     @objc private func backButtonPressed(_ sender: UIButton) {
         // Stop observing updates to user followers
-        print("back button pressed")
         navigationController?.popViewController(animated: true)
     }
 }
 
 // MARK: Button delegate for EventPostCollectionViewCell
 extension UserProfileViewController: EventPostCellDelegate {
-    func didTapUsernameButton(_ usernameButton: UIButton, forUser: UserProfile) {
-        print("Soon")
+    func didTapUsernameButton(_ usernameButton: UIButton, forUser user: UserProfile) {
+        usernameButton.isUserInteractionEnabled = false
+        defer {
+            usernameButton.isUserInteractionEnabled = true
+        }
+        
+        let userProfileViewController = UserProfileViewController(user)
+        navigationController?.pushViewController(userProfileViewController, animated: true)
     }
     
     func didTapAttendButton(_ attendButton: UIButton, forCell cell: EventPostCollectionViewCell) {

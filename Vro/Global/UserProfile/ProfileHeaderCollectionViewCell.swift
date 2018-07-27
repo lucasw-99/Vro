@@ -13,7 +13,7 @@ class ProfileHeaderCollectionViewCell: UICollectionViewCell {
     private let profilePhotoView = UIImageView()
     private let followerStatsLabel = UILabel()
     private let followButton = UIButton()
-    private let separatorView2 = UIView()
+    private let separatorView = UIView()
     
     private let currentUser: UserProfile
     private var followerCount: Int
@@ -63,8 +63,8 @@ private extension ProfileHeaderCollectionViewCell {
         self.followButton.isUserInteractionEnabled = false
         contentView.addSubview(followButton)
         
-        separatorView2.backgroundColor = .gray
-        contentView.addSubview(separatorView2)
+        separatorView.backgroundColor = .gray
+        contentView.addSubview(separatorView)
     }
     
     private func setupLayout() {
@@ -93,7 +93,7 @@ private extension ProfileHeaderCollectionViewCell {
         // don't show follow button if you're looking up your own profile
         followButton.isHidden = currentUser.uid == selectedUser.uid ? true : false
         
-        separatorView2.snp.makeConstraints { make in
+        separatorView.snp.makeConstraints { make in
             let isCurrentUser = currentUser.uid == selectedUser.uid
             make.top.equalTo(isCurrentUser ? followerStatsLabel.snp.bottom : followButton.snp.bottom).offset(20)
             make.leading.equalToSuperview().offset(10)
