@@ -8,9 +8,16 @@
 
 import UIKit
 
+protocol NotificationCellDelegate {
+    func didTapUserButton(_ userImageButton: UIButton, _ usernameButton: UIButton, user: UserProfile)
+}
+
 class NotificationCollectionViewCell: UICollectionViewCell {
-    private let fromUserImageView = UIImageView()
-    private let fromUserLabel = UILabel()
+    private let fromUserImageButton = UIButton()
+    private let usernameButton = UIButton()
+    
+    var buttonDelegate: NotificationCellDelegate?
+    var fromUser: UserProfile?
     
     var notification: Notification! {
         didSet {
@@ -32,27 +39,33 @@ class NotificationCollectionViewCell: UICollectionViewCell {
 // MARK: Setup subviews
 extension NotificationCollectionViewCell {
     private func setupSubviews() {
-        Util.makeImageCircular(image: fromUserImageView, 50)
-        contentView.addSubview(fromUserImageView)
+        fromUserImageButton.addTarget(self, action: #selector(NotificationCollectionViewCell.usernameButtonPressed(_:)), for: .touchUpInside)
+        Util.makeImageCircular(image: fromUserImageButton.imageView!, 50)
+        contentView.addSubview(fromUserImageButton)
         
-        fromUserLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        fromUserLabel.textAlignment = .natural
-        fromUserLabel.numberOfLines = 0
-        contentView.addSubview(fromUserLabel)
+        usernameButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        usernameButton.titleLabel?.textAlignment = .natural
+        usernameButton.titleLabel?.numberOfLines = 0
+        usernameButton.titleLabel?.lineBreakMode = .byWordWrapping
+        usernameButton.addTarget(self, action: #selector(NotificationCollectionViewCell.usernameButtonPressed(_:)), for: .touchUpInside)
+        usernameButton.isUserInteractionEnabled = true
+        
+        contentView.addSubview(usernameButton)
     }
     
     private func setupLayout() {
-        fromUserImageView.snp.makeConstraints { make in
+        fromUserImageButton.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.top.equalToSuperview()
             make.width.equalTo(50)
             make.height.equalTo(50)
         }
         
-        fromUserLabel.snp.makeConstraints { make in
+        usernameButton.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.leading.equalTo(fromUserImageView.snp.trailing).offset(10)
+            make.leading.equalTo(fromUserImageButton.snp.trailing).offset(10)
+            make.trailing.lessThanOrEqualToSuperview()
         }
     }
     
@@ -60,8 +73,8 @@ extension NotificationCollectionViewCell {
         guard let timestamp = notification.timestamp else { fatalError("timestamp nil in notification") }
         let dateStr = Util.smallestTimeUnit(from: timestamp)
         let attribute = [NSAttributedStringKey.foregroundColor: UIColor.gray,
-                         NSAttributedStringKey.font: UIFont(name: "GillSans", size: 12)
-                        ]
+                         NSAttributedStringKey.font: UIFont(name: "GillSans", size: 12) as Any
+                        ] as [NSAttributedStringKey: Any]
     
         switch notification.type {
         case .Like:
@@ -71,7 +84,7 @@ extension NotificationCollectionViewCell {
                 let dateRange = NSRange(location: likeText.count, length: dateStr.count)
                 let attrString = NSMutableAttributedString(string: "\(likeText)\(dateStr)")
                 attrString.addAttributes(attribute, range: dateRange)
-                self.fromUserLabel.attributedText = attrString
+                self.usernameButton.setAttributedTitle(attrString, for: .normal)
             }
         case .Comment:
             guard let comment = notification as? CommentNotification else { fatalError("Mismatched types for comment") }
@@ -80,7 +93,7 @@ extension NotificationCollectionViewCell {
                 let dateRange = NSRange(location: commentText.count, length: dateStr.count)
                 let attrString = NSMutableAttributedString(string: "\(commentText)\(dateStr)")
                 attrString.addAttributes(attribute, range: dateRange)
-                self.fromUserLabel.attributedText = attrString
+                self.usernameButton.setAttributedTitle(attrString, for: .normal)
             }
         case .Follower:
             guard let follower = notification as? FollowerNotification else { fatalError("Mismatched types for follower") }
@@ -89,7 +102,7 @@ extension NotificationCollectionViewCell {
                 let dateRange = NSRange(location: followerText.count, length: dateStr.count)
                 let attrString = NSMutableAttributedString(string: "\(followerText)\(dateStr)")
                 attrString.addAttributes(attribute, range: dateRange)
-                self.fromUserLabel.attributedText = attrString
+                self.usernameButton.setAttributedTitle(attrString, for: .normal)
             }
         case .Attendee:
             guard let attendee = notification as? AttendeeNotification else { fatalError("Mismatched types for attendee") }
@@ -98,7 +111,7 @@ extension NotificationCollectionViewCell {
                 let dateRange = NSRange(location: attendeeText.count, length: dateStr.count)
                 let attrString = NSMutableAttributedString(string: "\(attendeeText)\(dateStr)")
                 attrString.addAttributes(attribute, range: dateRange)
-                self.fromUserLabel.attributedText = attrString
+                self.usernameButton.setAttributedTitle(attrString, for: .normal)
             }
         }
     }
@@ -106,12 +119,22 @@ extension NotificationCollectionViewCell {
     private func getUser(withUid uid: String, completion: @escaping ( (_ username: String) -> () )) {
         UserService.observeUserProfile(uid) { userProfile in
             guard let userProfile = userProfile else { fatalError("user who made notification was nil") }
-            
+            self.fromUser = userProfile
             ImageService.getImage(withURL: userProfile.photoURL) { fromUserImage in
                 guard let fromUserImage = fromUserImage else { fatalError("invalid photoUrl") }
-                self.fromUserImageView.image = fromUserImage
+                self.fromUserImageButton.setImage(fromUserImage, for: .normal)
             }
             completion(userProfile.username)
+        }
+    }
+}
+
+// MARK: Button functions
+extension NotificationCollectionViewCell {
+    @objc private func usernameButtonPressed(_ sender: UIButton) {
+        print("username pressed")
+        if let fromUser = fromUser {
+            buttonDelegate?.didTapUserButton(fromUserImageButton, usernameButton, user: fromUser)
         }
     }
 }

@@ -11,6 +11,7 @@ import FirebaseDatabase
 import Foundation
 
 protocol EventPostCellDelegate {
+    func didTapUsernameButton(_ usernameButton: UIButton, forUser user: UserProfile)
     func didTapAttendButton(_ attendButton: UIButton, forCell cell: EventPostCollectionViewCell)
     func didTapLikeButton(_ likeButton: UIButton, forCell cell: EventPostCollectionViewCell)
     func didTapCommentButton(_ commentButton: UIButton, forEvent event: EventPost)
@@ -23,7 +24,7 @@ protocol EventPostCellDelegate {
 class EventPostCollectionViewCell: UICollectionViewCell {
     private let userHeaderView = UIView()
     private let userImage = UIImageView()
-    private let usernameLabel = UILabel()
+    private let usernameButton = UIButton()
     private let attendButton = UIButton()
 
     private let eventImageView = UIImageView()
@@ -76,6 +77,10 @@ class EventPostCollectionViewCell: UICollectionViewCell {
 
 // MARK: Button functions
 extension EventPostCollectionViewCell {
+    @objc private func usernamePressed(_ sender: UIButton) {
+        buttonDelegate?.didTapUsernameButton(usernameButton, forUser: eventPost.event.host)
+    }
+    
     @objc private func attendButtonPressed(_ sender: UIButton) {
         buttonDelegate?.didTapAttendButton(attendButton, forCell: self)
     }
@@ -101,7 +106,6 @@ extension EventPostCollectionViewCell {
     }
     
     @objc private func showNumGuests(_ sender: UIButton) {
-        print("Show num guests called")
         buttonDelegate?.didTapNumGuestsButton(numGuestsButton: sender, forEvent: eventPost)
     }
 }
@@ -113,11 +117,11 @@ extension EventPostCollectionViewCell {
         Util.makeImageCircular(image: userImage, 36)
         userHeaderView.addSubview(userImage)
 
-        usernameLabel.text = "User"
-        usernameLabel.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
-        usernameLabel.textAlignment = .natural
-        usernameLabel.numberOfLines = 1
-        userHeaderView.addSubview(usernameLabel)
+        usernameButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+        usernameButton.titleLabel?.textAlignment = .natural
+        usernameButton.setTitleColor(.black, for: .normal)
+        usernameButton.addTarget(self, action: #selector(EventPostCollectionViewCell.usernamePressed(_:)), for: .touchUpInside)
+        userHeaderView.addSubview(usernameButton)
 
         attendButton.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         attendButton.titleLabel?.textAlignment = .natural
@@ -203,7 +207,7 @@ extension EventPostCollectionViewCell {
             make.centerY.equalToSuperview()
         }
 
-        usernameLabel.snp.makeConstraints { make in
+        usernameButton.snp.makeConstraints { make in
             make.leading.equalTo(userImage.snp.trailing).offset(10)
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
@@ -303,7 +307,7 @@ extension EventPostCollectionViewCell {
     private func updateUI() {
         guard let currentUid = UserService.currentUserProfile?.uid else { fatalError("current user nil") }
 
-        usernameLabel.text = eventPost.event.host.username
+        usernameButton.setTitle(eventPost.event.host.username, for: .normal)
 
         ImageService.getImage(withURL: eventPost.event.host.photoURL, completion: { image in
             self.userImage.image = image

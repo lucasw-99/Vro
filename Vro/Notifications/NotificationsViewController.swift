@@ -126,7 +126,24 @@ extension NotificationsViewController: UICollectionViewDelegate {
         let cell = notificationsCollectionView.dequeueReusableCell(withReuseIdentifier: "NotificationCell", for: indexPath) as! NotificationCollectionViewCell
         let notification = dataSource[indexPath.section]
         cell.notification = notification
+        cell.buttonDelegate = self
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let notification = dataSource[indexPath.section]
+        let sizingCell = NotificationCollectionViewCell()
+        sizingCell.notification = notification
+        let zeroHeightSize = CGSize(width: notificationsCollectionView.frame.width - 5 - 5, height: 0)
+        let size = sizingCell.contentView.systemLayoutSizeFitting(zeroHeightSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow)
+        return size
+    }
+}
+
+// MARK: Collection view flow layout
+extension NotificationsViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 5, bottom: 10, right: 5)
     }
 }
 
@@ -194,9 +211,17 @@ extension NotificationsViewController: UICollectionViewDataSource {
     }
 }
 
-// MARK: Collection view flow layout
-extension NotificationsViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 5, bottom: 10, right: 5)
+// MARK: Button delegate for NotificationCollectionViewCell
+extension NotificationsViewController: NotificationCellDelegate {
+    func didTapUserButton(_ userImageButton: UIButton, _ usernameButton: UIButton, user: UserProfile) {
+        userImageButton.isUserInteractionEnabled = false
+        usernameButton.isUserInteractionEnabled = false
+        defer {
+            userImageButton.isUserInteractionEnabled = true
+            usernameButton.isUserInteractionEnabled = true
+        }
+        
+        let userProfileViewController = UserProfileViewController(user)
+        navigationController?.pushViewController(userProfileViewController, animated: true)
     }
 }

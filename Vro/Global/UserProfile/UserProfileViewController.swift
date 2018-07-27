@@ -70,6 +70,8 @@ class UserProfileViewController: UIViewController {
             self.followButton.isSelected = selectedUserFollowerInfo.followers.contains(currentUser)
             self.followButton.isUserInteractionEnabled = true
         }
+        
+        observeEventPosts()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -253,6 +255,10 @@ extension UserProfileViewController {
 
 // MARK: Button delegate for EventPostCollectionViewCell
 extension UserProfileViewController: EventPostCellDelegate {
+    func didTapUsernameButton(_ usernameButton: UIButton, forUser: UserProfile) {
+        print("Soon")
+    }
+    
     func didTapAttendButton(_ attendButton: UIButton, forCell cell: EventPostCollectionViewCell) {
         guard let indexPath = eventsCollectionView.indexPath(for: cell) else { fatalError("Couldn't get index path for attending") }
         attendButton.isUserInteractionEnabled = false

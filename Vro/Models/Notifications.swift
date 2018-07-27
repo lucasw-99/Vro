@@ -21,6 +21,7 @@ protocol Notification {
     var timestamp: Date? { get }
     var type: NotificationType { get }
     var forUserUid: String { get }
+    var userUid: String { get }
     var notificationId: String { get }
     var notificationDictValue: [String: Any] { get }
     
@@ -36,6 +37,7 @@ extension Notification {
             "seen": seen,
             "type": type.rawValue,
             "forUserUid": forUserUid,
+            "userUid": userUid,
             "notification": notificationDictValue
             ] as [String: Any]
         
@@ -48,9 +50,9 @@ class LikeNotification: Notification {
     var timestamp: Date?
     var type: NotificationType = .Like
     var forUserUid: String
+    var userUid: String
     var notificationId: String
     let likedPostId: String
-    let userUid: String
     
     var notificationDictValue: [String : Any] {
         let likeObject = [
@@ -61,6 +63,7 @@ class LikeNotification: Notification {
         return likeObject
     }
     
+    // TODO: Read out userUid? Change the name of it to fromUserUid?
     required init(forSnapshot snapshot: DataSnapshot) {
         guard let notificationDict = snapshot.value as? [String: Any],
             let seen = notificationDict["seen"] as? Bool,
@@ -95,9 +98,9 @@ class CommentNotification: Notification {
     var timestamp: Date?
     var type: NotificationType = .Comment
     var forUserUid: String
+    var userUid: String
     var notificationId: String
     let commentedPostId: String
-    let userUid: String
     
     var notificationDictValue: [String : Any] {
         let commentObject = [
@@ -141,10 +144,10 @@ class AttendeeNotification: Notification {
     var timestamp: Date?
     var type: NotificationType = .Attendee
     var forUserUid: String
+    var userUid: String
     var notificationId: String
     let eventAddress: String
     let eventTime: Date
-    let userUid: String
     
     var notificationDictValue: [String : Any] {
         let attendeeObject = [
@@ -192,6 +195,7 @@ class FollowerNotification: Notification {
     var timestamp: Date?
     var type: NotificationType = .Follower
     var forUserUid: String
+    var userUid: String
     var notificationId: String
     let followedUserUid: String
     let followerUid: String
@@ -218,6 +222,7 @@ class FollowerNotification: Notification {
         self.seen = seen
         self.timestamp = Date(milliseconds: timestamp)
         self.forUserUid = forUserUid
+        self.userUid = followerUid
         self.notificationId = notificationId
         self.followedUserUid = followedUserUid
         self.followerUid = followerUid
@@ -228,6 +233,7 @@ class FollowerNotification: Notification {
         self.followerUid = followerUid
         self.seen = seen
         self.forUserUid = followedUserUid
+        self.userUid = followerUid
         self.notificationId = notificationId
         self.timestamp = timestamp
     }

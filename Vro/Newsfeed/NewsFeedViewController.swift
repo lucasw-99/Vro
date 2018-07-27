@@ -141,6 +141,17 @@ extension NewsFeedViewController: UICollectionViewDataSource {
 
 // MARK: Button delegate for EventPostCollectionViewCell
 extension NewsFeedViewController: EventPostCellDelegate {
+    func didTapUsernameButton(_ usernameButton: UIButton, forUser user: UserProfile) {
+        print("gang")
+        usernameButton.isUserInteractionEnabled = false
+        defer {
+            usernameButton.isUserInteractionEnabled = true
+        }
+        
+        let userProfileViewController = UserProfileViewController(user)
+        navigationController?.pushViewController(userProfileViewController, animated: true)
+    }
+    
     func didTapAttendButton(_ attendButton: UIButton, forCell cell: EventPostCollectionViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { fatalError("Couldn't get index path for attending") }
         attendButton.isUserInteractionEnabled = false
