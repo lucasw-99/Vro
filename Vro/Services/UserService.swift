@@ -13,6 +13,7 @@ import UIKit
 class UserService {
 
     static var currentUserProfile: UserProfile?
+    static var currentUserToken: String?
 
     @available(*, introduced: 0.0)
     static func observeUserProfile(_ uid: String, completion: @escaping ( (_ userProfile: UserProfile?) -> () )) {
@@ -78,6 +79,11 @@ class UserService {
             print("userProfile has been set")
             completion()
         }
+    }
+    
+    static func loginUser(_ currentUser: UserProfile, _ token: String) {
+        currentUserProfile = currentUser
+        currentUserToken = token
     }
 
     // uid: uid of user

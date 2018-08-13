@@ -9,12 +9,13 @@
 import UIKit
 import FirebaseAuth
 import SnapKit
+import Alamofire
 
 class LoginViewController: UIViewController {
     private let backgroundImage: UIImageView = UIImageView(image: #imageLiteral(resourceName: "allMyVrosPng"))
-    private let emailInput: UITextField = UITextField()
+    private let usernameInput: UITextField = UITextField()
     private let passwordInput: UITextField = UITextField()
-    private let emailLabel: UILabel = UILabel()
+    private let usernameLabel: UILabel = UILabel()
     private let passwordLabel: UILabel = UILabel()
     private let loginButton: UIButton = UIButton(type: .system)
     private let signupButton: UIButton = UIButton(type: .system)
@@ -34,10 +35,9 @@ class LoginViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
-
-    @objc func loginUser(_ sender: Any) {
-
-        guard let email: String = emailInput.text, email != "" else {
+    
+    @objc func loginButtonPressed(_ sender: UIButton) {
+        guard let username: String = usernameInput.text, username != "" else {
             let alert = Util.makeOKAlert(alertTitle: "Error with Sign In", message: "The email field is empty.")
             self.present(alert, animated: true, completion: nil)
             return
@@ -47,37 +47,14 @@ class LoginViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
             return
         }
-        Util.toggleButton(button: loginButton, isEnabled: false)
-        // TODO: Validate users
-        let spinner = Util.displaySpinner(onView: view)
-        Auth.auth().signIn(withEmail: email, password: password) { user, error in
-            if error == nil && user != nil {
-                Util.removeSpinner(spinner)
-                UserService.updateCurrentUser(user!.user.uid) {
-                    // current user is initialized, now log in
-                    self.dismiss(animated: false, completion: nil)
-                    self.transitionToHome()
-                }
-            } else {
-                let alert = Util.makeOKAlert(alertTitle: "Error with Sign In", message: error!.localizedDescription)
-                Util.removeSpinner(spinner)
-                Util.toggleButton(button: self.loginButton, isEnabled: true)
-                self.present(alert, animated: true, completion: nil)
-            }
-        }
+        
+        loginUser(username, password)
     }
 
     @objc func signupUser(_ sender: Any) {
-        navigationController?.pushViewController(SignupViewController(), animated: true)
-    }
-
-    private func transitionToHome() {
-        Util.toggleButton(button: self.loginButton, isEnabled: true)
-        emailInput.text = ""
-        passwordInput.text = ""
-        let tabBar = CustomTabBarController()
-        tabBar.initializeTabViewControllers()
-        navigationController?.pushViewController(tabBar, animated: true)
+        let signupViewController = SignupViewController()
+        signupViewController.loginUserDelegate = self
+        navigationController?.pushViewController(signupViewController, animated: true)
     }
 
     private func setupSubviews() {
@@ -86,17 +63,17 @@ class LoginViewController: UIViewController {
         backgroundImage.alpha = 0.9
         view.addSubview(backgroundImage)
 
-        emailLabel.textAlignment = .center
-        emailLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        emailLabel.text = "Email"
-        emailLabel.textColor = UIColor.white
-        view.addSubview(emailLabel)
+        usernameLabel.textAlignment = .center
+        usernameLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        usernameLabel.text = "Username"
+        usernameLabel.textColor = UIColor.white
+        view.addSubview(usernameLabel)
 
-        emailInput.backgroundColor = UIColor.white
-        emailInput.borderStyle = .roundedRect
-        emailInput.autocorrectionType = .no
-        emailInput.autocapitalizationType = .none
-        view.addSubview(emailInput)
+        usernameInput.backgroundColor = UIColor.white
+        usernameInput.borderStyle = .roundedRect
+        usernameInput.autocorrectionType = .no
+        usernameInput.autocapitalizationType = .none
+        view.addSubview(usernameInput)
 
         passwordLabel.textAlignment = .center
         passwordLabel.font = UIFont.boldSystemFont(ofSize: 20)
@@ -115,7 +92,7 @@ class LoginViewController: UIViewController {
         loginButton.setTitleColor(UIColor.blue, for: .normal)
         loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 28)
         loginButton.translatesAutoresizingMaskIntoConstraints = false
-        loginButton.addTarget(self, action: #selector(LoginViewController.loginUser(_:)), for: .touchUpInside)
+        loginButton.addTarget(self, action: #selector(LoginViewController.loginButtonPressed(_:)), for: .touchUpInside)
         view.addSubview(loginButton)
 
         signupButton.setTitle("Sign Up", for: .normal)
@@ -132,20 +109,20 @@ class LoginViewController: UIViewController {
             make.edges.equalToSuperview()
         }
 
-        emailLabel.snp.makeConstraints { make in
+        usernameLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(75)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
 
-        emailInput.snp.makeConstraints { make in
-            make.top.equalTo(emailLabel.snp.bottom).offset(15)
+        usernameInput.snp.makeConstraints { make in
+            make.top.equalTo(usernameLabel.snp.bottom).offset(15)
             make.centerX.equalToSuperview()
             make.width.equalTo(190)
         }
 
         passwordLabel.snp.makeConstraints { make in
-            make.top.equalTo(emailInput.snp.bottom).offset(45)
+            make.top.equalTo(usernameInput.snp.bottom).offset(45)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
@@ -166,6 +143,64 @@ class LoginViewController: UIViewController {
             make.centerX.equalToSuperview()
         }
     }
+}
 
+extension LoginViewController: UserSignupDelegate {
+    func loginUser(_ username: String, _ password: String) {
+        Util.toggleButton(button: loginButton, isEnabled: false)
+        // TODO: Validate user input
+        let spinner = Util.displaySpinner(onView: view)
+        
+        let parameters: [String: Any] = [
+            "username" : username,
+            "password": password
+        ]
+        
+        Alamofire.request("http://178.128.183.75/users/authenticate", method: .post, parameters: parameters, encoding: JSONEncoding.default)
+            .responseJSON { response in
+                Util.removeSpinner(spinner)
+                Util.toggleButton(button: self.loginButton, isEnabled: true)
+                guard response.result.error == nil else {
+                    let error = response.result.error!
+                    let alert = Util.makeOKAlert(alertTitle: "Error with Sign In", message: error.localizedDescription)
+                    self.present(alert, animated: true, completion: nil)
+                    return
+                }
+                
+                guard let data = response.result.value as? [String: Any],
+                    let success = data["success"] as? Bool else {
+                    let errorMessage = "No data present in response"
+                    let alert = Util.makeOKAlert(alertTitle: "Error with Sign In", message: errorMessage)
+                    self.present(alert, animated: true, completion: nil)
+                    return
+                }
+                
+                if !success {
+                    let alert = Util.makeOKAlert(alertTitle: "Error with Sign In", message: "Username or password incorrect")
+                    self.present(alert, animated: true, completion: nil)
+                    return
+                }
+                
+                print("received data: \(data)")
+                guard let newUserPhotoUrl = URL(string: Constants.newUserProfilePhotoURL) else {
+                    fatalError("new user photo URL doesn't work!")
+                }
+                
+                guard let token = data["token"] as? String,
+                    let userDict = data["user"] as? [String: Any],
+                    let uid = userDict["id"] as? String,
+                    let username = userDict["username"] as? String else {
+                        fatalError("Malformatted data from server!")
+                }
+                let currentUser = UserProfile(uid, username, newUserPhotoUrl)
+                UserService.loginUser(currentUser, token)
+                
+                self.usernameInput.text = ""
+                self.passwordInput.text = ""
+                let tabBar = CustomTabBarController()
+                tabBar.initializeTabViewControllers()
+                self.navigationController?.pushViewController(tabBar, animated: true)
+        }
+    }
 }
 

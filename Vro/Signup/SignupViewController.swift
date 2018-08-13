@@ -9,6 +9,11 @@
 import UIKit
 import FirebaseAuth
 import FirebaseDatabase
+import Alamofire
+
+protocol UserSignupDelegate {
+    func loginUser(_ username: String, _ password: String)
+}
 
 class SignupViewController: UIViewController {
 
@@ -24,13 +29,13 @@ class SignupViewController: UIViewController {
     private let signupButton: UIButton = UIButton()
 
     private let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    
+    var loginUserDelegate: UserSignupDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()
         setupLayout()
-        // Do any additional setup after loading the view.
-        //createUserActivityIndicator
     }
 
     override func didReceiveMemoryWarning() {
@@ -162,46 +167,35 @@ class SignupViewController: UIViewController {
 
     private func createUser(_ email: String, _ username: String, _ password: String) {
         let spinner = Util.displaySpinner(onView: view)
-        Auth.auth().createUser(withEmail: email, password: password) { user, error in
-            guard let user = user else {
-                let alert = Util.makeOKAlert(alertTitle: self.alertTitle, message: error!.localizedDescription)
+        Util.toggleButton(button: self.signupButton, isEnabled: false)
+        
+        let parameters: [String: Any] = [
+            "name" : "Bogus name that doesn't matter for now",
+            "username" : username,
+            "email" : email,
+            "password": password
+        ]
+
+        Alamofire.request("http://178.128.183.75/users/register", method: .post, parameters: parameters, encoding: JSONEncoding.default)
+            .responseJSON { response in
                 Util.removeSpinner(spinner)
-                self.present(alert, animated: true, completion: nil)
-                return
-            }
-
-            // reassign userID to username
-            let changeUsernameRequest = Auth.auth().currentUser?.createProfileChangeRequest()
-            changeUsernameRequest?.displayName = username
-            changeUsernameRequest?.commitChanges { error in
-                if error == nil {
-                    Util.removeSpinner(spinner)
-                    self.addUserToDatabase(user.user.uid, username)
-                    self.navigationController?.popViewController(animated: true)
-                } else {
-                    let alert = Util.makeOKAlert(alertTitle: self.alertTitle, message: error!.localizedDescription)
-                    Util.removeSpinner(spinner)
-                    print("alert: \(alert)")
+                Util.toggleButton(button: self.signupButton, isEnabled: true)
+                guard response.result.error == nil else {
+                    let error = response.result.error!
+                    let alert = Util.makeOKAlert(alertTitle: self.alertTitle, message: error.localizedDescription)
                     self.present(alert, animated: true, completion: nil)
+                    return
                 }
-            }
-        }
-    }
-
-    private func addUserToDatabase(_ uid: String, _ username: String) {
-        let userPath = String(format: Constants.Database.userProfile, uid)
-        print("userPath: \(userPath), uid: \(uid)")
-        let currentUser = [
-            "uid": uid,
-            "username": username,
-            // set photo to default profile photo
-            "photoURL": Constants.newUserProfilePhotoURL
-        ] as [String: Any]
-        let userRef = Database.database().reference().child(userPath)
-        userRef.setValue(currentUser) { error, ref in
-            if error != nil {
-                print("Error: \(error!.localizedDescription)")
-            }
+                
+                guard let data = response.result.value as? [String: Any] else {
+                    let errorMessage = "No data was present in the response"
+                    let alert = Util.makeOKAlert(alertTitle: self.alertTitle, message: errorMessage)
+                    self.present(alert, animated: true, completion: nil)
+                    return
+                }
+                print("received data: \(data)")
+                print("Now login!")
+                self.loginUserDelegate?.loginUser(username, password)
         }
     }
 }

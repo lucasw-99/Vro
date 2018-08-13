@@ -12,6 +12,7 @@
 		7100EA6A20F46AA7002ADDFC /* GuestCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7100EA6920F46AA7002ADDFC /* GuestCollectionViewCell.swift */; };
 		7100EA6C20F46ACC002ADDFC /* ListGuestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7100EA6B20F46ACC002ADDFC /* ListGuestsViewController.swift */; };
 		7112A3AB210ABA9E00A9F199 /* ProfileHeaderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7112A3AA210ABA9E00A9F199 /* ProfileHeaderCollectionViewCell.swift */; };
+		7112A3AD210E3CD300A9F199 /* Auth0.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7112A3AC210E3CD300A9F199 /* Auth0.plist */; };
 		71732D0B20D98E4C00027AAE /* Like.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71732D0A20D98E4C00027AAE /* Like.swift */; };
 		71732D0D20D9BB9D00027AAE /* Attendee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71732D0C20D9BB9D00027AAE /* Attendee.swift */; };
 		71732D0F20D9BEDD00027AAE /* Follower.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71732D0E20D9BEDD00027AAE /* Follower.swift */; };
@@ -82,6 +83,7 @@
 		7100EA6920F46AA7002ADDFC /* GuestCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestCollectionViewCell.swift; sourceTree = "<group>"; };
 		7100EA6B20F46ACC002ADDFC /* ListGuestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListGuestsViewController.swift; sourceTree = "<group>"; };
 		7112A3AA210ABA9E00A9F199 /* ProfileHeaderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderCollectionViewCell.swift; sourceTree = "<group>"; };
+		7112A3AC210E3CD300A9F199 /* Auth0.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Auth0.plist; sourceTree = "<group>"; };
 		71732D0A20D98E4C00027AAE /* Like.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Like.swift; sourceTree = "<group>"; };
 		71732D0C20D9BB9D00027AAE /* Attendee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attendee.swift; sourceTree = "<group>"; };
 		71732D0E20D9BEDD00027AAE /* Follower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Follower.swift; sourceTree = "<group>"; };
@@ -365,6 +367,7 @@
 		A0FF4692209176B9006FE799 /* Vro */ = {
 			isa = PBXGroup;
 			children = (
+				7112A3AC210E3CD300A9F199 /* Auth0.plist */,
 				71732D1220E5D0E700027AAE /* Notifications */,
 				A04A776E20C4F10800106E06 /* NewEvent */,
 				A0FF469A209176BA006FE799 /* Assets.xcassets */,
@@ -477,6 +480,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0FF46A820918B66006FE799 /* GoogleService-Info.plist in Resources */,
+				7112A3AD210E3CD300A9F199 /* Auth0.plist in Resources */,
 				A0FF469B209176BA006FE799 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -509,6 +513,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Vro/Pods-Vro-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AlgoliaSearch-Client-Swift/AlgoliaSearch.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
@@ -521,6 +526,7 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlgoliaSearch.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",

@@ -14,4 +14,5 @@ target 'Vro' do
   pod 'InstantSearch-iOS'
   pod 'AlgoliaSearch-Client-Swift'
   pod 'SnapKit', '~> 4.0.0'
+  pod 'Alamofire', '~> 4.7'
 end

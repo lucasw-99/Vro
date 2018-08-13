@@ -16,32 +16,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         window = UIWindow(frame: UIScreen.main.bounds)
-        // TODO: Handle deleted users still having valid auth tokens
-        let authListener = Auth.auth().addStateDidChangeListener { auth, user in
-            if let user = user {
-                // user is logged in
-                // TODO: Add these calls appwide
-                UserService.updateCurrentUser(user.uid) {
-                    // current user is initialized, now log in
-                    let tabBar = CustomTabBarController()
-                    tabBar.initializeTabViewControllers()
+        // TODO (Lucas Wotton): Handle logging users in after they leave app
+        UserService.currentUserProfile = nil
 
-                    let navigationController = UINavigationController(rootViewController: tabBar)
-                    navigationController.isNavigationBarHidden = true
-                    self.window?.rootViewController = navigationController
-                    self.window?.makeKeyAndVisible()
-                }
-            } else {
-                UserService.currentUserProfile = nil
-
-                let loginViewController = LoginViewController()
-                loginViewController.view.backgroundColor = UIColor.black
-                let navigationController = UINavigationController(rootViewController: loginViewController)
-                navigationController.navigationBar.isTranslucent = false
-                self.window?.rootViewController = navigationController
-                self.window?.makeKeyAndVisible()
-            }
-        }
+        let loginViewController = LoginViewController()
+        loginViewController.view.backgroundColor = UIColor.black
+        let navigationController = UINavigationController(rootViewController: loginViewController)
+        navigationController.navigationBar.isTranslucent = false
+        navigationController.isNavigationBarHidden = true
+        self.window?.rootViewController = navigationController
+        self.window?.makeKeyAndVisible()
         return true
     }
 
