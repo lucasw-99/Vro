@@ -26,7 +26,10 @@ class ManageProfileViewController: UIViewController {
     private var imagePicker = UIImagePickerController()
 
     @IBAction func logoutUser(_ sender: Any) {
-        try! Auth.auth().signOut()
+        // logout user
+        // TODO (Lucas Wotton): Use enums to make this more understandable
+        UserService.updateLoginStatus(nil, nil, nil, nil)
+        AppDelegate.shared.rootViewController.switchToLogout()
     }
 
     override func viewDidLoad() {

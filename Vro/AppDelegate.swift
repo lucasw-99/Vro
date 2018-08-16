@@ -8,23 +8,19 @@
 
 import UIKit
 import Firebase
+import SwiftKeychainWrapper
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        // TODO (Lucas Wotton): Remove Firebase completely!
         FirebaseApp.configure()
+        
+        // TODO (Lucas Wotton): Check user login status!
         window = UIWindow(frame: UIScreen.main.bounds)
-        // TODO (Lucas Wotton): Handle logging users in after they leave app
-        UserService.currentUserProfile = nil
-
-        let loginViewController = LoginViewController()
-        loginViewController.view.backgroundColor = UIColor.black
-        let navigationController = UINavigationController(rootViewController: loginViewController)
-        navigationController.navigationBar.isTranslucent = false
-        navigationController.isNavigationBarHidden = true
-        self.window?.rootViewController = navigationController
+        self.window?.rootViewController = RootViewController()
         self.window?.makeKeyAndVisible()
         return true
     }
@@ -52,3 +48,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
+extension AppDelegate {
+    static var shared: AppDelegate {
+        return UIApplication.shared.delegate as! AppDelegate
+    }
+    var rootViewController: RootViewController {
+        return window!.rootViewController as! RootViewController
+    }
+}

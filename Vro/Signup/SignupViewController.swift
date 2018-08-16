@@ -176,6 +176,7 @@ class SignupViewController: UIViewController {
             "password": password
         ]
 
+        // TODO (Lucas Wotton): Abstract this to a service file
         Alamofire.request("http://178.128.183.75/users/register", method: .post, parameters: parameters, encoding: JSONEncoding.default)
             .responseJSON { response in
                 Util.removeSpinner(spinner)

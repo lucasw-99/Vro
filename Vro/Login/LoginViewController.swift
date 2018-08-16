@@ -27,11 +27,6 @@ class LoginViewController: UIViewController {
         setupLayout()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
@@ -102,6 +97,7 @@ class LoginViewController: UIViewController {
         signupButton.addTarget(self, action: #selector(LoginViewController.signupUser(_:)), for: .touchUpInside)
         view.addSubview(signupButton)
 
+        view.backgroundColor = UIColor.black
     }
 
     private func setupLayout() {
@@ -148,58 +144,20 @@ class LoginViewController: UIViewController {
 extension LoginViewController: UserSignupDelegate {
     func loginUser(_ username: String, _ password: String) {
         Util.toggleButton(button: loginButton, isEnabled: false)
-        // TODO: Validate user input
+        // TODO (Lucas Wotton): Validate user input
         let spinner = Util.displaySpinner(onView: view)
         
-        let parameters: [String: Any] = [
-            "username" : username,
-            "password": password
-        ]
-        
-        Alamofire.request("http://178.128.183.75/users/authenticate", method: .post, parameters: parameters, encoding: JSONEncoding.default)
-            .responseJSON { response in
-                Util.removeSpinner(spinner)
-                Util.toggleButton(button: self.loginButton, isEnabled: true)
-                guard response.result.error == nil else {
-                    let error = response.result.error!
-                    let alert = Util.makeOKAlert(alertTitle: "Error with Sign In", message: error.localizedDescription)
-                    self.present(alert, animated: true, completion: nil)
-                    return
-                }
-                
-                guard let data = response.result.value as? [String: Any],
-                    let success = data["success"] as? Bool else {
-                    let errorMessage = "No data present in response"
-                    let alert = Util.makeOKAlert(alertTitle: "Error with Sign In", message: errorMessage)
-                    self.present(alert, animated: true, completion: nil)
-                    return
-                }
-                
-                if !success {
-                    let alert = Util.makeOKAlert(alertTitle: "Error with Sign In", message: "Username or password incorrect")
-                    self.present(alert, animated: true, completion: nil)
-                    return
-                }
-                
-                print("received data: \(data)")
-                guard let newUserPhotoUrl = URL(string: Constants.newUserProfilePhotoURL) else {
-                    fatalError("new user photo URL doesn't work!")
-                }
-                
-                guard let token = data["token"] as? String,
-                    let userDict = data["user"] as? [String: Any],
-                    let uid = userDict["id"] as? String,
-                    let username = userDict["username"] as? String else {
-                        fatalError("Malformatted data from server!")
-                }
-                let currentUser = UserProfile(uid, username, newUserPhotoUrl)
-                UserService.loginUser(currentUser, token)
-                
+        UserService.authenticateUser(username, password) { error in
+            Util.removeSpinner(spinner)
+            Util.toggleButton(button: self.loginButton, isEnabled: true)
+            if let error = error {
+                let alert = Util.makeOKAlert(alertTitle: "Error with Sign In", message: error.localizedDescription)
+                self.present(alert, animated: true, completion: nil)
+            } else {
                 self.usernameInput.text = ""
                 self.passwordInput.text = ""
-                let tabBar = CustomTabBarController()
-                tabBar.initializeTabViewControllers()
-                self.navigationController?.pushViewController(tabBar, animated: true)
+                AppDelegate.shared.rootViewController.switchToMainScreen()
+            }
         }
     }
 }

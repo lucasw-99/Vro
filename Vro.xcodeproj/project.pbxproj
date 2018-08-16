@@ -13,6 +13,8 @@
 		7100EA6C20F46ACC002ADDFC /* ListGuestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7100EA6B20F46ACC002ADDFC /* ListGuestsViewController.swift */; };
 		7112A3AB210ABA9E00A9F199 /* ProfileHeaderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7112A3AA210ABA9E00A9F199 /* ProfileHeaderCollectionViewCell.swift */; };
 		7112A3AD210E3CD300A9F199 /* Auth0.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7112A3AC210E3CD300A9F199 /* Auth0.plist */; };
+		713175B421253B55005D2F89 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713175B321253B55005D2F89 /* SplashViewController.swift */; };
+		713175B621253BF1005D2F89 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713175B521253BF1005D2F89 /* RootViewController.swift */; };
 		71732D0B20D98E4C00027AAE /* Like.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71732D0A20D98E4C00027AAE /* Like.swift */; };
 		71732D0D20D9BB9D00027AAE /* Attendee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71732D0C20D9BB9D00027AAE /* Attendee.swift */; };
 		71732D0F20D9BEDD00027AAE /* Follower.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71732D0E20D9BEDD00027AAE /* Follower.swift */; };
@@ -84,6 +86,8 @@
 		7100EA6B20F46ACC002ADDFC /* ListGuestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListGuestsViewController.swift; sourceTree = "<group>"; };
 		7112A3AA210ABA9E00A9F199 /* ProfileHeaderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderCollectionViewCell.swift; sourceTree = "<group>"; };
 		7112A3AC210E3CD300A9F199 /* Auth0.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Auth0.plist; sourceTree = "<group>"; };
+		713175B321253B55005D2F89 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		713175B521253BF1005D2F89 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		71732D0A20D98E4C00027AAE /* Like.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Like.swift; sourceTree = "<group>"; };
 		71732D0C20D9BB9D00027AAE /* Attendee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attendee.swift; sourceTree = "<group>"; };
 		71732D0E20D9BEDD00027AAE /* Follower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Follower.swift; sourceTree = "<group>"; };
@@ -217,6 +221,7 @@
 				A0AD85F92093ED9B00D5F793 /* Util.swift */,
 				A0228F78209AC4F700E71C80 /* Constants.swift */,
 				A0AF4DE620B330A7001A9E09 /* PaddedTextField.swift */,
+				713175B521253BF1005D2F89 /* RootViewController.swift */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -382,6 +387,7 @@
 				A0FF4693209176B9006FE799 /* AppDelegate.swift */,
 				A0FF469C209176BA006FE799 /* LaunchScreen.storyboard */,
 				A0FF469F209176BA006FE799 /* Info.plist */,
+				713175B321253B55005D2F89 /* SplashViewController.swift */,
 				A0FF46A720918B65006FE799 /* GoogleService-Info.plist */,
 			);
 			path = Vro;
@@ -521,6 +527,8 @@
 				"${BUILT_PRODUCTS_DIR}/InstantSearch-iOS/InstantSearch.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftKeychainWrapper/SwiftKeychainWrapper.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftSpinner/SwiftSpinner.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -534,6 +542,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/InstantSearch.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftKeychainWrapper.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSpinner.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -565,6 +575,7 @@
 				7100EA6720F3BAEA002ADDFC /* LikeCollectionViewCell.swift in Sources */,
 				A0C8B6C9209A163400A98D53 /* MapViewController.swift in Sources */,
 				A0FF46AA20919435006FE799 /* SignupViewController.swift in Sources */,
+				713175B421253B55005D2F89 /* SplashViewController.swift in Sources */,
 				A056D80A20AD159600FA3F43 /* LikeService.swift in Sources */,
 				719357DC20F1629400510BD3 /* ListLikesViewController.swift in Sources */,
 				A08BA18320BEFA740062C72B /* MapViewWidget.swift in Sources */,
@@ -591,6 +602,7 @@
 				A0FF4694209176B9006FE799 /* AppDelegate.swift in Sources */,
 				A0E73FFB20A6912E007E72D3 /* SearchUsersCollectionViewCell.swift in Sources */,
 				A0228F7E209B483A00E71C80 /* UserService.swift in Sources */,
+				713175B621253BF1005D2F89 /* RootViewController.swift in Sources */,
 				A056D7E120AB3C8F00FA3F43 /* UserFollowers.swift in Sources */,
 				A0F2FB30209CA9380018F465 /* EventPost.swift in Sources */,
 				A0AF4DE520B1E603001A9E09 /* CommentCollectionViewCell.swift in Sources */,

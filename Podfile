@@ -15,4 +15,6 @@ target 'Vro' do
   pod 'AlgoliaSearch-Client-Swift'
   pod 'SnapKit', '~> 4.0.0'
   pod 'Alamofire', '~> 4.7'
+  pod 'SwiftKeychainWrapper', '~> 3.0'
+  pod 'SwiftSpinner'
 end

@@ -89,6 +89,12 @@ class Constants {
         static let searchUsersCell = "SearchUsersCell"
         static let commentsCell = "CommentsCell"
     }
+    
+    class Keychain {
+        static let loginToken = "loginToken"
+        static let username = "username"
+        static let password = "password"
+    }
 
     static let dateFormat = "MM/dd/yyyy hh:mm a"
     static let newUserProfilePhotoURL = "https://firebasestorage.googleapis.com/v0/b/wagin-5bc40.appspot.com/o/newUser.png?alt=media&token=22eed082-71ff-41d2-b30d-f7529186a60d"

@@ -9,6 +9,21 @@
 import FirebaseDatabase
 import FirebaseAuth
 import UIKit
+import SwiftKeychainWrapper
+import Alamofire
+
+public enum VroAuthenticationError: Error {
+    case unsuccessfulResponse
+}
+
+extension VroAuthenticationError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .unsuccessfulResponse:
+            return NSLocalizedString("Authentication Error", comment: "Username or password was incorrect")
+        }
+    }
+}
 
 class UserService {
 
@@ -81,9 +96,59 @@ class UserService {
         }
     }
     
-    static func loginUser(_ currentUser: UserProfile, _ token: String) {
+    static func updateLoginStatus(_ currentUser: UserProfile?, _ token: String?, _ username: String?, _ password: String?) {
+        if let token = token, let username = username, let password = password {
+            guard KeychainWrapper.standard.set(token, forKey: Constants.Keychain.loginToken) else { fatalError("Keychain could not save token") }
+            guard KeychainWrapper.standard.set(password, forKey: Constants.Keychain.password) else { fatalError("Keychain could not save password") }
+            guard KeychainWrapper.standard.set(username, forKey: Constants.Keychain.username) else { fatalError("Keychain could not save username") }
+        } else {
+            guard token == nil, username == nil, password == nil else { fatalError("mistake somewhere") }
+            KeychainWrapper.standard.removeObject(forKey: Constants.Keychain.loginToken)
+            KeychainWrapper.standard.removeObject(forKey: Constants.Keychain.password)
+            KeychainWrapper.standard.removeObject(forKey: Constants.Keychain.username)
+        }
         currentUserProfile = currentUser
         currentUserToken = token
+    }
+    
+    static func authenticateUser(_ username: String, _ password: String, completion: @escaping ( (_ error: Error?) -> () )) {
+        let parameters: [String: Any] = [
+            "username" : username,
+            "password": password
+        ]
+        
+        Alamofire.request("http://178.128.183.75/users/authenticate", method: .post, parameters: parameters, encoding: JSONEncoding.default)
+            .responseJSON { response in
+                guard response.result.error == nil else {
+                    completion(response.result.error)
+                    return
+                }
+                
+                guard let data = response.result.value as? [String: Any],
+                    let success = data["success"] as? Bool else {
+                        fatalError("Malformed data in response")
+                }
+                
+                if !success {
+                    completion(VroAuthenticationError.unsuccessfulResponse)
+                    return
+                }
+                
+                print("received data: \(data)")
+                guard let newUserPhotoUrl = URL(string: Constants.newUserProfilePhotoURL) else {
+                    fatalError("new user photo URL doesn't work!")
+                }
+                
+                guard let token = data["token"] as? String,
+                    let userDict = data["user"] as? [String: Any],
+                    let uid = userDict["id"] as? String,
+                    let username = userDict["username"] as? String else {
+                        fatalError("Malformatted data from server!")
+                }
+                let currentUser = UserProfile(uid, username, newUserPhotoUrl)
+                UserService.updateLoginStatus(currentUser, token, username, password)
+                completion(nil)
+        }
     }
 
     // uid: uid of user
