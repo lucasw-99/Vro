@@ -6,10 +6,9 @@
 //  Copyright © 2018 Lucas Wotton. All rights reserved.
 //
 import Foundation
-import FirebaseDatabase
 
 class UserProfile {
-    let uid: String
+    let uid: Int
     let username: String
     let photoURL: URL
 
@@ -25,31 +24,29 @@ class UserProfile {
 
 
     init(userJson json: [String: Any]) {
-        guard let uid = json["uid"] as? String,
+        guard let uid = json["id"] as? String,
             let username = json["username"] as? String,
             let photoUrlString = json["photoURL"] as? String,
             let photoUrl = URL(string: photoUrlString) else { fatalError("Malformatted json for UserProfile") }
-        self.uid = uid
+        // TODO (Lucas Wotton): Temporary patch
+        self.uid = 1
+        self.username = username
+        self.photoURL = photoUrl
+    }
+    
+    init(userJson json: [String: Any], photoUrlString: String) {
+        guard let id = json["id"] as? Int,
+            let username = json["username"] as? String,
+            let photoUrl = URL(string: photoUrlString) else { fatalError("Malformatted json for UserProfile") }
+        // TODO (Lucas Wotton): Temporary patch
+        self.uid = id
         self.username = username
         self.photoURL = photoUrl
     }
 
-    // init method meant for filtering users in search (so far)
-    init(forSnapshot snapshot: DataSnapshot) {
-        guard let dict = snapshot.value as? [String: Any],
-            let profileDict = dict["profile"] as? [String: Any],
-            let username = profileDict["username"] as? String,
-            let photoURLString = profileDict["photoURL"] as? String,
-            let photoURL = URL(string: photoURLString) else { fatalError("malformed UserProfile data in firebase") }
-
-        self.uid = snapshot.key
-        self.username = username
-        self.photoURL = photoURL
-    }
-
-    init(_ uid: String, _ username: String, _ photoURL: URL) {
+    init(_ uid: Int, _ username: String, _ photoUrl: URL) {
         self.uid = uid
         self.username = username
-        self.photoURL = photoURL
+        self.photoURL = photoUrl
     }
 }

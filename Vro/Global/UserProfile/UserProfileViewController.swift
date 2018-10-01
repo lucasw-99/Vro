@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FirebaseDatabase
 import SnapKit
 
 // TODO: Alot of duplicate code in this class. Maybe reduce
@@ -125,7 +124,7 @@ extension UserProfileViewController {
 // MARK: Populate dataSource
 extension UserProfileViewController: UICollectionViewDataSource {
     @objc private func observeEventPosts() {
-        EventPostService.getUserEvents(selectedUser.uid) { eventPosts in
+        EventPostService.getUserEvents(String(selectedUser.uid)) { eventPosts in
             // TODO: Store and sort by negative timestamps, akin to how you did notifications
             self.dataSource = eventPosts.reversed()
             // Do UI updating on main thread
@@ -235,23 +234,23 @@ extension UserProfileViewController: EventPostCellDelegate {
     }
     
     func didTapNumLikesButton(numLikesButton: UIButton, forEvent event: EventPost) {
-        numLikesButton.isUserInteractionEnabled = false
-        defer {
-            numLikesButton.isUserInteractionEnabled = true
-        }
-        
-        let listLikesViewController = ListLikesViewController(postedByUid: event.event.host.uid, eventPostId: event.eventPostID)
-        navigationController?.pushViewController(listLikesViewController, animated: true)
+//        numLikesButton.isUserInteractionEnabled = false
+//        defer {
+//            numLikesButton.isUserInteractionEnabled = true
+//        }
+//
+//        let listLikesViewController = ListLikesViewController(postedByUid: String(event.event.host.uid), eventPostId: event.eventPostID)
+//        navigationController?.pushViewController(listLikesViewController, animated: true)
     }
     
     func didTapNumGuestsButton(numGuestsButton: UIButton, forEvent event: EventPost) {
-        numGuestsButton.isUserInteractionEnabled = false
-        defer {
-            numGuestsButton.isUserInteractionEnabled = true
-        }
-        
-        let listGuestsViewController = ListGuestsViewController(eventPostId: event.eventPostID)
-        navigationController?.pushViewController(listGuestsViewController, animated: true)
+//        numGuestsButton.isUserInteractionEnabled = false
+//        defer {
+//            numGuestsButton.isUserInteractionEnabled = true
+//        }
+//
+//        let listGuestsViewController = ListGuestsViewController(eventPostId: event.eventPostID)
+//        navigationController?.pushViewController(listGuestsViewController, animated: true)
     }
 }
 

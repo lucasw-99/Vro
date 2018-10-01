@@ -7,10 +7,6 @@
 //
 
 import UIKit
-import FirebaseAuth
-import FirebaseStorage
-import FirebaseDatabase
-import FirebaseStorage
 
 class ManageProfileViewController: UIViewController {
 
@@ -18,7 +14,7 @@ class ManageProfileViewController: UIViewController {
     private let profileLabel = UILabel()
     private let usernameLabel = UILabel()
     private let followerStatsLabel = UILabel()
-    private var followerDatabaseRef: DatabaseReference?
+//    private var followerDatabaseRef: DatabaseReference?
 
     private let logoutButton = UIButton()
     private let logoutLabel = UILabel()
@@ -71,25 +67,25 @@ extension ManageProfileViewController: UIImagePickerControllerDelegate, UINaviga
                     print("Url was nil")
                     return
                 }
-                let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
-                changeRequest?.photoURL = url
-                changeRequest?.commitChanges { error in
-                    if error == nil {
-                        let photoURLPath = String(format: Constants.Database.userProfilePhotoURL, uid)
-                        let photoURLRef = Database.database().reference().child(photoURLPath)
-                        photoURLRef.setValue(url.absoluteString)
-                        // photo url changed, so we need to update current user
-                        UserService.updateCurrentUser(uid) {
-                            // dismiss view after user has been updated
-                            print("dismissing image picker")
-                            self.dismiss(animated: true, completion: nil)
-                        }
-                        // update users events
-                        self.updateEventProfilePhotos(uid, url.absoluteString)
-                    } else {
-                        print("Error: \(error!.localizedDescription)")
-                    }
-                }
+//                let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
+//                changeRequest?.photoURL = url
+//                changeRequest?.commitChanges { error in
+//                    if error == nil {
+//                        let photoURLPath = String(format: Constants.Database.userProfilePhotoURL, uid)
+//                        let photoURLRef = Database.database().reference().child(photoURLPath)
+//                        photoURLRef.setValue(url.absoluteString)
+//                        // photo url changed, so we need to update current user
+//                        UserService.updateCurrentUser(String(uid)) {
+//                            // dismiss view after user has been updated
+//                            print("dismissing image picker")
+//                            self.dismiss(animated: true, completion: nil)
+//                        }
+//                        // update users events
+//                        self.updateEventProfilePhotos(String(uid), url.absoluteString)
+//                    } else {
+//                        print("Error: \(error!.localizedDescription)")
+//                    }
+//                }
             }
 
         }
@@ -208,15 +204,20 @@ extension ManageProfileViewController {
     }
 
     private func setFollowerStatsLabelText() {
-        guard let currentUserUID = UserService.currentUserProfile?.uid else { fatalError("Current User shouldn't be nil") }
-        let userFollowersPath = String(format: Constants.Database.userFollowerInfo, currentUserUID)
-        followerDatabaseRef = Database.database().reference().child(userFollowersPath)
-
-        FollowersService.getFollowerInfo(currentUserUID, followerDatabaseRef!) { userFollowerStats in
+        guard let currentUid = UserService.currentUserProfile?.uid else { fatalError("Current User shouldn't be nil") }
+        FollowersService.getFollowInfo(currentUid) { error, userFollowStats in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+            
+            let userFollowStats = userFollowStats ?? UserFollowers(currentUid)
             print("user follower stats observable fired")
-            let followerCount = userFollowerStats.followers.count
-            let followingCount = userFollowerStats.following.count
-            self.followerStatsLabel.text = "\(followerCount) follower\(followerCount != 1 ? "s" : "")\n\(followingCount) following"
+            let followerCount = userFollowStats.followers.count
+            let followingCount = userFollowStats.following.count
+            DispatchQueue.main.async {
+                self.followerStatsLabel.text = "\(followerCount) follower\(followerCount != 1 ? "s" : "")\n\(followingCount) following"
+            }
+            
         }
     }
 }

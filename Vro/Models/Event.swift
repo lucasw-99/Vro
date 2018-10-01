@@ -46,8 +46,8 @@ class Event {
             let lng = geoloc["lng"] as? Double,
             let address = json["address"] as? String,
             let description = json["description"] as? String,
-            let eventImageUrl = json["eventImageURL"] as? String,
-            let eventTime = json["eventTime"] as? String,
+            let eventImageUrl = json["eventImageUrl"] as? String,
+            let eventTime = json["time"] as? String,
             let hostDict = json["host"] as? [String: Any],
             let attendeeCount = json["attendeeCount"] as? Int else { fatalError("Malformatted json for event") }
         self.host = UserProfile(userJson: hostDict)

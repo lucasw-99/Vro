@@ -75,6 +75,7 @@ class Constants {
         // 1: notificationId
         static let notificationIdsToTimestamps = "idsToTimestamps/%@"
     }
+    
     class Storage {
         // 1: uid, 2: Randomly generated ID
         static let eventImages = "users/%@/events/%@"
@@ -94,6 +95,14 @@ class Constants {
         static let loginToken = "loginToken"
         static let username = "username"
         static let password = "password"
+    }
+    
+    class Requests {
+        static let baseUrl = "http://178.128.183.75"
+        // 1: baseUrl
+        static let timelineRequest = "%@/timeline"
+        // 1: baseUrl
+        static let followRequest = "%@/followers"
     }
 
     static let dateFormat = "MM/dd/yyyy hh:mm a"

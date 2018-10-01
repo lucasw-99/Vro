@@ -8,8 +8,6 @@
 
 import Foundation
 import UIKit
-import FirebaseAuth
-import FirebaseStorage
 
 class ImageService {
     static let cache = NSCache<NSString, UIImage>()
@@ -45,37 +43,37 @@ class ImageService {
     }
 
     static func uploadImage(_ image: UIImage, _ section: String, completion: @escaping ((_ url: URL?) -> ())) {
-        let storageRef = Storage.storage().reference().child(section)
+//        let storageRef = Storage.storage().reference().child(section)
 
         guard let imageData = UIImageJPEGRepresentation(image, 0.75) else {
             return
         }
         // TODO: Add an observer
-        let metaData = StorageMetadata()
-        metaData.contentType = "image/jpg"
-        storageRef.putData(imageData, metadata: metaData) { metaData, error in
-            if error == nil {
-                storageRef.downloadURL { (url, error) in
-                    if error == nil {
-                        guard let imageUrl = url?.absoluteURL else {
-                            print("Failed to upload photo")
-                            completion(nil)
-                            return
-                        }
-                        // cache image
-                        cache.setObject(image, forKey: imageUrl.absoluteString as NSString)
-                        print("Successfully uploaded photo")
-                        completion(imageUrl)
-                    } else {
-                        print("Failed to upload photo")
-                        completion(nil)
-                    }
-                }
-            } else {
-                print("Failed to upload photo")
-                completion(nil)
-            }
-        }
+//        let metaData = StorageMetadata()
+//        metaData.contentType = "image/jpg"
+//        storageRef.putData(imageData, metadata: metaData) { metaData, error in
+//            if error == nil {
+//                storageRef.downloadURL { (url, error) in
+//                    if error == nil {
+//                        guard let imageUrl = url?.absoluteURL else {
+//                            print("Failed to upload photo")
+//                            completion(nil)
+//                            return
+//                        }
+//                        // cache image
+//                        cache.setObject(image, forKey: imageUrl.absoluteString as NSString)
+//                        print("Successfully uploaded photo")
+//                        completion(imageUrl)
+//                    } else {
+//                        print("Failed to upload photo")
+//                        completion(nil)
+//                    }
+//                }
+//            } else {
+//                print("Failed to upload photo")
+//                completion(nil)
+//            }
+//        }
     }
 
     static func updateUserImage(_ userPhotoURL: URL) {

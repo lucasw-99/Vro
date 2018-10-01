@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import FirebaseDatabase
 
 enum NotificationType: String {
     case Like = "Like"
@@ -25,7 +24,7 @@ protocol Notification {
     var notificationId: String { get }
     var notificationDictValue: [String: Any] { get }
     
-    init(forSnapshot snapshot: DataSnapshot)
+//    init(forSnapshot snapshot: DataSnapshot)
 }
 
 extension Notification {
@@ -64,23 +63,23 @@ class LikeNotification: Notification {
     }
     
     // TODO: Read out userUid? Change the name of it to fromUserUid?
-    required init(forSnapshot snapshot: DataSnapshot) {
-        guard let notificationDict = snapshot.value as? [String: Any],
-            let seen = notificationDict["seen"] as? Bool,
-            let timestamp = notificationDict["timestamp"] as? TimeInterval,
-            let forUserUid = notificationDict["forUserUid"] as? String,
-            let notificationId = notificationDict["notificationId"] as? String,
-            let likeDict = notificationDict["notification"] as? [String: Any],
-            let likedPostId = likeDict["likedPostId"] as? String,
-            let userUid = likeDict["userUid"] as? String
-            else { fatalError("malformed UserProfile data in firebase") }
-        self.seen = seen
-        self.timestamp = Date(milliseconds: timestamp)
-        self.forUserUid = forUserUid
-        self.notificationId = notificationId
-        self.likedPostId = likedPostId
-        self.userUid = userUid
-    }
+//    required init(forSnapshot snapshot: DataSnapshot) {
+//        guard let notificationDict = snapshot.value as? [String: Any],
+//            let seen = notificationDict["seen"] as? Bool,
+//            let timestamp = notificationDict["timestamp"] as? TimeInterval,
+//            let forUserUid = notificationDict["forUserUid"] as? String,
+//            let notificationId = notificationDict["notificationId"] as? String,
+//            let likeDict = notificationDict["notification"] as? [String: Any],
+//            let likedPostId = likeDict["likedPostId"] as? String,
+//            let userUid = likeDict["userUid"] as? String
+//            else { fatalError("malformed UserProfile data in firebase") }
+//        self.seen = seen
+//        self.timestamp = Date(milliseconds: timestamp)
+//        self.forUserUid = forUserUid
+//        self.notificationId = notificationId
+//        self.likedPostId = likedPostId
+//        self.userUid = userUid
+//    }
 
     
     init(likedPostId: String, userUid: String, seen: Bool, forUserUid: String, notificationId: String, timestamp: Date? = nil) {
@@ -111,23 +110,23 @@ class CommentNotification: Notification {
         return commentObject
     }
     
-    required init(forSnapshot snapshot: DataSnapshot) {
-        guard let notificationDict = snapshot.value as? [String: Any],
-            let seen = notificationDict["seen"] as? Bool,
-            let timestamp = notificationDict["timestamp"] as? TimeInterval,
-            let forUserUid = notificationDict["forUserUid"] as? String,
-            let notificationId = notificationDict["notificationId"] as? String,
-            let commentDict = notificationDict["notification"] as? [String: Any],
-            let commentedPostId = commentDict["commentedPostId"] as? String,
-            let userUid = commentDict["userUid"] as? String
-            else { fatalError("malformed UserProfile data in firebase") }
-        self.seen = seen
-        self.timestamp = Date(milliseconds: timestamp)
-        self.forUserUid = forUserUid
-        self.notificationId = notificationId
-        self.commentedPostId = commentedPostId
-        self.userUid = userUid
-    }
+//    required init(forSnapshot snapshot: DataSnapshot) {
+//        guard let notificationDict = snapshot.value as? [String: Any],
+//            let seen = notificationDict["seen"] as? Bool,
+//            let timestamp = notificationDict["timestamp"] as? TimeInterval,
+//            let forUserUid = notificationDict["forUserUid"] as? String,
+//            let notificationId = notificationDict["notificationId"] as? String,
+//            let commentDict = notificationDict["notification"] as? [String: Any],
+//            let commentedPostId = commentDict["commentedPostId"] as? String,
+//            let userUid = commentDict["userUid"] as? String
+//            else { fatalError("malformed UserProfile data in firebase") }
+//        self.seen = seen
+//        self.timestamp = Date(milliseconds: timestamp)
+//        self.forUserUid = forUserUid
+//        self.notificationId = notificationId
+//        self.commentedPostId = commentedPostId
+//        self.userUid = userUid
+//    }
     
     init(commentedPostId: String, userUid: String, seen: Bool, forUserUid: String, notificationId: String, timestamp: Date? = nil) {
         self.commentedPostId = commentedPostId
@@ -159,25 +158,25 @@ class AttendeeNotification: Notification {
         return attendeeObject
     }
     
-    required init(forSnapshot snapshot: DataSnapshot) {
-        guard let notificationDict = snapshot.value as? [String: Any],
-            let seen = notificationDict["seen"] as? Bool,
-            let timestamp = notificationDict["timestamp"] as? TimeInterval,
-            let forUserUid = notificationDict["forUserUid"] as? String,
-            let notificationId = notificationDict["notificationId"] as? String,
-            let attendeeDict = notificationDict["notification"] as? [String: Any],
-            let eventAddress = attendeeDict["eventAddress"] as? String,
-            let eventTime = attendeeDict["eventTime"] as? TimeInterval,
-            let userUid = attendeeDict["userUid"] as? String
-            else { fatalError("malformed UserProfile data in firebase") }
-        self.seen = seen
-        self.timestamp = Date(milliseconds: timestamp)
-        self.forUserUid = forUserUid
-        self.notificationId = notificationId
-        self.eventAddress = eventAddress
-        self.eventTime = Date(milliseconds: eventTime)
-        self.userUid = userUid
-    }
+//    required init(forSnapshot snapshot: DataSnapshot) {
+//        guard let notificationDict = snapshot.value as? [String: Any],
+//            let seen = notificationDict["seen"] as? Bool,
+//            let timestamp = notificationDict["timestamp"] as? TimeInterval,
+//            let forUserUid = notificationDict["forUserUid"] as? String,
+//            let notificationId = notificationDict["notificationId"] as? String,
+//            let attendeeDict = notificationDict["notification"] as? [String: Any],
+//            let eventAddress = attendeeDict["eventAddress"] as? String,
+//            let eventTime = attendeeDict["eventTime"] as? TimeInterval,
+//            let userUid = attendeeDict["userUid"] as? String
+//            else { fatalError("malformed UserProfile data in firebase") }
+//        self.seen = seen
+//        self.timestamp = Date(milliseconds: timestamp)
+//        self.forUserUid = forUserUid
+//        self.notificationId = notificationId
+//        self.eventAddress = eventAddress
+//        self.eventTime = Date(milliseconds: eventTime)
+//        self.userUid = userUid
+//    }
 
     init(eventAddress: String, eventTime: Date, attendeeUid: String, seen: Bool, forUserUid: String, notificationId: String, timestamp: Date? = nil) {
         self.eventAddress = eventAddress
@@ -209,24 +208,24 @@ class FollowerNotification: Notification {
         return attendeeObject
     }
     
-    required init(forSnapshot snapshot: DataSnapshot) {
-        guard let notificationDict = snapshot.value as? [String: Any],
-            let seen = notificationDict["seen"] as? Bool,
-            let timestamp = notificationDict["timestamp"] as? TimeInterval,
-            let forUserUid = notificationDict["forUserUid"] as? String,
-            let notificationId = notificationDict["notificationId"] as? String,
-            let followerDict = notificationDict["notification"] as? [String: Any],
-            let followedUserUid = followerDict["followedUid"] as? String,
-            let followerUid = followerDict["followerUid"] as? String
-            else { fatalError("malformed UserProfile data in firebase") }
-        self.seen = seen
-        self.timestamp = Date(milliseconds: timestamp)
-        self.forUserUid = forUserUid
-        self.userUid = followerUid
-        self.notificationId = notificationId
-        self.followedUserUid = followedUserUid
-        self.followerUid = followerUid
-    }
+//    required init(forSnapshot snapshot: DataSnapshot) {
+//        guard let notificationDict = snapshot.value as? [String: Any],
+//            let seen = notificationDict["seen"] as? Bool,
+//            let timestamp = notificationDict["timestamp"] as? TimeInterval,
+//            let forUserUid = notificationDict["forUserUid"] as? String,
+//            let notificationId = notificationDict["notificationId"] as? String,
+//            let followerDict = notificationDict["notification"] as? [String: Any],
+//            let followedUserUid = followerDict["followedUid"] as? String,
+//            let followerUid = followerDict["followerUid"] as? String
+//            else { fatalError("malformed UserProfile data in firebase") }
+//        self.seen = seen
+//        self.timestamp = Date(milliseconds: timestamp)
+//        self.forUserUid = forUserUid
+//        self.userUid = followerUid
+//        self.notificationId = notificationId
+//        self.followedUserUid = followedUserUid
+//        self.followerUid = followerUid
+//    }
 
     init(followedUserUid: String, followerUid: String, seen: Bool, notificationId: String, timestamp: Date? = nil) {
         self.followedUserUid = followedUserUid

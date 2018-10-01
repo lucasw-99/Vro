@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Firebase
 import SwiftKeychainWrapper
 
 @UIApplicationMain
@@ -15,10 +14,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // TODO (Lucas Wotton): Remove Firebase completely!
-        FirebaseApp.configure()
-        
-        // TODO (Lucas Wotton): Check user login status!
         window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.rootViewController = RootViewController()
         self.window?.makeKeyAndVisible()

@@ -6,15 +6,11 @@ target 'Vro' do
   use_frameworks!
 
   # Pods for Vro
-  pod 'Firebase/Core'
-  pod 'Firebase/Auth'
-  pod 'Firebase/Database'
-  pod 'Firebase/Storage'
-  pod 'FirebaseUI/Storage'
   pod 'InstantSearch-iOS'
   pod 'AlgoliaSearch-Client-Swift'
   pod 'SnapKit', '~> 4.0.0'
   pod 'Alamofire', '~> 4.7'
   pod 'SwiftKeychainWrapper', '~> 3.0'
   pod 'SwiftSpinner'
+  pod 'SwiftyJSON'
 end

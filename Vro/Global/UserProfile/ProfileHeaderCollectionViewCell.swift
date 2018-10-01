@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FirebaseDatabase
 
 class ProfileHeaderCollectionViewCell: UICollectionViewCell {
     private let profilePhotoView = UIImageView()
@@ -109,19 +108,19 @@ private extension ProfileHeaderCollectionViewCell {
         }
         
         let selectedUserFollowersPath = String(format: Constants.Database.userFollowerInfo, selectedUser.uid)
-        let selectedUserFollowersRef = Database.database().reference().child(selectedUserFollowersPath)
+//        let selectedUserFollowersRef = Database.database().reference().child(selectedUserFollowersPath)
         
-        FollowersService.getFollowerInfo(selectedUser.uid, selectedUserFollowersRef) { selectedUserFollowerInfo in
-            print("UserProfileViewController selectedUser observable")
-            self.followerCount = selectedUserFollowerInfo.followers.count
-            self.followingCount = selectedUserFollowerInfo.following.count
-            self.followerStatsLabel.text = "\(self.followerCount) follower\(self.followerCount != 1 ? "s" : "")\n\(self.followingCount) following"
-            let currentUser = Follower(self.currentUser.uid)
-            self.followButton.isSelected = selectedUserFollowerInfo.followers.contains(currentUser)
-            self.followButton.isUserInteractionEnabled = true
-            // TODO: Make use of the fact that the followers shit is an observable?
-            selectedUserFollowersRef.removeAllObservers()
-        }
+//        FollowersService.getFollowerInfo(String(selectedUser.uid), selectedUserFollowersRef) { selectedUserFollowerInfo in
+//            print("UserProfileViewController selectedUser observable")
+//            self.followerCount = selectedUserFollowerInfo.followers.count
+//            self.followingCount = selectedUserFollowerInfo.following.count
+//            self.followerStatsLabel.text = "\(self.followerCount) follower\(self.followerCount != 1 ? "s" : "")\n\(self.followingCount) following"
+//            let currentUser = Follower(String(self.currentUser.uid))
+//            self.followButton.isSelected = selectedUserFollowerInfo.followers.contains(1)
+//            self.followButton.isUserInteractionEnabled = true
+//            // TODO: Make use of the fact that the followers shit is an observable?
+//            selectedUserFollowersRef.removeAllObservers()
+//        }
     }
 }
 
@@ -136,7 +135,7 @@ extension ProfileHeaderCollectionViewCell {
         let wasSelected = followButton.isSelected
         followButton.isSelected = !followButton.isSelected
         print("updating followers")
-        FollowersService.updateFollowers(uid: currentUser.uid, followedUid: selectedUser.uid, addFollower: !wasSelected) {
+        FollowersService.updateFollowers(uid: String(currentUser.uid), followedUid: String(selectedUser.uid), addFollower: !wasSelected) {
             DispatchQueue.main.async {
                 self.followerCount += wasSelected ? -1 : 1
                 Util.toggleButton(button: self.followButton, isEnabled: true)

@@ -8,13 +8,12 @@
 
 import UIKit
 import SnapKit
-import FirebaseDatabase
 
 class NewsFeedViewController: UIViewController {
 
     private var dataSource: [EventPost] = []
     private var followedUsers: Set<String>?
-    private var userTimelineRef: DatabaseReference?
+//    private var userTimelineRef: DatabaseReference?
 
     private let vroLabel = UILabel()
     private let separatorView = UIView()
@@ -114,14 +113,11 @@ extension NewsFeedViewController {
 // MARK: Populate dataSource
 extension NewsFeedViewController: UICollectionViewDataSource {
     @objc private func observeEventPosts() {
-        guard let currentUID = UserService.currentUserProfile?.uid else { fatalError("Current user is nil") }
-        if let ref = userTimelineRef {
-            ref.removeAllObservers()
-        }
-        let userTimelinePath = String(format: Constants.Database.getTimelinePosts, currentUID)
-        let ref = Database.database().reference().child(userTimelinePath)
-        // TODO: Remove old posts from user timelines
-        TimelineService.populateUserTimeline(currentUID, ref) { posts in
+        guard let currentUid = UserService.currentUserProfile?.uid else { fatalError("Current user is nil") }
+        TimelineService.getUserTimeline { error, posts in
+            if let error = error {
+                print(error.localizedDescription)
+            }
             self.dataSource = posts
             // Do UI updating on main thread
             DispatchQueue.main.async {
@@ -134,8 +130,30 @@ extension NewsFeedViewController: UICollectionViewDataSource {
                     }
                 }
             }
+
         }
-        userTimelineRef = ref
+//        if let ref = userTimelineRef {
+//            ref.removeAllObservers()
+//        }
+//
+//        let userTimelinePath = String(format: Constants.Database.getTimelinePosts, currentUID)
+//        let ref = Database.database().reference().child(userTimelinePath)
+//        // TODO: Remove old posts from user timelines
+//        TimelineService.populateUserTimeline(String(currentUID), ref) { posts in
+//            self.dataSource = posts
+//            // Do UI updating on main thread
+//            DispatchQueue.main.async {
+//                self.collectionView.reloadData()
+//                // stop refresher from spinning, but not too quickly
+//                if self.refresher.isRefreshing {
+//                    let deadline = DispatchTime.now() + .milliseconds(700)
+//                    DispatchQueue.main.asyncAfter(deadline: deadline) {
+//                        self.refresher.endRefreshing()
+//                    }
+//                }
+//            }
+//        }
+//        userTimelineRef = ref
     }
 }
 
@@ -223,23 +241,23 @@ extension NewsFeedViewController: EventPostCellDelegate {
     }
     
     func didTapNumLikesButton(numLikesButton: UIButton, forEvent event: EventPost) {
-        numLikesButton.isUserInteractionEnabled = false
-        defer {
-            numLikesButton.isUserInteractionEnabled = true
-        }
-        
-        let listLikesViewController = ListLikesViewController(postedByUid: event.event.host.uid, eventPostId: event.eventPostID)
-        navigationController?.pushViewController(listLikesViewController, animated: true)
+//        numLikesButton.isUserInteractionEnabled = false
+//        defer {
+//            numLikesButton.isUserInteractionEnabled = true
+//        }
+//        
+//        let listLikesViewController = ListLikesViewController(postedByUid: String(event.event.host.uid), eventPostId: event.eventPostID)
+//        navigationController?.pushViewController(listLikesViewController, animated: true)
     }
     
     func didTapNumGuestsButton(numGuestsButton: UIButton, forEvent event: EventPost) {
-        numGuestsButton.isUserInteractionEnabled = false
-        defer {
-            numGuestsButton.isUserInteractionEnabled = true
-        }
-        
-        let listGuestsViewController = ListGuestsViewController(eventPostId: event.eventPostID)
-        navigationController?.pushViewController(listGuestsViewController, animated: true)
+//        numGuestsButton.isUserInteractionEnabled = false
+//        defer {
+//            numGuestsButton.isUserInteractionEnabled = true
+//        }
+//
+//        let listGuestsViewController = ListGuestsViewController(eventPostId: event.eventPostID)
+//        navigationController?.pushViewController(listGuestsViewController, animated: true)
     }
 }
 

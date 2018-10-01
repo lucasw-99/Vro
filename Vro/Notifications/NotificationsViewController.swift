@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FirebaseDatabase
 
 class NotificationsViewController: UIViewController {
     private let notificationsLabel = UILabel()
@@ -15,11 +14,12 @@ class NotificationsViewController: UIViewController {
     private let separatorView = UIView()
     private var dataSource = [Notification]()
     
-    private let newNotificationsRef: DatabaseReference = {
-        guard let currentUid = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
-        let newNotificationsPath = String(format: Constants.Database.notifications, currentUid)
-        return Database.database().reference().child(newNotificationsPath)
-    }()
+//    private let newNotificationsRef: DatabaseReference = {
+//        guard let currentUid = UserService.currentUserProfile?.uid else { fatalError("Current user nil") }
+//        print("currentUid: \(currentUid)")
+//        let newNotificationsPath = String(format: Constants.Database.notifications, currentUid)
+//        return Database.database().reference().child(newNotificationsPath)
+//    }()
 
     private let notificationsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -50,12 +50,6 @@ class NotificationsViewController: UIViewController {
         super.viewDidLoad()
         setupSubviews()
         setupLayout()
-    }
-    
-    deinit {
-        print("notificationsViewController deinit called")
-        // remove new notification observer
-        newNotificationsRef.removeAllObservers()
     }
 }
 
@@ -150,50 +144,51 @@ extension NotificationsViewController: UICollectionViewDelegateFlowLayout {
 // MARK: Data source
 extension NotificationsViewController: UICollectionViewDataSource {
     private func showNewNotifications() {
-        newNotificationsRef.queryOrdered(byChild: "negativeTimestamp").observe(.childAdded) { snapshot in
-            print("old snapshots: \(snapshot)")
-            guard let notificationDict = snapshot.value as? [String: Any],
-                let notificationType = notificationDict["type"] as? String
-                else { fatalError("malformed Notification data in firebase") }
-            guard let type = NotificationType(rawValue: notificationType) else { fatalError("unknown notification type: \(notificationType)") }
-            var notification: Notification? = nil
-            switch type {
-            case .Like:
-                notification = LikeNotification(forSnapshot: snapshot)
-            case .Comment:
-                notification = CommentNotification(forSnapshot: snapshot)
-            case .Attendee:
-                notification = AttendeeNotification(forSnapshot: snapshot)
-            case .Follower:
-                notification = FollowerNotification(forSnapshot: snapshot)
-            }
-            
-            guard let unwrappedNotification = notification else { fatalError("huge issues") }
-            print("old notification: \(unwrappedNotification)")
-            // TODO: Animate insertion
-            if let firstNotification = self.dataSource.first,
-                let firstTimestamp = firstNotification.timestamp,
-                let secondTimestamp = unwrappedNotification.timestamp,
-                firstTimestamp.compare(secondTimestamp) == .orderedAscending {
-                // this is a new notification, insert in front
-                self.dataSource.insert(unwrappedNotification, at: 0)
-            } else {
-                self.dataSource.append(unwrappedNotification)
-            }
-            self.notificationsCollectionView.reloadData()
-        }
-        
-        newNotificationsRef.observe(.childRemoved) { snapshot in
-            guard let notificationDict = snapshot.value as? [String: Any],
-                let notificationId = notificationDict["notificationId"] as? String
-                else { fatalError("Deleting notification error") }
-            let sectionIndex = self.dataSource.index { return $0.notificationId == notificationId }
-            if let sectionIndex = sectionIndex {
-                print("Deleting item at index: \(sectionIndex)")
-                self.dataSource.remove(at: sectionIndex)
-                self.notificationsCollectionView.reloadData()
-            }
-        }
+        print("showNewNotifications called")
+//        newNotificationsRef.queryOrdered(byChild: "negativeTimestamp").observe(.childAdded) { snapshot in
+//            print("old snapshots: \(snapshot)")
+//            guard let notificationDict = snapshot.value as? [String: Any],
+//                let notificationType = notificationDict["type"] as? String
+//                else { fatalError("malformed Notification data in firebase") }
+//            guard let type = NotificationType(rawValue: notificationType) else { fatalError("unknown notification type: \(notificationType)") }
+//            var notification: Notification? = nil
+//            switch type {
+//            case .Like:
+//                notification = LikeNotification(forSnapshot: snapshot)
+//            case .Comment:
+//                notification = CommentNotification(forSnapshot: snapshot)
+//            case .Attendee:
+//                notification = AttendeeNotification(forSnapshot: snapshot)
+//            case .Follower:
+//                notification = FollowerNotification(forSnapshot: snapshot)
+//            }
+//
+//            guard let unwrappedNotification = notification else { fatalError("huge issues") }
+//            print("old notification: \(unwrappedNotification)")
+//            // TODO: Animate insertion
+//            if let firstNotification = self.dataSource.first,
+//                let firstTimestamp = firstNotification.timestamp,
+//                let secondTimestamp = unwrappedNotification.timestamp,
+//                firstTimestamp.compare(secondTimestamp) == .orderedAscending {
+//                // this is a new notification, insert in front
+//                self.dataSource.insert(unwrappedNotification, at: 0)
+//            } else {
+//                self.dataSource.append(unwrappedNotification)
+//            }
+//            self.notificationsCollectionView.reloadData()
+//        }
+//
+//        newNotificationsRef.observe(.childRemoved) { snapshot in
+//            guard let notificationDict = snapshot.value as? [String: Any],
+//                let notificationId = notificationDict["notificationId"] as? String
+//                else { fatalError("Deleting notification error") }
+//            let sectionIndex = self.dataSource.index { return $0.notificationId == notificationId }
+//            if let sectionIndex = sectionIndex {
+//                print("Deleting item at index: \(sectionIndex)")
+//                self.dataSource.remove(at: sectionIndex)
+//                self.notificationsCollectionView.reloadData()
+//            }
+//        }
     }
     
     @objc private func observeNotifications() {

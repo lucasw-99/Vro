@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import FirebaseDatabase
 
 class Like {
     let identifier: String
@@ -24,19 +23,6 @@ class Like {
             ] as [String: Any]
         
         return likeObject
-    }
-    
-    init(forSnapshot snapshot: DataSnapshot) {
-        guard let likeDict = snapshot.value as? [String: Any],
-            let identifier = likeDict["identifier"] as? String,
-            let likeAuthorId = likeDict["likeAuthorId"] as? String,
-            let eventPostId = likeDict["eventPostId"] as? String,
-            let timestamp = likeDict["timestamp"] as? TimeInterval else { fatalError("like snapshot was incorrectly formatted") }
-        
-        self.identifier = identifier
-        self.likeAuthorId = likeAuthorId
-        self.eventPostId = eventPostId
-        self.timestamp = Date(milliseconds: timestamp)
     }
     
     init(_ likeAuthorId: String, _ eventPostId: String) {

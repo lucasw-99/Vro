@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import FirebaseDatabase
 
 class Comment {
     let commentId: String
@@ -29,20 +28,20 @@ class Comment {
     }
 
     // this constructor is used for reading comments
-    init(forSnapshot snapshot: DataSnapshot) {
-        guard let commentDict = snapshot.value as? [String: Any],
-            let commentId = commentDict["commentID"] as? String,
-            let commentText = commentDict["commentText"] as? String,
-            let commentAuthorId = commentDict["commentAuthorID"] as? String,
-            let eventPostId = commentDict["eventPostID"] as? String,
-            let timestamp = commentDict["timestamp"] as? TimeInterval else { fatalError("comment snapshot was incorrectly formatted") }
-
-        self.commentId = commentId
-        self.commentText = commentText
-        self.commentAuthorId = commentAuthorId
-        self.eventPostId = eventPostId
-        self.timestamp = Date(milliseconds: timestamp)
-    }
+//    init(forSnapshot snapshot: DataSnapshot) {
+//        guard let commentDict = snapshot.value as? [String: Any],
+//            let commentId = commentDict["commentID"] as? String,
+//            let commentText = commentDict["commentText"] as? String,
+//            let commentAuthorId = commentDict["commentAuthorID"] as? String,
+//            let eventPostId = commentDict["eventPostID"] as? String,
+//            let timestamp = commentDict["timestamp"] as? TimeInterval else { fatalError("comment snapshot was incorrectly formatted") }
+//
+//        self.commentId = commentId
+//        self.commentText = commentText
+//        self.commentAuthorId = commentAuthorId
+//        self.eventPostId = eventPostId
+//        self.timestamp = Date(milliseconds: timestamp)
+//    }
 
     // this constructor is used for posting comments
     init(_ commentId: String, _ commentText: String, _ commentAuthorId: String, _ eventPostId: String) {

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FirebaseDatabase
 
 class ListGuestsViewController: UIViewController {
     private let backButton = UIButton()
@@ -28,16 +27,16 @@ class ListGuestsViewController: UIViewController {
     init(eventPostId: String) {
         super.init(nibName: nil, bundle: nil)
         let postGuestsPath = String(format: Constants.Database.eventPotentialGuests, eventPostId)
-        let postLikesRef = Database.database().reference().child(postGuestsPath)
+//        let postLikesRef = Database.database().reference().child(postGuestsPath)
         
-        postLikesRef.observeSingleEvent(of: .value) { snapshot in
-            for childSnapshot in snapshot.children {
-                guard let childSnapshot = childSnapshot as? DataSnapshot else { fatalError("Didn't expect this") }
-                let guest = Attendee(forSnapshot: childSnapshot)
-                self.dataSource.append(guest)
-            }
-            self.guestsCollectionView.reloadData()
-        }
+//        postLikesRef.observeSingleEvent(of: .value) { snapshot in
+//            for childSnapshot in snapshot.children {
+//                guard let childSnapshot = childSnapshot as? DataSnapshot else { fatalError("Didn't expect this") }
+//                let guest = Attendee(forSnapshot: childSnapshot)
+//                self.dataSource.append(guest)
+//            }
+//            self.guestsCollectionView.reloadData()
+//        }
     }
     
     required init?(coder aDecoder: NSCoder) {

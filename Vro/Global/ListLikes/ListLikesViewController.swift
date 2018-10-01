@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FirebaseDatabase
 
 class ListLikesViewController: UIViewController {
     private let backButton = UIButton()
@@ -27,17 +26,17 @@ class ListLikesViewController: UIViewController {
     
     init(postedByUid: String, eventPostId: String) {
         super.init(nibName: nil, bundle: nil)
-        let postLikesPath = String(format: Constants.Database.postLikes, postedByUid, eventPostId)
-        let postLikesRef = Database.database().reference().child(postLikesPath)
-        
-        postLikesRef.observeSingleEvent(of: .value) { snapshot in
-            for childSnapshot in snapshot.children {
-                guard let childSnapshot = childSnapshot as? DataSnapshot else { fatalError("Didn't expect this") }
-                let like = Like(forSnapshot: childSnapshot)
-                self.dataSource.append(like)
-            }
-            self.likesCollectionView.reloadData()
-        }
+//        let postLikesPath = String(format: Constants.Database.postLikes, postedByUid, eventPostId)
+//        let postLikesRef = Database.database().reference().child(postLikesPath)
+//        
+//        postLikesRef.observeSingleEvent(of: .value) { snapshot in
+//            for childSnapshot in snapshot.children {
+//                guard let childSnapshot = childSnapshot as? DataSnapshot else { fatalError("Didn't expect this") }
+//                let like = Like(forSnapshot: childSnapshot)
+//                self.dataSource.append(like)
+//            }
+//            self.likesCollectionView.reloadData()
+//        }
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -8,7 +8,6 @@
 
 import UIKit
 import MapKit
-import FirebaseDatabase
 
 class UploadEventViewController: UIViewController {
     private let headerView = UIView()
@@ -78,16 +77,16 @@ extension UploadEventViewController {
         guard let eventImageUrl = eventImageUrl else { fatalError("event image url is nil") }
         let eventPostID = Util.generateId()
         let description = "Not implemented yet 🤡"
-        let event = Event(currentUser, eventImageUrl.absoluteString, description, providedAddress, eventDate.date, selectedPin.coordinate)
-        let eventPost = EventPost(event, captionText.text, Date(), eventPostID)
-        let updates = [String: Any?]()
-        EventPostService.setEvent(eventPost, withUpdates: updates) { finalUpdates in
-            let updateRef = Database.database().reference()
-            updateRef.updateChildValues(finalUpdates.mapValues { $0 as Any }) { error, _ in
-                print("Successfully posted new event with eventPostId \(eventPostID)")
-                self.dismissNewEventViewControllers()
-            }
-        }
+//        let event = Event(currentUser, eventImageUrl.absoluteString, description, providedAddress, eventDate.date, selectedPin.coordinate)
+//        let eventPost = EventPost(event, captionText.text, Date(), eventPostID)
+//        let updates = [String: Any?]()
+//        EventPostService.setEvent(eventPost, withUpdates: updates) { finalUpdates in
+//            let updateRef = Database.database().reference()
+//            updateRef.updateChildValues(finalUpdates.mapValues { $0 as Any }) { error, _ in
+//                print("Successfully posted new event with eventPostId \(eventPostID)")
+//                self.dismissNewEventViewControllers()
+//            }
+//        }
     }
 
     @objc func cancelButtonPressed(_ sender: Any) {

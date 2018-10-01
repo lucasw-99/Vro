@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FirebaseDatabase
 import Foundation
 
 protocol EventPostCellDelegate {
@@ -44,7 +43,7 @@ class EventPostCollectionViewCell: UICollectionViewCell {
     private let containerView = UIView()
 
     var buttonDelegate: EventPostCellDelegate?
-    private var eventPostLikesRef: DatabaseReference?
+//    private var eventPostLikesRef: DatabaseReference?
 
     var eventPost: EventPost! {
         didSet {
@@ -78,7 +77,7 @@ class EventPostCollectionViewCell: UICollectionViewCell {
 // MARK: Button functions
 extension EventPostCollectionViewCell {
     @objc private func usernamePressed(_ sender: UIButton) {
-        buttonDelegate?.didTapUsernameButton(usernameButton, forUser: eventPost.event.host)
+//        buttonDelegate?.didTapUsernameButton(usernameButton, forUser: eventPost.event.host)
     }
     
     @objc private func attendButtonPressed(_ sender: UIButton) {
@@ -94,7 +93,7 @@ extension EventPostCollectionViewCell {
     }
 
     @objc private func shareButtonPressed(_ sender: UIButton) {
-        buttonDelegate?.didTapShareButton(shareButton, forEvent: eventPost.event)
+//        buttonDelegate?.didTapShareButton(shareButton, forEvent: eventPost.event)
     }
 
     @objc private func showCommentsButtonPressed(_ sender: UIButton) {
@@ -305,43 +304,43 @@ extension EventPostCollectionViewCell {
     }
 
     private func updateUI() {
-        guard let currentUid = UserService.currentUserProfile?.uid else { fatalError("current user nil") }
-
-        usernameButton.setTitle(eventPost.event.host.username, for: .normal)
-
-        ImageService.getImage(withURL: eventPost.event.host.photoURL, completion: { image in
-            self.userImage.image = image
-        })
-        userImage.layer.borderWidth = 1
-        userImage.layer.borderColor = UIColor.lightGray.cgColor
-
-        if let url = URL(string: eventPost.event.eventImageURL) {
-            ImageService.getImage(withURL: url) { image in
-                self.eventImageView.image = image
-            }
-        } else {
-            ImageService.getImage(withURL: URL(string: Constants.noImageProvidedPhotoURL)!) { image in
-                self.eventImageView.image = image
-            }
-            print("Invalid image URL")
-        }
-        if !eventPost.caption.isEmpty {
-            captionLabel.text = eventPost.caption
-            captionLabel.isHidden = false
-        }
-
-        numLikes = eventPost.likeCount
-
-        likeButton.isSelected = eventPost.isLiked
-
-        numAttending = eventPost.event.attendeeCount
-
-        attendButton.isSelected = eventPost.isAttending
-        attendButton.isHidden = currentUid == eventPost.event.host.uid
-
-        eventTimeLabel.text = "Event happening in \(Util.smallestTimeUnit(from: eventPost.event.eventTime))"
-
-        daysAgo.text = "Posted \(Util.smallestTimeUnit(from: eventPost.timestamp))"
+//        guard let currentUid = UserService.currentUserProfile?.uid else { fatalError("current user nil") }
+//
+//        usernameButton.setTitle(eventPost.event.host.username, for: .normal)
+//
+//        ImageService.getImage(withURL: eventPost.event.host.photoURL, completion: { image in
+//            self.userImage.image = image
+//        })
+//        userImage.layer.borderWidth = 1
+//        userImage.layer.borderColor = UIColor.lightGray.cgColor
+//
+//        if let url = URL(string: eventPost.event.eventImageURL) {
+//            ImageService.getImage(withURL: url) { image in
+//                self.eventImageView.image = image
+//            }
+//        } else {
+//            ImageService.getImage(withURL: URL(string: Constants.noImageProvidedPhotoURL)!) { image in
+//                self.eventImageView.image = image
+//            }
+//            print("Invalid image URL")
+//        }
+//        if !eventPost.caption.isEmpty {
+//            captionLabel.text = eventPost.caption
+//            captionLabel.isHidden = false
+//        }
+//
+//        numLikes = eventPost.likeCount
+//
+//        likeButton.isSelected = eventPost.isLiked
+//
+//        numAttending = eventPost.event.attendeeCount
+//
+//        attendButton.isSelected = eventPost.isAttending
+//        attendButton.isHidden = currentUid == eventPost.event.host.uid
+//
+//        eventTimeLabel.text = "Event happening in \(Util.smallestTimeUnit(from: eventPost.event.eventTime))"
+//
+//        daysAgo.text = "Posted \(Util.smallestTimeUnit(from: eventPost.timestamp))"
     }
 
     private func setLikes(numLikes: Int) {

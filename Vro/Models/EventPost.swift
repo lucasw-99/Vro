@@ -8,57 +8,55 @@
 
 import UIKit
 import MapKit
-import FirebaseDatabase
 
 class EventPost {
-    let event: Event
-    let caption: String
-    let timestamp: Date
-    let eventPostID: String
-    let likeCount: Int
+    let eventPostId: Int
+    let host: UserProfile
+    let eventImageUrl: URL
+    let description: String
+    let address: String
+    let coordinate: CLLocationCoordinate2D
+    let eventTime: Date
+    // TODO (Lucas Wotton): Bring this back? Timeline already sorted chronologically
+//    let timestamp: Date
+    var likeCount: Int
+    var attendeeCount: Int
 
     var isLiked: Bool = false
     var isAttending: Bool = false
 
-    var dictValue: [String: Any] {
-        let eventPostObject = [
-            "event": event.dictValue,
-            "likeCount": likeCount,
-            "caption": caption,
-            // TODO: Store timestamp as negative value to sort from most recent to least recent?
-            "timestamp": [".sv": "timestamp"],
-            "eventPostID": eventPostID
-            ] as [String: Any]
-
-        return eventPostObject
-    }
-
-    init(forSnapshot snapshot: DataSnapshot) {
-        guard let eventPostDict = snapshot.value as? [String: Any],
-            let eventDict = eventPostDict["event"] as? [String: Any],
-            let eventPostCaption = eventPostDict["caption"] as? String,
-            let eventPostTimestamp = eventPostDict["timestamp"] as? TimeInterval,
-            let eventPostID = eventPostDict["eventPostID"] as? String,
-            let likeCount = eventPostDict["likeCount"] as? Int else { fatalError("eventPost snapshot was incorrectly formatted") }
-
-        let event = Event(eventJson: eventDict)
-        let timestamp = Date(milliseconds: eventPostTimestamp)
-        self.event = event
-        self.caption = eventPostCaption
-        self.timestamp = timestamp
-        self.eventPostID = eventPostID
+    
+    init(eventJson: [String: Any]) {
+        print("eventJson: \(eventJson)")
+        guard let hostDict = eventJson["host"] as? [String: Any],
+            let hostId = hostDict["id"] as? Int,
+            let username = hostDict["username"] as? String,
+            let photoUrlString = hostDict["photoUrl"] as? String,
+            let photoUrl = URL(string: photoUrlString),
+            let eventPostId = eventJson["eventId"] as? Int,
+            let address = eventJson["address"] as? String,
+            let description = eventJson["description"] as? String,
+            let eventTimeString = eventJson["time"] as? String,
+            let eventUrlString = eventJson["eventImageUrl"] as? String,
+            let eventUrl = URL(string: eventUrlString),
+            let likeCount = eventJson["likeCount"] as? Int,
+            let attendingCount = eventJson["attendingCount"] as? Int,
+            let geoloc = eventJson["geoloc"] as? [String: Any],
+            let lat = geoloc["lat"] as? Double,
+            let lng = geoloc["lng"] as? Double else {
+                fatalError("Malformatted event json")
+        }
+        self.host = UserProfile(hostId, username, photoUrl)
+        self.eventPostId = eventPostId
+        self.address = address
+        self.description = description
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
+        // TODO (Lucas Wotton): Force unwrap??
+        self.eventTime = formatter.date(from: eventTimeString)!
+        self.eventImageUrl = eventUrl
         self.likeCount = likeCount
-    }
-
-    // init method for just posted events
-    init(_ event: Event,
-         _ caption: String,
-         _ timestamp: Date,
-         _ eventPostID: String) {
-        self.event = event
-        self.caption = caption
-        self.timestamp = timestamp
-        self.eventPostID = eventPostID
-        self.likeCount = 0
+        self.attendeeCount = attendingCount
+        self.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
     }
 }

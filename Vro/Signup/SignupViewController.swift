@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import FirebaseAuth
-import FirebaseDatabase
 import Alamofire
 
 protocol UserSignupDelegate {
@@ -168,35 +166,25 @@ class SignupViewController: UIViewController {
     private func createUser(_ email: String, _ username: String, _ password: String) {
         let spinner = Util.displaySpinner(onView: view)
         Util.toggleButton(button: self.signupButton, isEnabled: false)
-        
-        let parameters: [String: Any] = [
-            "name" : "Bogus name that doesn't matter for now",
-            "username" : username,
-            "email" : email,
-            "password": password
-        ]
-
-        // TODO (Lucas Wotton): Abstract this to a service file
-        Alamofire.request("http://178.128.183.75/users/register", method: .post, parameters: parameters, encoding: JSONEncoding.default)
-            .responseJSON { response in
-                Util.removeSpinner(spinner)
-                Util.toggleButton(button: self.signupButton, isEnabled: true)
-                guard response.result.error == nil else {
-                    let error = response.result.error!
-                    let alert = Util.makeOKAlert(alertTitle: self.alertTitle, message: error.localizedDescription)
-                    self.present(alert, animated: true, completion: nil)
-                    return
-                }
-                
-                guard let data = response.result.value as? [String: Any] else {
-                    let errorMessage = "No data was present in the response"
-                    let alert = Util.makeOKAlert(alertTitle: self.alertTitle, message: errorMessage)
-                    self.present(alert, animated: true, completion: nil)
-                    return
-                }
-                print("received data: \(data)")
-                print("Now login!")
-                self.loginUserDelegate?.loginUser(username, password)
+        UserService.createUser(email, username, password) { response in
+            Util.removeSpinner(spinner)
+            Util.toggleButton(button: self.signupButton, isEnabled: true)
+            guard response.result.error == nil else {
+                let error = response.result.error!
+                let alert = Util.makeOKAlert(alertTitle: self.alertTitle, message: error.localizedDescription)
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+            
+            guard let data = response.result.value as? [String: Any] else {
+                let errorMessage = "No data was present in the response"
+                let alert = Util.makeOKAlert(alertTitle: self.alertTitle, message: errorMessage)
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+            print("received data: \(data)")
+            print("Now login!")
+            self.loginUserDelegate?.loginUser(username, password)
         }
     }
 }
