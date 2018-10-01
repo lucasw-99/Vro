@@ -16,9 +16,9 @@ class EventPost {
     let description: String
     let address: String
     let coordinate: CLLocationCoordinate2D
-    let eventTime: Date
-    // TODO (Lucas Wotton): Bring this back? Timeline already sorted chronologically
-//    let timestamp: Date
+    // TODO (Lucas Wotton): Fix this on server
+//    let eventTime: Date
+    let timestamp: Date
     var likeCount: Int
     var attendeeCount: Int
 
@@ -36,7 +36,7 @@ class EventPost {
             let eventPostId = eventJson["eventId"] as? Int,
             let address = eventJson["address"] as? String,
             let description = eventJson["description"] as? String,
-            let eventTimeString = eventJson["time"] as? String,
+            let timestampString = eventJson["time"] as? String,
             let eventUrlString = eventJson["eventImageUrl"] as? String,
             let eventUrl = URL(string: eventUrlString),
             let likeCount = eventJson["likeCount"] as? Int,
@@ -53,7 +53,7 @@ class EventPost {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
         // TODO (Lucas Wotton): Force unwrap??
-        self.eventTime = formatter.date(from: eventTimeString)!
+        self.timestamp = formatter.date(from: timestampString)!
         self.eventImageUrl = eventUrl
         self.likeCount = likeCount
         self.attendeeCount = attendingCount
