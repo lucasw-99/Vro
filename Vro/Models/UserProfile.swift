@@ -24,12 +24,11 @@ class UserProfile {
 
 
     init(userJson json: [String: Any]) {
-        guard let uid = json["id"] as? String,
+        guard let id = json["id"] as? Int,
             let username = json["username"] as? String,
-            let photoUrlString = json["photoURL"] as? String,
+            let photoUrlString = json["photoUrl"] as? String,
             let photoUrl = URL(string: photoUrlString) else { fatalError("Malformatted json for UserProfile") }
-        // TODO (Lucas Wotton): Temporary patch
-        self.uid = 1
+        self.uid = id
         self.username = username
         self.photoURL = photoUrl
     }

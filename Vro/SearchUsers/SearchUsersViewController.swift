@@ -75,25 +75,29 @@ extension SearchUsersViewController {
 extension SearchUsersViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
-        let usernameToFind = searchBar.text!
-        UserService.fetchUser(usernameToFind) { user in
-            if let foundUser = user {
-                self.dataSource = [foundUser]
-            } else {
-                self.dataSource = []
-            }
-            self.userCollectionView.reloadData()
-        }
+        let searchText = searchBar.text!
+        searchUsername(usernameToSearch: searchText)
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         // TODO: Check if enough characters for autocomplete search?
-        UserService.getPartialUsernameMatches(searchText) { matchingUsers in
-            self.dataSource = matchingUsers
+        let searchText = searchBar.text!
+        searchUsername(usernameToSearch: searchText)
+    }
+    
+    private func searchUsername(usernameToSearch query: String) {
+        UserService.getUsernameMatches(query) { error, searchResults in
+            print("searchResults: \(searchResults)")
+            if let error = error {
+                // TODO (Lucas Wotton): Show popup?
+                print("Fuck! Error: \(error.localizedDescription)")
+            }
+            self.dataSource = searchResults
             DispatchQueue.main.async {
                 self.userCollectionView.reloadData()
             }
         }
+
     }
 
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {

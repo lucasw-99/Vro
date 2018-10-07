@@ -23,6 +23,19 @@ extension VroAuthenticationError: LocalizedError {
     }
 }
 
+public enum VroUsernameSearchError: Error {
+    case unsuccessfulResponse
+}
+
+extension VroUsernameSearchError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .unsuccessfulResponse:
+            return NSLocalizedString("Username Search Error", comment: "Could not retrieve search results")
+        }
+    }
+}
+
 class UserService {
 
     static var currentUserProfile: UserProfile?
@@ -176,19 +189,45 @@ class UserService {
 //        }
     }
 
-    static func getPartialUsernameMatches(_ searchUsername: String, completion: @escaping ( (_ userProfile: [UserProfile]) -> () )) {
-        let partialUserMatchesPath = Constants.Database.users
-//        let partialUserMatchesRef = Database.database().reference().child(partialUserMatchesPath)
-//        let orderedQuery = partialUserMatchesRef.queryOrdered(byChild: "profile/username").queryStarting(atValue: searchUsername).queryLimited(toFirst: 5)
-//        var queryResults = [UserProfile]()
-//        orderedQuery.observeSingleEvent(of: .value) { snapshot in
-//            for child in snapshot.children {
-//                if let childSnapshot = child as? DataSnapshot {
-//                    let matchingUser = UserProfile(forSnapshot: childSnapshot)
-//                    queryResults.append(matchingUser)
-//                }
-//            }
-//            completion(queryResults)
-//        }
+    static func getUsernameMatches(_ searchUsername: String, completion: @escaping ( (_ error: Error?, _ userProfile: [UserProfile]) -> () )) {
+        print("GetUsernameMatches called. SearchUsername: \(searchUsername)")
+        let url = String(format: Constants.Requests.userUsernameMatches, Constants.Requests.baseUrl)
+        
+        guard let token = UserService.currentUserToken else { fatalError("User JWT token nil") }
+        let headers = [
+            "Authorization": token,
+        ]
+        let parameters = [
+            "username": searchUsername
+        ]
+        
+        Alamofire.request(url, method: .get, parameters: parameters, headers: headers).responseJSON { response in
+            guard response.result.error == nil else {
+                completion(response.result.error, [])
+                return
+            }
+            
+            guard let data = response.result.value as? [String: Any],
+                let success = data["success"] as? Bool else {
+                    fatalError("Malformed data in response")
+            }
+            
+            if !success {
+                completion(VroUsernameSearchError.unsuccessfulResponse, [])
+                return
+            }
+            
+            
+            guard let userArray = data["users"] as? [[String: Any]] else {
+                fatalError("Malformatted data from server!")
+            }
+            
+            var searchResults: [UserProfile] = []
+            for userJson in userArray {
+                searchResults.append(UserProfile(userJson: userJson))
+            }
+            
+            completion(nil, searchResults)
+        }
     }
 }

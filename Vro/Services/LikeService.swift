@@ -6,18 +6,17 @@
 //  Copyright © 2018 Lucas Wotton. All rights reserved.
 //
 
+import Alamofire
+import SwiftyJSON
+
 class LikeService {
-//    static func getLikesForPost(_ postedByUID: String, _ eventPostID: String, completion: @escaping ( (_ userLikes: [String: Like], _ databaseRef: DatabaseReference) -> () )) {
-//        let postLikesPath = String(format: Constants.Database.postLikes, postedByUID, eventPostID)
-//        let postLikesRef = Database.database().reference().child(postLikesPath)
-//
-//        postLikesRef.observe(.value) { snapshot in
-//            // TODO: DOES THIS WORK
-//            let userLikes = (snapshot.value as? [String: Like]) ?? [String: Like]()
-//            print("userLikes: \(userLikes), snapshot: \(snapshot)\n")
-//            completion(userLikes, postLikesRef)
-//        }
-//    }
+    static func getLikesForPost(_ posterId: Int, _ eventPostID: Int, completion: @escaping ( (_ userLikes: [Int: Like]) -> () )) {
+        guard let token = UserService.currentUserToken else { fatalError("User JWT token nil") }
+        let headers = [
+            "Authorization": token,
+            ]
+        // TODO (Lucas Wotton): Add logic in server to get likes for an event post, rather than all a users likes
+    }
 
     static func likePost(for post: EventPost, currentUser user: UserProfile, success: @escaping ( (_ success: Bool) -> Void )) {
 //        let eventPostID = post.eventPostID

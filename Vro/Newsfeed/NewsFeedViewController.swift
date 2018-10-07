@@ -217,11 +217,11 @@ extension NewsFeedViewController: EventPostCellDelegate {
     }
     
     func didTapNumLikesButton(numLikesButton: UIButton, forEvent event: EventPost) {
-//        numLikesButton.isUserInteractionEnabled = false
-//        defer {
-//            numLikesButton.isUserInteractionEnabled = true
-//        }
-//        
+        numLikesButton.isUserInteractionEnabled = false
+        defer {
+            numLikesButton.isUserInteractionEnabled = true
+        }
+//
 //        let listLikesViewController = ListLikesViewController(postedByUid: String(event.event.host.uid), eventPostId: event.eventPostID)
 //        navigationController?.pushViewController(listLikesViewController, animated: true)
     }

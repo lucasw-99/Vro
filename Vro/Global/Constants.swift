@@ -103,6 +103,10 @@ class Constants {
         static let timelineRequest = "%@/timeline"
         // 1: baseUrl
         static let followRequest = "%@/followers"
+        // 1: baseUrl
+        static let postLikeRequest = "%@/likes"
+        // 1: baseUrl
+        static let userUsernameMatches = "%@/users/search"
     }
 
     static let dateFormat = "MM/dd/yyyy hh:mm a"

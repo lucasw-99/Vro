@@ -24,19 +24,9 @@ class ListLikesViewController: UIViewController {
     
     private var dataSource = [Like]()
     
-    init(postedByUid: String, eventPostId: String) {
+    init(posterId: Int, eventPostId: Int) {
         super.init(nibName: nil, bundle: nil)
-//        let postLikesPath = String(format: Constants.Database.postLikes, postedByUid, eventPostId)
-//        let postLikesRef = Database.database().reference().child(postLikesPath)
-//        
-//        postLikesRef.observeSingleEvent(of: .value) { snapshot in
-//            for childSnapshot in snapshot.children {
-//                guard let childSnapshot = childSnapshot as? DataSnapshot else { fatalError("Didn't expect this") }
-//                let like = Like(forSnapshot: childSnapshot)
-//                self.dataSource.append(like)
-//            }
-//            self.likesCollectionView.reloadData()
-//        }
+        // TODO (Lucas Wotton): Show loading screen until this finishes loading?
     }
     
     required init?(coder aDecoder: NSCoder) {
